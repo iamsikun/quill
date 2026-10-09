@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/social-preview.jpg" alt="Quill: academic writing for AI agents" width="100%">
+</p>
+
 # Quill
 
 Quill is a portable academic-writing skill for Codex and Claude Code. It drafts
@@ -265,7 +269,7 @@ copies of the writing instructions.
 uv sync
 uv run pytest -q
 uv build
-QUILL_WHEEL="$PWD/dist/quill-0.4.1-py3-none-any.whl" uv run pytest -q
+QUILL_WHEEL="$PWD/dist/quill-0.4.2-py3-none-any.whl" uv run pytest -q
 ```
 
 `uv run python scripts/validate.py` checks the skill against the Agent Skills spec and

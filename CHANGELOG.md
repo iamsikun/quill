@@ -5,6 +5,11 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
+## 0.4.2 — 2026-10-09
+
+- Add the project banner to the README. Writing instructions and CLI behavior are
+  unchanged.
+
 ## 0.4.1 — 2026-10-09
 
 - Describe Quill consistently across the plugin manifest, marketplace listing, and
