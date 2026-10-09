@@ -5,6 +5,12 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
+## Unreleased
+
+- `install.sh` now installs the `quill` CLI by default as an editable uv tool from the
+  clone, refreshes it when an update changes `pyproject.toml`, and removes it on
+  uninstall. Use `--no-cli` to skip it. A CLI installed some other way is left alone.
+
 ## 0.2.0 — 2026-10-09
 
 First release as Quill (formerly Pepper). Breaking restructure.

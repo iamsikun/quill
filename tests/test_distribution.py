@@ -82,10 +82,11 @@ def test_installer_links_detected_agents(tmp_path):
            'QUILL_HOME': str(tmp_path / 'clone'), 'QUILL_REPO': str(ROOT), 'QUILL_REF': branch}
     run = lambda *args: subprocess.run(['bash', ROOT / 'install.sh', *args], env=env,
                                        capture_output=True, text=True, check=True).stdout
-    run('install', '--no-auto-update')
+    run('install', '--no-auto-update', '--no-cli')  # keep the test offline; CLI install is checked by hand
     for skills_dir in ('.claude/skills', '.agents/skills'):
         link = home / skills_dir / 'quill'
         assert link.is_symlink() and (link / 'SKILL.md').is_file()
     status = run('status')
     assert 'version:' in status and 'auto-update: off' in status
+    assert 'cli:         not managed' in status
     assert 'up to date' in run('update')

@@ -4,10 +4,12 @@
 #   curl -fsSL https://raw.githubusercontent.com/iamsikun/quill/stable/install.sh | bash
 #
 # Commands:
-#   install.sh [install] [--no-auto-update]   clone, link into every detected agent, schedule daily updates
-#   install.sh update                         fast-forward to the latest stable release (run by the scheduler)
-#   install.sh status                         show installed version, links, and last update
-#   install.sh uninstall                      remove links, scheduled job, and the clone
+#   install.sh [install] [--no-auto-update] [--no-cli]
+#                          clone, link into every detected agent, install the quill CLI
+#                          with uv, and schedule daily updates
+#   install.sh update      fast-forward to the latest stable release (run by the scheduler)
+#   install.sh status      show installed version, links, CLI, and last update
+#   install.sh uninstall   remove links, the CLI, the scheduled job, and the clone
 #
 # Environment overrides:
 #   QUILL_HOME  where the clone lives            (default: ~/.local/share/quill)
@@ -24,6 +26,7 @@ LOG_FILE="$STATE_DIR/update.log"
 LAUNCHD_LABEL="io.github.iamsikun.quill.update"
 LAUNCHD_PLIST="$HOME/Library/LaunchAgents/$LAUNCHD_LABEL.plist"
 CRON_MARKER="# quill-auto-update"
+CLI_STATE="$STATE_DIR/cli"   # path of the uv that installed the CLI; present only if we own it
 
 say() { printf 'quill: %s\n' "$*"; }
 die() { printf 'quill: error: %s\n' "$*" >&2; exit 1; }
@@ -88,6 +91,65 @@ unlink_skill() {
   done
 }
 
+# The scheduler runs with a minimal PATH, so also look where uv's installers put it.
+find_uv() {
+  local candidate
+  for candidate in "$(command -v uv 2>/dev/null)" "$HOME/.local/bin/uv" "$HOME/.cargo/bin/uv" \
+                   /opt/homebrew/bin/uv /usr/local/bin/uv; do
+    [ -n "$candidate" ] && [ -x "$candidate" ] && { printf '%s\n' "$candidate"; return 0; }
+  done
+  return 1
+}
+
+# Editable install from the clone, so each update reaches the CLI with no extra step.
+install_cli() {
+  local uv receipt
+  if ! uv="$(find_uv)"; then
+    say "uv not found; skipped the quill CLI (install uv from https://docs.astral.sh/uv/, then rerun install.sh)"
+    return 0
+  fi
+  receipt="$("$uv" tool dir)/quill/uv-receipt.toml"
+  if [ ! -f "$CLI_STATE" ] && [ -f "$receipt" ] && ! grep -qF "$QUILL_HOME" "$receipt"; then
+    say "kept the existing quill CLI, which was installed from elsewhere (see 'uv tool list')"
+    return 0
+  fi
+  if ! "$uv" tool install --quiet --reinstall --editable "$QUILL_HOME"; then
+    say "could not install the quill CLI; the skill works without it"
+    return 0
+  fi
+  mkdir -p "$STATE_DIR"
+  printf '%s\n' "$uv" > "$CLI_STATE"
+  say "installed the quill CLI with uv"
+  local bin
+  bin="$("$uv" tool dir --bin)"
+  case ":$PATH:" in
+    *":$bin:"*) ;;
+    *) say "add $bin to your PATH to run 'quill'" ;;
+  esac
+}
+
+# Reinstalling refreshes the package metadata (version, dependencies, entry points).
+refresh_cli() {
+  [ -f "$CLI_STATE" ] || return 0
+  local uv
+  uv="$(cat "$CLI_STATE")"
+  [ -x "$uv" ] || uv="$(find_uv)" || { say "uv not found; quill CLI not refreshed"; return 0; }
+  if "$uv" tool install --quiet --reinstall --editable "$QUILL_HOME"; then
+    say "refreshed the quill CLI"
+  else
+    say "could not refresh the quill CLI"
+  fi
+}
+
+uninstall_cli() {
+  [ -f "$CLI_STATE" ] || return 0
+  local uv
+  uv="$(cat "$CLI_STATE")"
+  [ -x "$uv" ] || uv="$(find_uv)" || { say "uv not found; remove the CLI with 'uv tool uninstall quill'"; return 0; }
+  "$uv" tool uninstall quill >/dev/null 2>&1 && say "removed the quill CLI"
+  rm -f "$CLI_STATE"
+}
+
 schedule_updates() {
   local script="$QUILL_HOME/install.sh"
   mkdir -p "$STATE_DIR"
@@ -143,10 +205,11 @@ unschedule_updates() {
 }
 
 cmd_install() {
-  local auto=1
+  local auto=1 cli=1
   for arg in "$@"; do
     case "$arg" in
       --no-auto-update) auto=0 ;;
+      --no-cli) cli=0 ;;
       *) die "unknown option: $arg" ;;
     esac
   done
@@ -162,20 +225,23 @@ cmd_install() {
   fi
 
   link_skill
+  if [ "$cli" -eq 1 ]; then
+    install_cli
+  fi
   if [ "$auto" -eq 1 ]; then
     schedule_updates
   else
     say "automatic updates off; run '$QUILL_HOME/install.sh update' to update"
   fi
   say "done. Restart your agent to pick up the skill."
-  say "optional manuscript CLI that follows the same updates: uv tool install --editable $QUILL_HOME"
 }
 
 # Fast-forward only: never discards local edits, never moves to unreleased work.
 cmd_update() {
   [ -d "$QUILL_HOME/.git" ] || die "Quill is not installed at $QUILL_HOME"
-  local before after
+  local before after rev
   before="$(installed_version)"
+  rev="$(git -C "$QUILL_HOME" rev-parse HEAD)"
   if ! git -C "$QUILL_HOME" fetch --quiet --tags origin "$QUILL_REF" 2>/dev/null; then
     say "$(date '+%F %T') offline or fetch failed; keeping $before"
     return 0
@@ -185,6 +251,9 @@ cmd_update() {
     return 0
   fi
   after="$(installed_version)"
+  if ! git -C "$QUILL_HOME" diff --quiet "$rev" HEAD -- pyproject.toml; then
+    refresh_cli
+  fi
   mkdir -p "$STATE_DIR"
   date '+%F %T' > "$STATE_DIR/last-update"
   if [ "$before" = "$after" ]; then
@@ -204,6 +273,11 @@ cmd_status() {
   for dir in "$HOME/.claude/skills" "$HOME/.agents/skills" "$HOME/.copilot/skills" "$HOME/.config/opencode/skills"; do
     [ -L "$dir/quill" ] && say "linked:      $dir/quill"
   done
+  if [ -f "$CLI_STATE" ]; then
+    say "cli:         installed (uv tool, editable from $QUILL_HOME)"
+  else
+    say "cli:         not managed by the installer"
+  fi
   if [ -f "$LAUNCHD_PLIST" ] || { command -v crontab >/dev/null && crontab -l 2>/dev/null | grep -q "$CRON_MARKER"; }; then
     say "auto-update: on (daily)"
   else
@@ -214,6 +288,7 @@ cmd_status() {
 cmd_uninstall() {
   unschedule_updates
   unlink_skill
+  uninstall_cli
   if [ -d "$QUILL_HOME/.git" ]; then
     if [ -n "$(git -C "$QUILL_HOME" status --porcelain 2>/dev/null)" ]; then
       say "kept $QUILL_HOME because it has local edits; delete it yourself when done"
@@ -230,11 +305,11 @@ main() {
   local cmd="${1:-install}"
   case "$cmd" in
     install) shift || true; cmd_install "$@" ;;
-    --no-auto-update) cmd_install "$@" ;;
+    --no-auto-update|--no-cli) cmd_install "$@" ;;
     update) cmd_update ;;
     status) cmd_status ;;
     uninstall) cmd_uninstall ;;
-    -h|--help|help) sed -n '2,16p' "$0" 2>/dev/null || true ;;
+    -h|--help|help) sed -n '2,18p' "$0" 2>/dev/null || true ;;
     *) die "unknown command: $cmd (try: install, update, status, uninstall)" ;;
   esac
 }

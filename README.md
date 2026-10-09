@@ -26,31 +26,28 @@ This one command:
 - clones Quill to `~/.local/share/quill`;
 - links the skill into every agent it detects (`~/.claude/skills`, the shared
   `~/.agents/skills` read by Codex, Gemini CLI and Cursor, Copilot, OpenCode);
+- installs the `quill` manuscript CLI with [uv](https://docs.astral.sh/uv/), as an
+  editable install from that clone, so it follows the same updates;
 - schedules a daily background update (launchd on macOS, cron on Linux).
 
 Updates only ever fast-forward to new releases, are skipped quietly when offline, and
 never touch a copy you have edited. Restart your agent after installing.
 
 ```bash
-~/.local/share/quill/install.sh status      # version, links, last update
+~/.local/share/quill/install.sh status      # version, links, CLI, last update
 ~/.local/share/quill/install.sh update      # update now
 ~/.local/share/quill/install.sh uninstall   # remove everything
 ```
 
 Add `--no-auto-update` to the install command (`... | bash -s -- --no-auto-update`) to
-manage updates yourself. If you'd rather read the script before running it, clone the
-repo and run `./install.sh`.
+manage updates yourself, or `--no-cli` to skip the CLI. The skill itself needs no
+Python, CLI, or external service for ordinary writing. Without uv, the installer skips
+the CLI and says so. If you already installed a `quill` CLI some other way, the installer
+leaves it alone. When an update changes the package's metadata or dependencies, the
+installer refreshes the CLI.
 
-The skill itself needs no Python, Quill CLI, or external service for ordinary writing.
-For the optional manuscript utilities below, install the CLI from the same clone so it
-follows the same updates:
-
-```bash
-uv tool install --editable ~/.local/share/quill
-```
-
-Code changes arrive with each update. If a release changes the CLI's dependencies, rerun
-the command above.
+If you'd rather read the script before running it, clone the repo and run
+`./install.sh`.
 
 **Claude Code: plugin marketplace.** This is the alternative to the installer for
 Claude Code users; use one or the other, not both.
