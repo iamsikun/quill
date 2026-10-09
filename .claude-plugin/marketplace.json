@@ -1,0 +1,14 @@
+{
+  "name": "quill",
+  "owner": {
+    "name": "Sikun Xu"
+  },
+  "description": "Quill: a portable academic-writing skill for LLM agents.",
+  "plugins": [
+    {
+      "name": "quill",
+      "source": "./",
+      "description": "Academic-writing skill: draft and revise research prose while preserving scientific meaning."
+    }
+  ]
+}

@@ -7,7 +7,7 @@ from pathlib import Path
 from .assembly import assemble_paper, camera_ready
 from .importer import import_paper
 from .workspace import clear_session, create_journal_version, log_decision, new_paper, set_target, sync_context
-from .skills import install_skill, skill_destinations
+from .skills import install_skill, skill_destinations, uninstall_skill
 from .migration import migrate_project
 from .sync import find_repo_root, init_project, package_version
 from .validate import validate_repo
@@ -32,6 +32,18 @@ def _cmd_skill(args: argparse.Namespace) -> int:
     for name, destination in skill_destinations(_repo_root(), host=args.host, scope=args.scope).items():
         print(f"{name}: {destination}")
     print(f"skill ready ({len(result.written_files)} files changed)")
+    return 0
+
+
+def _cmd_skill_uninstall(args: argparse.Namespace) -> int:
+    result = uninstall_skill(_repo_root(), host=args.host, scope=args.scope)
+    if result.conflicts:
+        _print_conflicts(result.conflicts)
+        print("No skill files removed. Preserve or resolve local changes before retrying.")
+        return 1
+    for path in result.written_files:
+        print(f"removed: {path}")
+    print(f"skill uninstalled ({len(result.written_files)} files removed)")
     return 0
 
 
@@ -167,13 +179,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="quill")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    skill_parser = subparsers.add_parser("skill", help="Install or synchronize the portable writing skill")
+    skill_parser = subparsers.add_parser(
+        "skill", help="Copy the writing skill into a project (or user folder) without auto-updates")
     skill_actions = skill_parser.add_subparsers(dest="skill_action", required=True)
-    for action in ("install", "sync"):
+    for action in ("install", "sync", "uninstall"):
         action_parser = skill_actions.add_parser(action)
         action_parser.add_argument("--host", choices=("codex", "claude", "all"), default="all")
         action_parser.add_argument("--scope", choices=("user", "project"), default="user")
-        action_parser.set_defaults(func=_cmd_skill)
+        action_parser.set_defaults(func=_cmd_skill_uninstall if action == "uninstall" else _cmd_skill)
 
     init_parser = subparsers.add_parser("init", help="Add missing optional project configuration and templates")
     init_parser.set_defaults(func=_cmd_init)

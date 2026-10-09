@@ -1,0 +1,8 @@
+{
+  "name": "quill",
+  "version": "0.2.0",
+  "description": "Draft and revise academic manuscripts while preserving claims, assumptions, evidence, uncertainty, numbers, notation, and citations.",
+  "author": { "name": "Sikun Xu" },
+  "license": "MIT",
+  "keywords": ["research", "academic-writing", "papers", "editing", "latex"]
+}

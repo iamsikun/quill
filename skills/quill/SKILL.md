@@ -1,6 +1,10 @@
 ---
 name: quill
 description: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, or addressing reviewer feedback. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.
+license: MIT
+metadata:
+  author: Sikun Xu
+  version: "0.2.0"
 ---
 
 # Quill

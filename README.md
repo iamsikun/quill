@@ -11,47 +11,92 @@ Ask naturally: “Polish this methods paragraph,” “Draft an introduction fro
 notes,” or “Revise this section in response to the reviewer.” You can also invoke
 Quill explicitly as `$quill` in Codex or `/quill` in Claude Code.
 
-## Install the skill
+## Install
 
-Install the optional Python utility from this checkout:
+Install once and Quill keeps itself current. Releases come from the `stable` branch,
+so work in progress never reaches your agents.
 
-```bash
-uv tool install /path/to/quill
-quill skill install
-```
-
-The default installs a self-contained skill for both hosts at the user level,
-making it available across projects. For development, use
-`uv tool install -e /path/to/quill`.
+**Any agent (recommended):**
 
 ```bash
-quill skill install --host codex --scope user
-quill skill install --host claude --scope user
-
-# Commit a skill to a particular project for collaborators:
-quill skill install --host all --scope project
-
-# After upgrading the Python utility:
-quill skill sync --host all --scope user
+curl -fsSL https://raw.githubusercontent.com/iamsikun/quill/stable/install.sh | bash
 ```
 
-| Host | User destination | Project destination |
+This one command:
+- clones Quill to `~/.local/share/quill`;
+- links the skill into every agent it detects (`~/.claude/skills`, the shared
+  `~/.agents/skills` read by Codex, Gemini CLI and Cursor, Copilot, OpenCode);
+- schedules a daily background update (launchd on macOS, cron on Linux).
+
+Updates only ever fast-forward to new releases, are skipped quietly when offline, and
+never touch a copy you have edited. Restart your agent after installing.
+
+```bash
+~/.local/share/quill/install.sh status      # version, links, last update
+~/.local/share/quill/install.sh update      # update now
+~/.local/share/quill/install.sh uninstall   # remove everything
+```
+
+Add `--no-auto-update` to the install command (`... | bash -s -- --no-auto-update`) to
+manage updates yourself. If you'd rather read the script before running it, clone the
+repo and run `./install.sh`.
+
+The skill itself needs no Python, Quill CLI, or external service for ordinary writing.
+For the optional manuscript utilities below, install the CLI from the same clone so it
+follows the same updates:
+
+```bash
+uv tool install --editable ~/.local/share/quill
+```
+
+Code changes arrive with each update. If a release changes the CLI's dependencies, rerun
+the command above.
+
+**Claude Code: plugin marketplace.** This is the alternative to the installer for
+Claude Code users; use one or the other, not both.
+
+```bash
+claude plugin marketplace add iamsikun/quill#stable
+claude plugin install quill@quill
+```
+
+Then turn on auto-update: `/plugin` → **Marketplaces** → **quill** → **Enable
+auto-update**. Third-party marketplaces have it off by default. Claude Code then picks up
+each new release on its own.
+
+**Other options:**
+- **`skills` CLI:** `npx skills add iamsikun/quill -g` installs into the agents it
+  detects. Update with the CLI's update command, which `npx skills --help` lists.
+- **Manual:** symlink `skills/quill` from a clone into your agent's skills folder, then
+  `git pull` to update.
+- **Project copy for collaborators:** `quill skill install --scope project` copies the
+  skill into `.agents/skills/quill` and `.claude/skills/quill` so you can commit it with
+  a project. Copies do not update themselves; run `quill skill sync --scope project`
+  after updating, and `quill skill uninstall --scope project` to remove them.
+
+| Agent | User-level path | Project-level path |
 |---|---|---|
-| Codex | `$CODEX_HOME/skills/quill`, defaulting to `~/.codex/skills/quill` | `.agents/skills/quill` |
 | Claude Code | `~/.claude/skills/quill` | `.claude/skills/quill` |
+| Codex | `~/.agents/skills/quill` | `.agents/skills/quill` |
+| Gemini CLI | `~/.gemini/skills/quill` or `~/.agents/skills/quill` | `.gemini/skills/quill` or `.agents/skills/quill` |
+| Cursor | `~/.cursor/skills/quill` or `~/.agents/skills/quill` | `.cursor/skills/quill` or `.agents/skills/quill` |
 
-Choose the scope you need; installing at both scopes may produce duplicate entries.
-The installer never changes host settings or writes `AGENTS.md`/`CLAUDE.md`. It
-records ownership in `.quill-install.json` inside the installed skill. Sync updates
-unchanged owned files, removes unchanged obsolete files, and preserves unknown
-files. A local conflict prevents updates to all selected hosts; resolve it manually
-and retry. There is no force-overwrite flag.
+Install at only one scope; installing at both may produce duplicate entries. Start a
+fresh agent session if Quill has not appeared. Automatic selection depends on the host
+and request; explicit invocation is available when you want to select it directly.
 
-You can also copy or install the canonical `skills/quill` folder with your host's
-skill installer. The skill itself needs no Python, Quill CLI, or external service
-for ordinary writing. References travel with it. Start a fresh host session if
-Quill has not appeared. Automatic selection depends on the host and request;
-explicit invocation is available when you want to select it directly.
+The copy commands never change host settings or write `AGENTS.md`/`CLAUDE.md`. They
+record ownership in `.quill-install.json` inside the copied skill. Sync updates
+unchanged owned files, removes unchanged obsolete files, and preserves unknown files.
+Uninstall removes only unchanged owned files. A local conflict blocks the operation on
+all selected hosts; resolve it manually and retry. There is no force-overwrite flag.
+
+**Moving from a 0.2 copy install.** If you earlier ran `quill skill install` at user
+scope, remove those copies with `quill skill uninstall --scope user` before running the
+installer. The installer skips any existing copy rather than overwrite it, and Codex
+would otherwise list Quill twice.
+
+See [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
 
 ## Writing behavior
 
@@ -128,7 +173,7 @@ files yourself rather than deleting a whole `.claude` directory.
 
 | Removed interface | Replacement |
 |---|---|
-| `pepper install`, `pepper sync` | `quill skill install`, `quill skill sync`; use `quill init` for project assets |
+| `pepper install`, `pepper sync` | `install.sh` (user level) or `quill skill install`/`sync --scope project`; use `quill init` for project assets |
 | `draft-paper`, `draft-section`, `edit-section`, `review-paper`, `revise-paper`, `polish`, `workflow-brief` | Ask the host to use Quill and perform the writing directly |
 | `literature-search` | Use your host's research tools; supply relevant sources to Quill |
 | Generated specialist agents and slash-command wrappers | One portable `quill` skill |
@@ -152,6 +197,11 @@ uv build
 QUILL_WHEEL="$PWD/dist/quill-0.2.0-py3-none-any.whl" uv run pytest -q
 ```
 
+`uv run python scripts/validate.py` checks the skill against the Agent Skills spec and
+confirms that the version agrees across `SKILL.md`, `.claude-plugin/plugin.json`,
+`pyproject.toml`, and `src/quill/__init__.py`. Release steps are in
+[AGENTS.md](AGENTS.md#releasing).
+
 Tests cover installed content and references, ownership protection, migration, and
 managed utilities. `evals/README.md` describes the 16 synthetic behavioral cases,
 three-arm comparison, and fresh-session discovery checks. Behavioral results are
@@ -159,3 +209,7 @@ recorded separately from mechanical tests; neither a valid manifest nor a fluent
 answer establishes improved human comprehension.
 See [the evaluation results](evals/RESULTS.md) for the actual host checks and their
 limitations.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

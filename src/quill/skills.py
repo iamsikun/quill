@@ -38,6 +38,10 @@ def skill_destinations(repo_root: Path, *, host: str, scope: str) -> dict[str, P
             bases['codex'] = safe_path(codex_home, 'skills')
         if 'claude' in selected:
             bases['claude'] = safe_path(home, '.claude/skills')
+    for base in bases.values():
+        if (base / 'quill').is_symlink():
+            raise ValueError(f'{base / "quill"} is a symlink, probably from install.sh; '
+                             'manage it with install.sh update/uninstall instead')
     return {name: safe_path(bases[name], 'quill') for name in selected}
 
 
@@ -106,4 +110,40 @@ def install_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user', sy
     for destination in deletes:
         destination.unlink()
         result.written_files.append(str(destination))
+    return result
+
+
+def uninstall_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user') -> SyncResult:
+    """Remove only files whose checksums match the ownership manifest; keep everything else."""
+    result = SyncResult()
+    deletes: list[Path] = []
+    roots: list[Path] = []
+    for root in skill_destinations(repo_root, host=host, scope=scope).values():
+        manifest_path = safe_path(root, SKILL_MANIFEST)
+        manifest = _load_manifest(manifest_path)
+        if manifest is None:
+            if root.exists():
+                result.conflicts.append(f'{root}: not managed by Quill; remove it manually')
+            continue
+        for relative, digest in sorted(manifest['hashes'].items()):
+            destination = safe_path(root, relative)
+            if not destination.exists():
+                continue
+            if not destination.is_file() or hash_file(destination) != digest:
+                result.conflicts.append(f'{destination}: locally modified')
+            else:
+                deletes.append(destination)
+        deletes.append(manifest_path)
+        roots.append(root)
+    if result.conflicts:
+        return result
+    for destination in deletes:
+        destination.unlink()
+        result.written_files.append(str(destination))
+    for root in roots:
+        directories = sorted((p for p in root.rglob('*') if p.is_dir() and not p.is_symlink()),
+                             key=lambda p: len(p.parts), reverse=True)
+        for directory in (*directories, root):
+            if not any(directory.iterdir()):
+                directory.rmdir()
     return result
