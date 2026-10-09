@@ -1,0 +1,34 @@
+{
+  "host": "claude",
+  "host_version": "2.1.296 (Claude Code)",
+  "arm": "references",
+  "case": "theorem",
+  "skill_hashes": {
+    "SKILL.md": "0792309699cf8176cd1d190103e284286f9b14a10d75a3f900914bfc774f14cc",
+    "agents/openai.yaml": "9ebfd33cbfa11100285837deeb4c5f44a7ab0a3be182e08e4577bab390a4f9ed",
+    "references/author-style.md": "c7d6d30951231ced1af13de8d5132a85d54e7a9a5967d77ed6a959c5f5b6657a",
+    "references/drafting.md": "d705d4ef58e7323f5ab02e666830f0284b1244e0eba7b6e081b975b198569306",
+    "references/editing.md": "b6df7f7c16f97359b2ce15084e8dbf78a6bc7e165be5322866f5de978b55352f",
+    "references/examples.md": "92f9ecd1bd0ff705dc93a1d47cb13d0c6e16ea6ea556dd29bec32cd068fc0248",
+    "references/quill-workspaces.md": "4dda4a4cf0fed93227ddb60176989b3a6bdcf6e22d566d571f64962835efd71a",
+    "references/technical-writing.md": "22903e2fc8cd61ba8529004e376065de4cbb293e8f6dd9f88929afcbdcfa1820"
+  },
+  "case_hash": "3d43ff999ec3ac12f2e6b0b0d95e50d7b7ee507d091a37d019c41e75c22fc454",
+  "exit_code": 0,
+  "elapsed_seconds": 5.96,
+  "fixtures_unchanged": true,
+  "release": "0.4.1",
+  "date": "2026-10-09",
+  "model": "claude-opus-5-5[1m]",
+  "answer": "Under Assumptions B1\u2013B3, the estimator converges in probability to V(t) as n \u2192 \u221e for each fixed t \u2208 (0, 1). This convergence is pointwise; the result does not establish uniform convergence over t.\n\nNote: If the estimator has a symbol, such as V\u0302\u2099(t), naming it would make the referent clearer.",
+  "fidelity": "pass",
+  "reviewer": "implementing assistant",
+  "checks": [
+    "B1\u2013B3 preserved",
+    "Every fixed t in (0, 1) preserved",
+    "Convergence in probability preserved",
+    "Asymptotic scope preserved",
+    "No uniform convergence claimed"
+  ],
+  "limitation": "One synthetic release smoke test; no evidence of improved writing quality or discovery rates."
+}

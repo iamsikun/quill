@@ -4,8 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "quill"
-version = "0.4.0"
-description = "Portable academic writing skill with optional manuscript utilities"
+version = "0.4.1"
+description = "Academic-writing skill for AI coding agents (Claude Code, Codex, Gemini CLI, Cursor) with an optional LaTeX manuscript CLI"
+keywords = ["academic-writing", "scientific-writing", "paper-writing", "research-paper", "manuscript", "latex", "agent-skills", "claude-code", "codex"]
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -15,6 +16,12 @@ authors = [
 dependencies = [
   "PyYAML>=6.0.2",
 ]
+
+[project.urls]
+Homepage = "https://github.com/iamsikun/quill"
+Repository = "https://github.com/iamsikun/quill"
+Changelog = "https://github.com/iamsikun/quill/blob/main/CHANGELOG.md"
+Issues = "https://github.com/iamsikun/quill/issues"
 
 [project.scripts]
 quill = "quill.cli:main"

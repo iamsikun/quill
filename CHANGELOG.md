@@ -5,6 +5,12 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
+## 0.4.1 — 2026-10-09
+
+- Describe Quill consistently across the plugin manifest, marketplace listing, and
+  package metadata, and add search keywords and project links. Writing instructions
+  and CLI behavior are unchanged.
+
 ## 0.4.0 — 2026-10-09
 
 - Preserve manuscript entry points and nested LaTeX dependencies on import and in
