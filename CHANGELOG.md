@@ -20,4 +20,6 @@ First release as Quill (formerly Pepper). Breaking restructure.
     into every detected agent
   - Claude Code plugin manifests
   - `quill skill uninstall` for copies made by `quill skill install`
+  - user-level Codex copies now go to `~/.agents/skills`, where Codex reads skills,
+    instead of `$CODEX_HOME/skills`; uninstall also removes copies at the old location
   - MIT license

@@ -91,10 +91,12 @@ unchanged owned files, removes unchanged obsolete files, and preserves unknown f
 Uninstall removes only unchanged owned files. A local conflict blocks the operation on
 all selected hosts; resolve it manually and retry. There is no force-overwrite flag.
 
-**Moving from a 0.2 copy install.** If you earlier ran `quill skill install` at user
-scope, remove those copies with `quill skill uninstall --scope user` before running the
-installer. The installer skips any existing copy rather than overwrite it, and Codex
-would otherwise list Quill twice.
+**Moving from an earlier copy install.** If you earlier ran `quill skill install` at
+user scope, remove those copies with `quill skill uninstall --scope user` before running
+the installer; the installer skips any existing copy rather than overwrite it. Earlier
+versions put the Codex copy in `$CODEX_HOME/skills` (default `~/.codex/skills`), which
+current Codex no longer reads. Uninstall removes that copy too, and `quill skill install`
+refuses to add a second Codex copy until it is gone.
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
 

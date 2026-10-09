@@ -23,26 +23,30 @@ def skill_bytes() -> dict[str, bytes]:
 
 
 def skill_destinations(repo_root: Path, *, host: str, scope: str) -> dict[str, Path]:
+    """Codex reads .agents/skills at both scopes; Claude Code reads .claude/skills."""
     if host not in (*HOSTS, 'all') or scope not in ('user', 'project'):
         raise ValueError('host must be codex, claude, or all; scope must be user or project')
     selected = HOSTS if host == 'all' else (host,)
-    if scope == 'project':
-        bases = {name: safe_path(repo_root.resolve(), f'{directory}/skills')
-                 for name, directory in (('codex', '.agents'), ('claude', '.claude'))
-                 if name in selected}
-    else:
-        home = Path.home().resolve()
-        codex_home = Path(os.environ.get('CODEX_HOME') or home / '.codex').expanduser().resolve()
-        bases = {}
-        if 'codex' in selected:
-            bases['codex'] = safe_path(codex_home, 'skills')
-        if 'claude' in selected:
-            bases['claude'] = safe_path(home, '.claude/skills')
+    root = repo_root.resolve() if scope == 'project' else Path.home().resolve()
+    bases = {name: safe_path(root, f'{directory}/skills')
+             for name, directory in (('codex', '.agents'), ('claude', '.claude'))
+             if name in selected}
     for base in bases.values():
         if (base / 'quill').is_symlink():
             raise ValueError(f'{base / "quill"} is a symlink, probably from install.sh; '
                              'manage it with install.sh update/uninstall instead')
     return {name: safe_path(bases[name], 'quill') for name in selected}
+
+
+def legacy_codex_destination(*, host: str, scope: str) -> Path | None:
+    """Quill 0.2 copied the user-level Codex skill into $CODEX_HOME/skills, which Codex no longer reads."""
+    if scope != 'user' or host not in ('codex', 'all'):
+        return None
+    codex_home = Path(os.environ.get('CODEX_HOME') or Path.home() / '.codex').expanduser().resolve()
+    legacy = codex_home / 'skills/quill'
+    if legacy.is_symlink() or not (legacy / SKILL_MANIFEST).is_file():
+        return None
+    return legacy
 
 
 def _load_manifest(path: Path) -> dict | None:
@@ -67,6 +71,11 @@ def install_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user', sy
         raise ValueError('Quill skill bundle has no SKILL.md')
     hashes = {relative: hash_bytes(payload) for relative, payload in assets.items()}
     result = SyncResult()
+    legacy = legacy_codex_destination(host=host, scope=scope)
+    if legacy is not None:
+        result.conflicts.append(f'{legacy}: older Quill copy that Codex no longer reads; '
+                                'remove it with quill skill uninstall --host codex --scope user')
+        return result
     writes: list[tuple[Path, bytes]] = []
     deletes: list[Path] = []
     for name, root in skill_destinations(repo_root, host=host, scope=scope).items():
@@ -118,7 +127,11 @@ def uninstall_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user') 
     result = SyncResult()
     deletes: list[Path] = []
     roots: list[Path] = []
-    for root in skill_destinations(repo_root, host=host, scope=scope).values():
+    candidates = list(skill_destinations(repo_root, host=host, scope=scope).values())
+    legacy = legacy_codex_destination(host=host, scope=scope)
+    if legacy is not None:
+        candidates.append(legacy)
+    for root in candidates:
         manifest_path = safe_path(root, SKILL_MANIFEST)
         manifest = _load_manifest(manifest_path)
         if manifest is None:

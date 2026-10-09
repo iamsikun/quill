@@ -54,7 +54,7 @@ def test_install_and_sync_across_hosts(tmp_path, homes, scope, host):
     expected_hosts = skills.HOSTS if host == 'all' else (host,)
     for name in expected_hosts:
         base = homes if scope == 'user' else repo
-        directory = '.codex' if name == 'codex' and scope == 'user' else '.agents' if name == 'codex' else '.claude'
+        directory = '.agents' if name == 'codex' else '.claude'
         target = base / directory / 'skills/quill'
         for relative, payload in skills.skill_bytes().items():
             assert (target / relative).read_bytes() == payload
@@ -65,19 +65,43 @@ def test_install_and_sync_across_hosts(tmp_path, homes, scope, host):
     assert not (repo / '.quill').exists()
 
 
-def test_configured_codex_home(tmp_path, homes, monkeypatch):
+def _legacy_codex_copy(homes: Path) -> Path:
+    """A user-level copy made by Quill 0.2 in ~/.codex/skills, which Codex no longer reads."""
+    legacy = homes / '.codex/skills/quill'
+    payloads = skills.skill_bytes()
+    for relative, payload in payloads.items():
+        (legacy / relative).parent.mkdir(parents=True, exist_ok=True)
+        (legacy / relative).write_bytes(payload)
+    record = {'schema_version': 1, 'package_version': '0.2.0', 'host': 'codex', 'scope': 'user',
+              'hashes': {relative: hash_bytes(payload) for relative, payload in payloads.items()}}
+    (legacy / skills.SKILL_MANIFEST).write_text(json.dumps(record))
+    return legacy
+
+
+def test_legacy_codex_copy_blocks_install_until_uninstalled(tmp_path, homes):
+    legacy = _legacy_codex_copy(homes)
+    result = skills.install_skill(tmp_path, host='all')
+    assert result.conflicts and 'uninstall' in result.conflicts[0]
+    assert not (homes / '.agents').exists() and not (homes / '.claude').exists()
+    assert not skills.uninstall_skill(tmp_path, host='codex').conflicts
+    assert not legacy.exists()
+    assert not skills.install_skill(tmp_path, host='codex').conflicts
+    assert (homes / '.agents/skills/quill/SKILL.md').is_file()
+
+
+def test_codex_home_only_locates_legacy_copies(tmp_path, homes, monkeypatch):
     configured = tmp_path / 'custom-codex'
     monkeypatch.setenv('CODEX_HOME', str(configured))
     skills.install_skill(tmp_path, host='codex')
-    assert (configured / 'skills/quill/SKILL.md').is_file()
-    assert not (homes / '.codex').exists()
+    assert (homes / '.agents/skills/quill/SKILL.md').is_file()
+    assert not configured.exists()
 
 
 def test_update_preserves_unknown_files_and_prunes_owned_obsolete(tmp_path, homes, monkeypatch):
     original = skills.skill_bytes()
     monkeypatch.setattr(skills, 'skill_bytes', lambda: {**original, 'obsolete.md': b'old'})
     skills.install_skill(tmp_path, host='codex')
-    target = homes / '.codex/skills/quill'
+    target = homes / '.agents/skills/quill'
     (target / 'personal.md').write_text('keep')
     changed = {**original, 'references/editing.md': b'Updated editing guidance.'}
     monkeypatch.setattr(skills, 'skill_bytes', lambda: changed)
@@ -104,7 +128,7 @@ def test_obsolete_modified_file_blocks_update(tmp_path, homes, monkeypatch):
     original = skills.skill_bytes()
     monkeypatch.setattr(skills, 'skill_bytes', lambda: {**original, 'old.md': b'old'})
     skills.install_skill(tmp_path, host='codex')
-    target = homes / '.codex/skills/quill'
+    target = homes / '.agents/skills/quill'
     (target / 'old.md').write_text('local edits')
     monkeypatch.setattr(skills, 'skill_bytes', lambda: original)
     assert skills.install_skill(tmp_path, host='codex', sync=True).conflicts
@@ -113,7 +137,7 @@ def test_obsolete_modified_file_blocks_update(tmp_path, homes, monkeypatch):
 
 def test_sync_requires_ownership_and_install_protects_existing(tmp_path, homes):
     assert skills.install_skill(tmp_path, host='codex', sync=True).conflicts
-    target = homes / '.codex/skills/quill'
+    target = homes / '.agents/skills/quill'
     target.mkdir(parents=True)
     (target / 'SKILL.md').write_text('existing skill')
     assert skills.install_skill(tmp_path, host='codex').conflicts
@@ -128,9 +152,9 @@ def test_reject_unsafe_manifest_paths(tmp_path, relative):
 
 def test_manifest_cannot_delete_outside_skill(tmp_path, homes):
     skills.install_skill(tmp_path, host='codex')
-    manifest = homes / '.codex/skills/quill' / skills.SKILL_MANIFEST
+    manifest = homes / '.agents/skills/quill' / skills.SKILL_MANIFEST
     data = json.loads(manifest.read_text())
-    outside = homes / '.codex/skills/outside'
+    outside = homes / '.agents/skills/outside'
     outside.write_text('private data')
     data['hashes']['../outside'] = hash_bytes(outside.read_bytes())
     manifest.write_text(json.dumps(data))
@@ -163,7 +187,7 @@ def test_removed_commands_fail_with_guidance(command, capsys):
 
 def test_installed_references_are_independent_of_cwd(tmp_path, homes, monkeypatch):
     skills.install_skill(tmp_path, host='codex')
-    target = homes / '.codex/skills/quill'
+    target = homes / '.agents/skills/quill'
     other = tmp_path / 'another-project'
     other.mkdir()
     monkeypatch.chdir(other)
