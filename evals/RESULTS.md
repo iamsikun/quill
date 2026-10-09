@@ -1,5 +1,17 @@
 # Development evaluation — 2026-10-09
 
+## Quill 0.4.0 release smoke check
+
+The unchanged writing guidance (with version metadata 0.4.0) passed one fresh
+`theorem` case using the `references` arm in Claude Code 2.1.296. The response
+preserved B1–B3, each fixed t in (0, 1), convergence in probability, asymptotic
+scope, and the absence of a uniform guarantee. The implementing assistant reviewed
+the answer. [The sanitized record](results/0.4.0-smoke.json) includes the answer,
+model, case hash, and skill hashes. This is a release smoke check, not new evidence
+of writing-quality improvements or automatic discovery rates.
+
+## Earlier development comparison
+
 These runs predate the rename from Pepper to Quill. Names, prompts, responses, and
 hashes are retained as historical evidence, with the original cases archived at
 [2026-10-09-cases.json](results/2026-10-09-cases.json). They do not independently

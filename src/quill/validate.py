@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
 
-from .sync import project_assets_dir
+from .sync import project_assets_dir, safe_path
+from .latex import LatexGraph, dependency_graph, reference_errors
+from .workspace import _load_yaml
 
 
 @dataclass(slots=True)
@@ -31,7 +32,7 @@ def _check_templates(repo_root: Path, result: ValidationResult) -> None:
             result.warnings.append(f"{venue_dir.relative_to(repo_root).as_posix()} is missing main.tex")
 
 
-def _check_runtime_state(repo_root: Path, result: ValidationResult) -> None:
+def _check_runtime_state(repo_root: Path, result: ValidationResult, target_name: str | None = None) -> None:
     paper_root = repo_root / "paper"
     if not paper_root.exists():
         return
@@ -39,7 +40,7 @@ def _check_runtime_state(repo_root: Path, result: ValidationResult) -> None:
     if not state_file.exists():
         result.errors.append("paper/state.yaml is missing")
         return
-    state_data = yaml.safe_load(state_file.read_text(encoding="utf-8")) or {}
+    state_data = _load_yaml(state_file)
     active_target = state_data.get("active_target")
     if not active_target:
         result.errors.append("paper/state.yaml is missing active_target")
@@ -49,31 +50,52 @@ def _check_runtime_state(repo_root: Path, result: ValidationResult) -> None:
     if not (paper_root / "shared/context.md").exists():
         result.warnings.append("paper/shared/context.md is missing")
 
-    camera_ready = any(
-        target_data.get("stage") == "camera-ready"
-        for target_data in (state_data.get("targets") or {}).values()
-        if isinstance(target_data, dict)
-    )
-    tex_files = list(paper_root.glob("*/main.tex")) + list(paper_root.glob("*/sections/*.tex"))
-    label_locations: dict[str, list[str]] = {}
-    for tex_file in tex_files:
-        text = tex_file.read_text(encoding="utf-8", errors="ignore")
-        rel = tex_file.relative_to(repo_root).as_posix()
-        if r"\ref{??}" in text or r"\cite{??}" in text:
-            result.errors.append(f"{rel} has unresolved placeholder references")
-        if camera_ready and "TODO" in text:
-            result.errors.append(f"{rel} contains TODO while in camera-ready stage")
-        for match in re.finditer(r"\\label\{([^}]+)\}", text):
-            label_locations.setdefault(match.group(1), []).append(rel)
-    for label, files in label_locations.items():
-        if len(files) > 1:
-            result.warnings.append(f"duplicate \\label{{{label}}} in: {', '.join(files)}")
+    targets = state_data.get("targets", {})
+    if not isinstance(targets, dict) or active_target not in targets:
+        result.errors.append("paper/state.yaml active_target must name a declared target")
+        return
+    if target_name and target_name not in targets:
+        result.errors.append(f"unknown target: {target_name}")
+        return
+    for name in ([target_name] if target_name else targets):
+        target_root = safe_path(paper_root, name)
+        metadata_path = safe_path(target_root, "target.yaml")
+        if not metadata_path.is_file():
+            result.errors.append(f"paper/{name}/target.yaml is missing")
+            continue
+        metadata = _load_yaml(metadata_path)
+        entrypoint = str(metadata.get("entrypoint", "main.tex"))
+        entry = safe_path(target_root, entrypoint)
+        if entry.is_file():
+            graph = dependency_graph(target_root, entrypoint)
+        else:
+            graph = LatexGraph()
+            result.warnings.append(f"paper/{name}/{entrypoint} not assembled; checking section sources only")
+            for path in sorted((target_root / "sections").rglob("*.tex")):
+                part = dependency_graph(target_root, path.relative_to(target_root).as_posix())
+                graph.files.update(part.files)
+                graph.texts.update(part.texts)
+                graph.errors.extend(part.errors)
+                graph.warnings.extend(part.warnings)
+            if (target_root / "references.bib").is_file():
+                graph.files.add(Path("references.bib"))
+            if metadata.get("imported_from") or targets[name].get("stage") == "camera-ready":
+                graph.errors.append(f"missing manuscript entry point: {entrypoint}")
+        result.errors.extend(f"{name}: {message}" for message in graph.errors + reference_errors(target_root, graph))
+        result.warnings.extend(f"{name}: {message}" for message in graph.warnings)
+        if targets[name].get("stage") == "camera-ready":
+            for relative, text in graph.texts.items():
+                if "TODO" in text:
+                    result.errors.append(f"paper/{name}/{relative} contains TODO while in camera-ready stage")
 
 
-def validate_repo(repo_root: Path) -> ValidationResult:
+def validate_repo(repo_root: Path, *, target_name: str | None = None) -> ValidationResult:
     result = ValidationResult()
     if not (project_assets_dir(repo_root) / "config.yaml").is_file():
         result.errors.append("missing .quill/config.yaml; run quill init for managed workspace utilities")
-    _check_templates(repo_root, result)
-    _check_runtime_state(repo_root, result)
+    try:
+        _check_templates(repo_root, result)
+        _check_runtime_state(repo_root, result, target_name)
+    except (ValueError, OSError, yaml.YAMLError, TypeError, AttributeError) as exc:
+        result.errors.append(str(exc))
     return result

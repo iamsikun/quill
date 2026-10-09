@@ -31,12 +31,13 @@ This one command:
 - schedules a daily background update (launchd on macOS, cron on Linux).
 
 Updates only ever fast-forward to new releases, are skipped quietly when offline, and
-never touch a copy you have edited. Restart your agent after installing.
+never advance a working tree you have edited. Existing skill symlinks pointing
+elsewhere are preserved. Restart your agent after installing.
 
 ```bash
 ~/.local/share/quill/install.sh status      # version, links, CLI, last update
 ~/.local/share/quill/install.sh update      # update now
-~/.local/share/quill/install.sh uninstall   # remove everything
+~/.local/share/quill/install.sh uninstall   # remove owned installation; preserve personal work
 ```
 
 Add `--no-auto-update` to the install command (`... | bash -s -- --no-auto-update`) to
@@ -45,6 +46,10 @@ Python, CLI, or external service for ordinary writing. Without uv, the installer
 the CLI and says so. If you already installed a `quill` CLI some other way, the installer
 leaves it alone. When an update changes the package's metadata or dependencies, the
 installer refreshes the CLI.
+Failed refreshes are reported and retried by the next update, even if Git is
+already current. Reinstalling with `--no-auto-update` disables an existing job.
+Uninstall preserves clones with local changes, ignored files, unpublished commits,
+or no recorded installer ownership (including older installations).
 
 If you'd rather read the script before running it, clone the repo and run
 `./install.sh`.
@@ -88,6 +93,39 @@ unchanged owned files, removes unchanged obsolete files, and preserves unknown f
 Uninstall removes only unchanged owned files. A local conflict blocks the operation on
 all selected hosts; resolve it manually and retry. There is no force-overwrite flag.
 
+Preview a copy update before applying it:
+
+```bash
+quill skill sync --scope project --dry-run
+quill skill sync --scope project --diff
+quill skill sync --scope project
+```
+
+`--diff` implies a read-only preview and includes conflicting content for manual
+resolution. Both flags also work with `skill install` and `skill uninstall`.
+A conflict still exits nonzero; no selected host is changed.
+
+Keep personal preferences in a project-owned file such as `.quill/preferences.md`
+(or your existing project documentation), outside the canonical and installed
+skill folders. Attach that file or explicitly ask your agent to read it when using
+Quill; the CLI does not automatically inject it. For example: “Use Quill and read
+`.quill/preferences.md` before editing this section.” Sync and uninstall do not
+manage this file. To resolve a customized skill-copy conflict, save your changes
+separately, restore the affected file to its previously installed contents, inspect
+the preview, and retry. Do not edit the ownership checksums.
+
+Inspect the installation without changing it:
+
+```bash
+quill doctor
+quill doctor --json
+```
+
+Diagnostics show CLI and skill versions, installation methods, resolved skill
+paths, duplicate scopes, modified managed files, installer update state and
+pending refreshes, and available optional tools. Exit status is 1 when an issue
+needs attention. Missing LaTeX tools alone do not prevent ordinary writing.
+
 **Moving from an earlier copy install.** If you earlier ran `quill skill install` at
 user scope, remove those copies with `quill skill uninstall --scope user` before running
 the installer; the installer skips any existing copy rather than overwrite it. Earlier
@@ -120,17 +158,36 @@ managed targets and source context:
 
 ```bash
 quill init
-quill new-paper \
-  --title "Example paper" \
-  --topic "The research question and setting." \
-  --contribution "A supported contribution" \
-  --venue neurips \
-  --paper-type Empirical
+quill new-paper --title "Example paper"
 ```
 
 `quill init` adds missing configuration and template assets only. Existing files
-are preserved. It does not install skills or create manuscript state. Use
-`quill import-paper --help` to import an existing LaTeX project.
+are preserved. It does not install skills or create manuscript state. The default
+`generic` venue creates `paper/manuscript` with a standard article and `plainnat`
+bibliography style. Topic, contributions, paper type, and venue are optional; add
+`--topic`, repeated `--contribution`, `--paper-type`, or `--venue neurips` as needed.
+The generic venue also works with existing configuration files.
+
+Creation refuses an existing target before writing files. Use `--target NAME` to
+create another target, or `quill set-target NAME` to select one. Shared context and
+the master bibliography are preserved when adding targets. Edit existing metadata
+in `paper/<target>/target.yaml`; rerunning creation is not a metadata update.
+
+Import an existing LaTeX manuscript without splitting or rewriting its sources:
+
+```bash
+quill import-paper /path/to/main.tex --title "Existing paper"
+quill import-paper /path/to/project --title "Another version" --target revision
+```
+
+Import preserves the entry-point filename, relative paths, source bytes, nested
+inputs, local styles, graphics, and bibliographies reachable through supported
+literal commands. A directory with several document entry points requires selecting
+the exact `.tex` file. Use `--source-root` when the compilation root differs from
+the entry point's parent. Paths escaping that root, unresolved dependencies, and
+dynamic paths requiring TeX expansion are rejected before creating a workspace.
+Import does not merge bibliographies or copy unrelated project files. The
+`--import-mode` flag records review/revision intent; it never rewrites the sources.
 
 New workspaces use `.quill/`. Existing projects with `.pepper/config.yaml` keep
 using their configuration and templates in place, including when running
@@ -139,13 +196,28 @@ using their configuration and templates in place, including when running
 Retained utilities include `new-paper`, `import-paper`, `set-target`,
 `create-journal-version`, `sync-context`, `log-decision`, `clear-session`,
 `assemble`, `camera-ready`, `validate`, and `version`. Assembly regenerates a managed
-`main.tex`; use it only when regeneration is intended. Compilation requires a
+`main.tex`; use it only when regeneration is intended. Imported targets retain
+their original entry point during assembly. Compilation requires a
 LaTeX installation. Template shells and venue metadata are starting points, not
 verified current submission requirements. Obtain official style files separately.
 
 Existing projects keep their `paper/state.yaml`, shared context, source map,
 bibliography, session decisions, and target files. The skill reads relevant context
 without requiring it for self-contained writing.
+
+`quill validate` checks each target's reachable document separately for missing
+inputs, graphics, bibliographies, undefined references/citations, and duplicate
+labels. Use `--target NAME` to limit the check. Comments and verbatim examples are
+excluded. These are static checks of common literal LaTeX commands, not execution
+of TeX macros or verification of venue requirements. Warnings identify unsupported
+constructs; use compilation to verify the actual document.
+
+`quill camera-ready` builds a fresh package containing the manuscript and its
+dependencies. It copies auxiliary template styles, never the template's example
+manuscript, and rejects unresolved or unsupported dependencies. A failed check or
+build leaves the previous package and target stage intact. `--compile` uses
+`latexmk` when available, with a `pdflatex`/BibTeX fallback. The generated
+`VERIFICATION.md` distinguishes static checks from successful compilation.
 
 ## Migrating from Pepper
 
@@ -193,7 +265,7 @@ copies of the writing instructions.
 uv sync
 uv run pytest -q
 uv build
-QUILL_WHEEL="$PWD/dist/quill-0.3.0-py3-none-any.whl" uv run pytest -q
+QUILL_WHEEL="$PWD/dist/quill-0.4.0-py3-none-any.whl" uv run pytest -q
 ```
 
 `uv run python scripts/validate.py` checks the skill against the Agent Skills spec and

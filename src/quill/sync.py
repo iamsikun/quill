@@ -15,6 +15,8 @@ MARKER_END = "<!-- pepper:end -->"
 class SyncResult:
     written_files: list[str] = field(default_factory=list)
     conflicts: list[str] = field(default_factory=list)
+    planned_changes: list[str] = field(default_factory=list)
+    diffs: list[str] = field(default_factory=list)
 
 
 def package_version() -> str:

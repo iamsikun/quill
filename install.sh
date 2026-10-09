@@ -27,6 +27,9 @@ LAUNCHD_LABEL="io.github.iamsikun.quill.update"
 LAUNCHD_PLIST="$HOME/Library/LaunchAgents/$LAUNCHD_LABEL.plist"
 CRON_MARKER="# quill-auto-update"
 CLI_STATE="$STATE_DIR/cli"   # path of the uv that installed the CLI; present only if we own it
+CLI_METADATA="$STATE_DIR/cli-metadata"  # fingerprint of the last successfully installed pyproject.toml
+LAST_ERROR="$STATE_DIR/last-error"
+CLONE_STATE="$STATE_DIR/clone"
 
 say() { printf 'quill: %s\n' "$*"; }
 die() { printf 'quill: error: %s\n' "$*" >&2; exit 1; }
@@ -57,8 +60,11 @@ link_skill() {
     target="$dir/quill"
     mkdir -p "$dir"
     if [ -L "$target" ]; then
-      ln -sfn "$(skill_src)" "$target"
-      say "linked $target"
+      if [ "$(readlink "$target")" = "$(skill_src)" ]; then
+        say "linked $target"
+      else
+        say "kept $target (symlink owned elsewhere: $(readlink "$target"))"
+      fi
     elif [ -f "$target/.quill-install.json" ]; then
       say "skipped $target (a copy from 'quill skill install'; run 'quill skill uninstall --scope user', then reinstall)"
     elif [ -e "$target" ]; then
@@ -101,6 +107,27 @@ find_uv() {
   return 1
 }
 
+metadata_fingerprint() { git -C "$QUILL_HOME" hash-object pyproject.toml; }
+
+record_error() {
+  mkdir -p "$STATE_DIR"
+  printf '%s\n' "$*" > "$LAST_ERROR"
+  say "$*"
+}
+
+cli_owned() {
+  local receipt
+  receipt="$("$1" tool dir)/quill/uv-receipt.toml"
+  [ -f "$receipt" ] && grep -qF "editable = \"$QUILL_HOME\"" "$receipt"
+}
+
+record_cli_success() {
+  mkdir -p "$STATE_DIR"
+  printf '%s\n' "$1" > "$CLI_STATE"
+  metadata_fingerprint > "$CLI_METADATA"
+  rm -f "$LAST_ERROR"
+}
+
 # Editable install from the clone, so each update reaches the CLI with no extra step.
 install_cli() {
   local uv receipt
@@ -109,16 +136,15 @@ install_cli() {
     return 0
   fi
   receipt="$("$uv" tool dir)/quill/uv-receipt.toml"
-  if [ ! -f "$CLI_STATE" ] && [ -f "$receipt" ] && ! grep -qF "$QUILL_HOME" "$receipt"; then
+  if [ -f "$receipt" ] && ! cli_owned "$uv"; then
     say "kept the existing quill CLI, which was installed from elsewhere (see 'uv tool list')"
     return 0
   fi
   if ! "$uv" tool install --quiet --reinstall --editable "$QUILL_HOME"; then
-    say "could not install the quill CLI; the skill works without it"
+    record_error "could not install the quill CLI; rerun install.sh to retry; the skill works without it"
     return 0
   fi
-  mkdir -p "$STATE_DIR"
-  printf '%s\n' "$uv" > "$CLI_STATE"
+  record_cli_success "$uv"
   say "installed the quill CLI with uv"
   local bin
   bin="$("$uv" tool dir --bin)"
@@ -131,13 +157,23 @@ install_cli() {
 # Reinstalling refreshes the package metadata (version, dependencies, entry points).
 refresh_cli() {
   [ -f "$CLI_STATE" ] || return 0
-  local uv
+  local uv receipt
   uv="$(cat "$CLI_STATE")"
-  [ -x "$uv" ] || uv="$(find_uv)" || { say "uv not found; quill CLI not refreshed"; return 0; }
+  [ -x "$uv" ] || uv="$(find_uv)" || { record_error "uv not found; quill CLI refresh pending"; return 1; }
+  receipt="$("$uv" tool dir)/quill/uv-receipt.toml"
+  if [ -f "$receipt" ] && ! cli_owned "$uv"; then
+    record_error "quill CLI receipt no longer belongs to $QUILL_HOME; kept the external installation"
+    return 1
+  fi
+  if [ -f "$receipt" ] && [ -f "$CLI_METADATA" ] && [ "$(cat "$CLI_METADATA")" = "$(metadata_fingerprint)" ]; then
+    return 0
+  fi
   if "$uv" tool install --quiet --reinstall --editable "$QUILL_HOME"; then
+    record_cli_success "$uv"
     say "refreshed the quill CLI"
   else
-    say "could not refresh the quill CLI"
+    record_error "could not refresh the quill CLI; next update will retry"
+    return 1
   fi
 }
 
@@ -145,9 +181,14 @@ uninstall_cli() {
   [ -f "$CLI_STATE" ] || return 0
   local uv
   uv="$(cat "$CLI_STATE")"
-  [ -x "$uv" ] || uv="$(find_uv)" || { say "uv not found; remove the CLI with 'uv tool uninstall quill'"; return 0; }
-  "$uv" tool uninstall quill >/dev/null 2>&1 && say "removed the quill CLI"
-  rm -f "$CLI_STATE"
+  [ -x "$uv" ] || uv="$(find_uv)" || { die "uv not found; remove the CLI with 'uv tool uninstall quill' before uninstalling"; }
+  if cli_owned "$uv"; then
+    "$uv" tool uninstall quill >/dev/null 2>&1 || die "could not uninstall the CLI; kept the clone and ownership state"
+    say "removed the quill CLI"
+  else
+    say "kept the quill CLI installed elsewhere"
+  fi
+  rm -f "$CLI_STATE" "$CLI_METADATA"
 }
 
 schedule_updates() {
@@ -199,7 +240,7 @@ unschedule_updates() {
     say "removed launchd job"
   fi
   if command -v crontab >/dev/null && crontab -l 2>/dev/null | grep -q "$CRON_MARKER"; then
-    crontab -l 2>/dev/null | grep -v "$CRON_MARKER" | crontab -
+    { crontab -l 2>/dev/null | grep -v "$CRON_MARKER" || true; } | crontab -
     say "removed cron job"
   fi
 }
@@ -221,6 +262,8 @@ cmd_install() {
   else
     mkdir -p "$(dirname "$QUILL_HOME")"
     git clone --quiet --branch "$QUILL_REF" "$QUILL_REPO" "$QUILL_HOME"
+    mkdir -p "$STATE_DIR"
+    printf '%s\n' "$QUILL_HOME" > "$CLONE_STATE"
     say "installed Quill $(installed_version) ($QUILL_REF) to $QUILL_HOME"
   fi
 
@@ -231,6 +274,7 @@ cmd_install() {
   if [ "$auto" -eq 1 ]; then
     schedule_updates
   else
+    unschedule_updates
     say "automatic updates off; run '$QUILL_HOME/install.sh update' to update"
   fi
   say "done. Restart your agent to pick up the skill."
@@ -239,22 +283,25 @@ cmd_install() {
 # Fast-forward only: never discards local edits, never moves to unreleased work.
 cmd_update() {
   [ -d "$QUILL_HOME/.git" ] || die "Quill is not installed at $QUILL_HOME"
-  local before after rev
+  local before after
   before="$(installed_version)"
-  rev="$(git -C "$QUILL_HOME" rev-parse HEAD)"
+  if [ -n "$(git -C "$QUILL_HOME" status --porcelain)" ]; then
+    record_error "local changes in $QUILL_HOME; keeping $before"
+    return 1
+  fi
   if ! git -C "$QUILL_HOME" fetch --quiet --tags origin "$QUILL_REF" 2>/dev/null; then
     say "$(date '+%F %T') offline or fetch failed; keeping $before"
-    return 0
+    refresh_cli
+    return
   fi
   if ! git -C "$QUILL_HOME" merge --quiet --ff-only FETCH_HEAD 2>/dev/null; then
-    say "$(date '+%F %T') local changes in $QUILL_HOME prevent a fast-forward; keeping $before"
-    return 0
+    record_error "local history in $QUILL_HOME prevents a fast-forward; keeping $before"
+    return 1
   fi
   after="$(installed_version)"
-  if ! git -C "$QUILL_HOME" diff --quiet "$rev" HEAD -- pyproject.toml; then
-    refresh_cli
-  fi
+  refresh_cli || return 1
   mkdir -p "$STATE_DIR"
+  rm -f "$LAST_ERROR"
   date '+%F %T' > "$STATE_DIR/last-update"
   if [ "$before" = "$after" ]; then
     say "$(date '+%F %T') up to date ($after)"
@@ -269,12 +316,16 @@ cmd_status() {
   say "tracking:    $QUILL_REF ($(git -C "$QUILL_HOME" rev-parse --short HEAD))"
   say "location:    $QUILL_HOME"
   say "last update: $(cat "$STATE_DIR/last-update" 2>/dev/null || echo never)"
+  [ ! -f "$LAST_ERROR" ] || say "last error:  $(cat "$LAST_ERROR")"
   local dir
   for dir in "$HOME/.claude/skills" "$HOME/.agents/skills" "$HOME/.copilot/skills" "$HOME/.config/opencode/skills"; do
-    [ -L "$dir/quill" ] && say "linked:      $dir/quill"
+    [ -L "$dir/quill" ] && say "linked:      $dir/quill -> $(readlink "$dir/quill")"
   done
   if [ -f "$CLI_STATE" ]; then
-    say "cli:         installed (uv tool, editable from $QUILL_HOME)"
+    say "cli:         managed receipt recorded (run quill doctor to inspect versions)"
+    if [ ! -f "$CLI_METADATA" ] || [ "$(cat "$CLI_METADATA")" != "$(metadata_fingerprint)" ]; then
+      say "cli refresh: pending; run install.sh update"
+    fi
   else
     say "cli:         not managed by the installer"
   fi
@@ -290,8 +341,16 @@ cmd_uninstall() {
   unlink_skill
   uninstall_cli
   if [ -d "$QUILL_HOME/.git" ]; then
-    if [ -n "$(git -C "$QUILL_HOME" status --porcelain 2>/dev/null)" ]; then
-      say "kept $QUILL_HOME because it has local edits; delete it yourself when done"
+    if [ ! -f "$CLONE_STATE" ] || [ "$(cat "$CLONE_STATE")" != "$QUILL_HOME" ]; then
+      say "kept $QUILL_HOME because clone ownership is not recorded (including older installs)"
+    elif ! git -C "$QUILL_HOME" status --porcelain >/dev/null 2>&1; then
+      say "kept $QUILL_HOME because its Git state could not be checked"
+    elif [ -n "$(git -C "$QUILL_HOME" status --porcelain --ignored)" ]; then
+      say "kept $QUILL_HOME because it has local or ignored files; delete it yourself when done"
+    elif ! git -C "$QUILL_HOME" show-ref --verify --quiet refs/remotes/origin/"$QUILL_REF"; then
+      say "kept $QUILL_HOME because the tracked remote branch cannot establish published history"
+    elif [ -n "$(git -C "$QUILL_HOME" rev-list --all --not --remotes=origin)" ]; then
+      say "kept $QUILL_HOME because it has unpublished commits; delete it yourself when done"
     else
       rm -rf "$QUILL_HOME"
       say "removed $QUILL_HOME"

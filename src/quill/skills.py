@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import difflib
 import os
 from importlib.resources import files
 from pathlib import Path
@@ -64,7 +65,22 @@ def _load_manifest(path: Path) -> dict | None:
     return data
 
 
-def install_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user', sync: bool = False) -> SyncResult:
+def _preview(result: SyncResult, path: Path, payload: bytes | None, *, diff: bool) -> None:
+    action = 'delete' if payload is None else ('update' if path.exists() else 'create')
+    result.planned_changes.append(f'{action}: {path}')
+    if diff and path.name != SKILL_MANIFEST:
+        before = path.read_bytes() if path.is_file() else b''
+        after = payload or b''
+        try:
+            result.diffs.append(''.join(difflib.unified_diff(
+                before.decode().splitlines(keepends=True), after.decode().splitlines(keepends=True),
+                fromfile=f'{path} (current)', tofile=f'{path} (proposed)')))
+        except UnicodeDecodeError:
+            result.diffs.append(f'{path}: binary content differs\n')
+
+
+def install_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user', sync: bool = False,
+                  dry_run: bool = False, diff: bool = False) -> SyncResult:
     """Preflight all selected hosts before updating any files. Never force edits away."""
     assets = skill_bytes()
     if 'SKILL.md' not in assets:
@@ -95,6 +111,7 @@ def install_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user', sy
                 if current == hashes[relative]:
                     continue
                 if current != known.get(relative):
+                    _preview(result, destination, payload, diff=diff)
                     result.conflicts.append(f'{destination}: locally modified or not owned')
                     continue
             writes.append((destination, payload))
@@ -102,6 +119,7 @@ def install_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user', sy
             destination = safe_path(root, relative)
             if destination.exists():
                 if not destination.is_file() or hash_file(destination) != known[relative]:
+                    _preview(result, destination, None, diff=diff)
                     result.conflicts.append(f'{destination}: obsolete file has local changes')
                 else:
                     deletes.append(destination)
@@ -110,7 +128,11 @@ def install_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user', sy
         payload = (json.dumps(record, indent=2, sort_keys=True) + '\n').encode()
         if not manifest_path.exists() or manifest_path.read_bytes() != payload:
             writes.append((manifest_path, payload))
-    if result.conflicts:
+    for destination, payload in writes:
+        _preview(result, destination, payload, diff=diff)
+    for destination in deletes:
+        _preview(result, destination, None, diff=diff)
+    if result.conflicts or dry_run or diff:
         return result
     for destination, payload in writes:
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -122,7 +144,8 @@ def install_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user', sy
     return result
 
 
-def uninstall_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user') -> SyncResult:
+def uninstall_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user',
+                    dry_run: bool = False, diff: bool = False) -> SyncResult:
     """Remove only files whose checksums match the ownership manifest; keep everything else."""
     result = SyncResult()
     deletes: list[Path] = []
@@ -148,7 +171,9 @@ def uninstall_skill(repo_root: Path, *, host: str = 'all', scope: str = 'user') 
                 deletes.append(destination)
         deletes.append(manifest_path)
         roots.append(root)
-    if result.conflicts:
+    for destination in deletes:
+        _preview(result, destination, None, diff=diff)
+    if result.conflicts or dry_run or diff:
         return result
     for destination in deletes:
         destination.unlink()

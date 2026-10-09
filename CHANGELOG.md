@@ -5,6 +5,24 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
+## 0.4.0 — 2026-10-09
+
+- Preserve manuscript entry points and nested LaTeX dependencies on import and in
+  submission archives; never replace a manuscript with a template example.
+- Refuse repeated target creation before writing, preserve shared context and
+  bibliographies, and retain imported source bytes during assembly.
+- Validate literal inputs, graphics, bibliography files, reference/citation keys,
+  and duplicate labels separately for each target. Compilation remains a separate check.
+- Preserve external skill symlinks and clones with personal work or unproven
+  ownership. Retry failed CLI metadata refreshes on subsequent updates and expose
+  pending refreshes and failures. Respect external CLI installations.
+- Add `quill doctor` with text/JSON diagnostics and `--dry-run`/`--diff` previews for
+  skill installation, synchronization, and removal. Document project-owned preferences.
+- Add a generic manuscript target requiring only a title, with optional metadata
+  and explicit names for additional targets.
+- Add regression tests for these workflows, including compilation of an extracted
+  submission archive. Writing instructions are unchanged.
+
 ## 0.3.0 — 2026-10-09
 
 - `install.sh` now installs the `quill` CLI by default as an editable uv tool from the

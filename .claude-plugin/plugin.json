@@ -1,6 +1,6 @@
 {
   "name": "quill",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Draft and revise academic manuscripts while preserving claims, assumptions, evidence, uncertainty, numbers, notation, and citations.",
   "author": { "name": "Sikun Xu" },
   "license": "MIT",

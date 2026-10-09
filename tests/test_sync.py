@@ -206,5 +206,6 @@ def test_import_and_context_sync(tmp_path: Path) -> None:
                           contributions=["Supported claim"], venue_key="neurips", paper_type="Empirical")
     assert target == "conference"
     context = sync_context(repo).read_text()
-    assert "introduction.tex" in context
+    assert "manuscript.tex" in context
+    assert (repo / "paper/conference/manuscript.tex").read_bytes() == source.read_bytes()
     assert validate_repo(repo).ok

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
+import yaml
 
 from .assembly import assemble_paper, camera_ready
 from .importer import import_paper
@@ -11,6 +13,7 @@ from .skills import install_skill, skill_destinations, uninstall_skill
 from .migration import migrate_project
 from .sync import find_repo_root, init_project, package_version
 from .validate import validate_repo
+from .doctor import diagnose, format_diagnosis
 
 
 def _repo_root() -> Path:
@@ -24,11 +27,20 @@ def _print_conflicts(conflicts: list[str]) -> None:
 
 
 def _cmd_skill(args: argparse.Namespace) -> int:
-    result = install_skill(_repo_root(), host=args.host, scope=args.scope, sync=args.skill_action == "sync")
+    result = install_skill(_repo_root(), host=args.host, scope=args.scope, sync=args.skill_action == "sync",
+                           dry_run=args.dry_run, diff=args.diff)
+    if args.dry_run or args.diff:
+        for change in result.planned_changes:
+            print(f"would {change}")
+        for difference in result.diffs:
+            print(difference, end="" if difference.endswith("\n") else "\n")
+        print("Preview only; no files changed.")
     if result.conflicts:
         _print_conflicts(result.conflicts)
         print("No skill files changed. Preserve or resolve local changes before retrying.")
         return 1
+    if args.dry_run or args.diff:
+        return 0
     for name, destination in skill_destinations(_repo_root(), host=args.host, scope=args.scope).items():
         print(f"{name}: {destination}")
     print(f"skill ready ({len(result.written_files)} files changed)")
@@ -36,11 +48,19 @@ def _cmd_skill(args: argparse.Namespace) -> int:
 
 
 def _cmd_skill_uninstall(args: argparse.Namespace) -> int:
-    result = uninstall_skill(_repo_root(), host=args.host, scope=args.scope)
+    result = uninstall_skill(_repo_root(), host=args.host, scope=args.scope, dry_run=args.dry_run, diff=args.diff)
+    if args.dry_run or args.diff:
+        for change in result.planned_changes:
+            print(f"would {change}")
+        for difference in result.diffs:
+            print(difference, end="" if difference.endswith("\n") else "\n")
+        print("Preview only; no files changed.")
     if result.conflicts:
         _print_conflicts(result.conflicts)
         print("No skill files removed. Preserve or resolve local changes before retrying.")
         return 1
+    if args.dry_run or args.diff:
+        return 0
     for path in result.written_files:
         print(f"removed: {path}")
     print(f"skill uninstalled ({len(result.written_files)} files removed)")
@@ -72,15 +92,15 @@ def _cmd_migrate(args: argparse.Namespace) -> int:
     return 0
 
 
-def _cmd_validate(_: argparse.Namespace) -> int:
+def _cmd_validate(args: argparse.Namespace) -> int:
     repo_root = _repo_root()
-    result = validate_repo(repo_root)
+    result = validate_repo(repo_root, target_name=args.target)
     for warning in result.warnings:
         print(f"WARN: {warning}")
     for error in result.errors:
         print(f"ERROR: {error}")
     if result.ok:
-        print("validation passed")
+        print("validation passed (static checks; compilation not performed)")
         return 0
     print("validation failed")
     return 1
@@ -89,6 +109,12 @@ def _cmd_validate(_: argparse.Namespace) -> int:
 def _cmd_version(_: argparse.Namespace) -> int:
     print(f"package version: {package_version()}")
     return 0
+
+
+def _cmd_doctor(args: argparse.Namespace) -> int:
+    report = diagnose(_repo_root())
+    print(json.dumps(report, indent=2) if args.json else format_diagnosis(report))
+    return 1 if report['issues'] else 0
 
 
 def _cmd_new_paper(args: argparse.Namespace) -> int:
@@ -100,6 +126,7 @@ def _cmd_new_paper(args: argparse.Namespace) -> int:
         contributions=args.contribution,
         venue_key=args.venue,
         paper_type=args.paper_type,
+        target_name=args.target,
     )
     print(f"initialized paper workspace for target '{target}'")
     print("use the Quill skill in your host to draft or revise the manuscript")
@@ -117,6 +144,8 @@ def _cmd_import_paper(args: argparse.Namespace) -> int:
         venue_key=args.venue,
         paper_type=args.paper_type,
         import_mode=args.import_mode,
+        target_name=args.target,
+        source_root=Path(args.source_root) if args.source_root else None,
     )
     print(f"imported paper into target '{target}'")
     print("use the Quill skill to revise the imported manuscript")
@@ -169,10 +198,11 @@ def _cmd_clear_session(args: argparse.Namespace) -> int:
 
 def _add_common_metadata_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--title", required=True, help="Working paper title")
-    parser.add_argument("--topic", required=True, help="2-3 sentence topic description")
-    parser.add_argument("--contribution", action="append", required=True, help="Repeat for each contribution")
-    parser.add_argument("--venue", required=True, help="Venue key from .quill/config.yaml")
-    parser.add_argument("--paper-type", required=True, help="Methodology, Theory, Empirical, or Theory+Experiments")
+    parser.add_argument("--topic", default="", help="Optional topic description")
+    parser.add_argument("--contribution", action="append", default=[], help="Optional; repeat for each contribution")
+    parser.add_argument("--venue", default="generic", help="Venue key from .quill/config.yaml; default: generic")
+    parser.add_argument("--paper-type", default="", help="Optional manuscript type")
+    parser.add_argument("--target", help="New target name; defaults to manuscript, conference, or journal")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -186,6 +216,8 @@ def build_parser() -> argparse.ArgumentParser:
         action_parser = skill_actions.add_parser(action)
         action_parser.add_argument("--host", choices=("codex", "claude", "all"), default="all")
         action_parser.add_argument("--scope", choices=("user", "project"), default="user")
+        action_parser.add_argument("--dry-run", action="store_true", help="Preview changes without writing files")
+        action_parser.add_argument("--diff", action="store_true", help="Show proposed diffs; implies --dry-run")
         action_parser.set_defaults(func=_cmd_skill_uninstall if action == "uninstall" else _cmd_skill)
 
     init_parser = subparsers.add_parser("init", help="Add missing optional project configuration and templates")
@@ -196,10 +228,15 @@ def build_parser() -> argparse.ArgumentParser:
     migration_parser.set_defaults(func=_cmd_migrate)
 
     validate_parser = subparsers.add_parser("validate", help="Validate an optional managed manuscript project")
+    validate_parser.add_argument("--target", help="Check one target; default: every declared target")
     validate_parser.set_defaults(func=_cmd_validate)
 
     version_parser = subparsers.add_parser("version", help="Show the installed package version")
     version_parser.set_defaults(func=_cmd_version)
+
+    doctor_parser = subparsers.add_parser("doctor", help="Inspect installations, update health, and optional dependencies")
+    doctor_parser.add_argument("--json", action="store_true", help="Return machine-readable diagnostics")
+    doctor_parser.set_defaults(func=_cmd_doctor)
 
     new_parser = subparsers.add_parser("new-paper", help="Initialize a new paper workspace")
     _add_common_metadata_arguments(new_parser)
@@ -207,6 +244,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     import_parser = subparsers.add_parser("import-paper", help="Import an existing LaTeX project")
     import_parser.add_argument("source", help="Path to a TeX file or directory")
+    import_parser.add_argument("--source-root", help="Compilation root containing the entry point and its dependencies")
     import_parser.add_argument("--import-mode", default="review", choices=("review", "revise", "retarget"))
     _add_common_metadata_arguments(import_parser)
     import_parser.set_defaults(func=_cmd_import_paper)
@@ -265,7 +303,7 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(arguments)
     try:
         status = args.func(args)
-    except (OSError, ValueError, KeyError, TypeError) as exc:
+    except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError) as exc:
         print(f"quill: {exc}", file=sys.stderr)
         status = 1
     sys.exit(status)

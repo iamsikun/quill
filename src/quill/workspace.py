@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import re
-import textwrap
 from datetime import date, datetime
 from pathlib import Path
 
 import yaml
 
-from .sync import project_assets_dir
+from .sync import project_assets_dir, safe_path
+from .latex import dependency_graph, source_text
 
 EXCLUDED_SCAN_DIRS = {".git", ".agents", ".claude", ".quill", ".pepper", "paper", "node_modules", ".venv", "dist", "__pycache__"}
 
@@ -37,6 +37,8 @@ def _load_yaml(path: Path) -> dict:
     if not path.exists():
         return {}
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if data is not None and not isinstance(data, dict):
+        raise ValueError(f"expected a YAML mapping: {path}")
     return data or {}
 
 
@@ -63,12 +65,15 @@ def _detect_target_name(venue_config: dict) -> str:
 
 
 def _target_metadata(config: dict, venue_key: str, *, target_name: str | None = None) -> dict:
-    venues = config.get("venues", {})
+    venues = {"generic": {"template_dir": "generic", "audience": "general",
+                          "bibstyle": "plainnat", "blind_review": False}, **config.get("venues", {})}
     if venue_key not in venues:
         available = ", ".join(sorted(venues))
         raise ValueError(f"unknown venue '{venue_key}'; available venues: {available}")
     venue = dict(venues[venue_key])
-    resolved_target = target_name or _detect_target_name(venue)
+    resolved_target = target_name or ("manuscript" if venue_key == "generic" else _detect_target_name(venue))
+    if not re.fullmatch(r"[a-z0-9][a-z0-9_-]*", resolved_target) or resolved_target == "shared":
+        raise ValueError(f"invalid target name: {resolved_target!r}")
     return {
         "name": resolved_target,
         "venue": venue_key,
@@ -78,6 +83,7 @@ def _target_metadata(config: dict, venue_key: str, *, target_name: str | None = 
         "audience": venue.get("audience"),
         "format": venue.get("format"),
         "bibstyle": venue.get("bibstyle"),
+        "entrypoint": "main.tex",
     }
 
 
@@ -110,33 +116,12 @@ def _context_markdown(
         f"- {category.replace('_', ' ').title()}: {', '.join(paths)}"
         for category, paths in source_map.items()
     ) or "- No matching repo paths discovered"
-    import_block = ""
+    blocks = ["# Paper Context", f"## Title\n{title}", f"## Topic\n{topic}",
+              f"## Contributions\n{contribution_lines}", f"## Paper Type\n{paper_type}",
+              f"## Source Map\n{source_lines}", "## Key Files\n- Fill in important project-specific files here"]
     if import_notes:
-        import_block = f"\n## Import Notes\n{import_notes.strip()}\n"
-    return textwrap.dedent(
-        f"""\
-        # Paper Context
-
-        ## Title
-        {title}
-
-        ## Topic
-        {topic}
-
-        ## Contributions
-        {contribution_lines}
-
-        ## Paper Type
-        {paper_type}
-
-        ## Source Map
-        {source_lines}
-
-        ## Key Files
-        - Fill in important project-specific files here
-        {import_block}
-        """
-    ).strip() + "\n"
+        blocks.append(f"## Import Notes\n{import_notes.strip()}")
+    return "\n\n".join(blocks) + "\n"
 
 
 def _initialize_shared_files(shared_root: Path) -> None:
@@ -168,18 +153,41 @@ def initialize_workspace(
     imported_from: str | None = None,
     import_mode: str | None = None,
     target_name: str | None = None,
+    manuscript_files: dict[str, bytes] | None = None,
+    entrypoint: str = "main.tex",
 ) -> str:
     config = _load_config(repo_root)
     target = _target_metadata(config, venue_key, target_name=target_name)
-    paper_root = repo_root / "paper"
-    target_root = paper_root / target["name"]
-    target_root.mkdir(parents=True, exist_ok=True)
+    paper_root = safe_path(repo_root, "paper")
+    target_root = safe_path(paper_root, target["name"])
+    state_path = safe_path(paper_root, "state.yaml")
+    state = _load_yaml(state_path)
+    if not isinstance(state.get("targets", {}), dict):
+        raise ValueError("paper/state.yaml targets must be a mapping")
+    if target_root.exists() or target["name"] in state.get("targets", {}):
+        raise ValueError(f"target '{target['name']}' already exists; use set-target or choose --target NAME. No files changed")
+    context_path = safe_path(paper_root, "shared/context.md")
+    for name in ("claims.md", "figure-plan.md", "table-plan.md", "references-master.bib", "literature", "evidence"):
+        safe_path(paper_root, f"shared/{name}")
+    for relative in manuscript_files or {}:
+        safe_path(target_root, relative)
+        if relative in {"target.yaml", "sections", "figures"}:
+            raise ValueError(f"import source conflicts with reserved workspace path: {relative}")
+    safe_path(target_root, entrypoint)
+    target.update(title=title, entrypoint=entrypoint)
+    if imported_from:
+        target["imported_from"] = imported_from
+    context_text = _context_markdown(
+        title=title, topic=topic, contributions=contributions, paper_type=paper_type,
+        source_map=source_map if source_map is not None else scan_source_map(repo_root),
+        import_notes=f"- Imported from: `{imported_from}`\n- Import mode: `{import_mode or 'review'}`" if imported_from else None,
+    )
+
+    target_root.mkdir(parents=True)
     (target_root / "sections").mkdir(parents=True, exist_ok=True)
     (target_root / "figures").mkdir(parents=True, exist_ok=True)
     _initialize_shared_files(paper_root / "shared")
 
-    state_path = paper_root / "state.yaml"
-    state = _load_yaml(state_path)
     state.setdefault("targets", {})
     state["active_target"] = target["name"]
     state["initialized"] = True
@@ -188,25 +196,19 @@ def initialize_workspace(
         "created": state.get("targets", {}).get(target["name"], {}).get("created", _today()),
         "venue": venue_key,
     }
-    if imported_from:
-        state["imported_from"] = imported_from
     if import_mode:
         target_state["import_mode"] = import_mode
     state["targets"][target["name"]] = target_state
     _write_yaml(state_path, state)
 
-    import_notes = None
-    if imported_from:
-        import_notes = f"- Imported from: `{imported_from}`\n- Import mode: `{import_mode or 'review'}`"
-    context_text = _context_markdown(
-        title=title,
-        topic=topic,
-        contributions=contributions,
-        paper_type=paper_type,
-        source_map=source_map or scan_source_map(repo_root),
-        import_notes=import_notes,
-    )
-    (paper_root / "shared/context.md").write_text(context_text, encoding="utf-8")
+    if not context_path.exists():
+        context_path.write_text(context_text, encoding="utf-8")
+    for relative, payload in (manuscript_files or {}).items():
+        destination = target_root / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(payload)
+    if not imported_from:
+        (target_root / "references.bib").touch()
     _write_yaml(target_root / "target.yaml", target)
     return target["name"]
 
@@ -215,19 +217,21 @@ def new_paper(
     repo_root: Path,
     *,
     title: str,
-    topic: str,
-    contributions: list[str],
-    venue_key: str,
-    paper_type: str,
+    topic: str = "",
+    contributions: list[str] | None = None,
+    venue_key: str = "generic",
+    paper_type: str = "",
+    target_name: str | None = None,
 ) -> str:
     return initialize_workspace(
         repo_root,
         title=title,
         topic=topic,
-        contributions=contributions,
+        contributions=contributions or [],
         venue_key=venue_key,
         paper_type=paper_type,
         source_map=scan_source_map(repo_root),
+        target_name=target_name,
     )
 
 
@@ -267,10 +271,12 @@ def create_journal_version(repo_root: Path, *, venue_key: str, activate: bool = 
     metadata = _target_metadata(config, venue_key, target_name="journal")
     if metadata["audience"] == "ml":
         raise ValueError("journal target must use a non-ML venue")
-    paper_root = repo_root / "paper"
+    paper_root = safe_path(repo_root, "paper")
+    state = _load_state(repo_root) if (paper_root / "state.yaml").exists() else {"targets": {}, "initialized": True}
+    if safe_path(paper_root, "journal").exists() or "journal" in state.get("targets", {}):
+        raise ValueError("journal target already exists; use set-target journal. No files changed")
     (paper_root / "journal/sections").mkdir(parents=True, exist_ok=True)
     (paper_root / "journal/figures").mkdir(parents=True, exist_ok=True)
-    state = _load_state(repo_root) if (paper_root / "state.yaml").exists() else {"targets": {}, "initialized": True}
     state.setdefault("targets", {})
     state["targets"]["journal"] = {
         "stage": state.get("targets", {}).get("journal", {}).get("stage", "init"),
@@ -316,7 +322,7 @@ def clear_session(repo_root: Path) -> Path:
 
 def _extract_tex_metadata(tex_path: Path) -> dict:
     """Extract labels and section titles from a .tex file."""
-    content = tex_path.read_text(encoding="utf-8")
+    content = source_text(tex_path.read_text(encoding="utf-8"))
     return {
         "labels": _LABEL_RE.findall(content),
         "sections": _SECTION_RE.findall(content),
@@ -326,16 +332,23 @@ def _extract_tex_metadata(tex_path: Path) -> dict:
 def sync_context(repo_root: Path, *, target_name: str | None = None) -> Path:
     """Scan .tex files and update context.md with the actual paper structure."""
     target = target_name or active_target(repo_root)
-    sections_dir = repo_root / f"paper/{target}/sections"
-    if not sections_dir.exists():
-        raise FileNotFoundError(f"no sections directory at {sections_dir}")
+    target_root = safe_path(repo_root, f"paper/{target}")
+    metadata = _load_yaml(target_root / "target.yaml")
+    entrypoint = str(metadata.get("entrypoint", "main.tex"))
+    if (target_root / entrypoint).is_file():
+        graph = dependency_graph(target_root, entrypoint)
+        if graph.errors:
+            raise ValueError("\n".join(graph.errors))
+        tex_files = [target_root / path for path in graph.texts if path.suffix == ".tex"]
+    else:
+        tex_files = sorted((target_root / "sections").rglob("*.tex"))
 
     structure_lines: list[str] = []
-    for tex_file in sorted(sections_dir.glob("*.tex")):
+    for tex_file in sorted(tex_files):
         meta = _extract_tex_metadata(tex_file)
         title = meta["sections"][0] if meta["sections"] else tex_file.stem.replace("_", " ").title()
         label_info = ", ".join(meta["labels"]) if meta["labels"] else "no labels"
-        structure_lines.append(f"- `{tex_file.name}`: {title} [{label_info}]")
+        structure_lines.append(f"- `{tex_file.relative_to(target_root)}`: {title} [{label_info}]")
 
     context_path = repo_root / "paper/shared/context.md"
     content = context_path.read_text(encoding="utf-8")
@@ -344,7 +357,7 @@ def sync_context(repo_root: Path, *, target_name: str | None = None) -> Path:
     if "## Current Structure" in content:
         content = re.sub(
             r"## Current Structure\n.*?(?=\n## |\Z)",
-            structure_block + "\n",
+            lambda _: structure_block + "\n",
             content,
             flags=re.DOTALL,
         )
