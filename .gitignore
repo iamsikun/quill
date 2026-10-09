@@ -1,6 +1,6 @@
 
 
-# pepper:start
+# quill:start
 paper/**/camera-ready/
 paper/**/submission/
 paper/**/*.aux
@@ -11,7 +11,7 @@ paper/**/*.fls
 paper/**/*.log
 paper/**/*.out
 paper/**/*.synctex.gz
-# pepper:end
+# quill:end
 # packaging and tests
 .pytest_cache/
 build/

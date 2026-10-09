@@ -1,0 +1,291 @@
+[
+  {
+    "expect_activation": true,
+    "id": "mechanics",
+    "prompt": "Copyedit this academic sentence and return the corrected sentence.",
+    "source": "The estimates is computed for each of the 48 districts.",
+    "references": [
+      "editing.md"
+    ],
+    "must_preserve": [
+      "48 districts",
+      "estimates computed for each district"
+    ],
+    "must_not": [
+      "change the sample size",
+      "add a method or finding"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "surgical",
+    "prompt": "Line-edit ONLY the second paragraph for clarity. Return all three paragraphs; keep the first and third exactly unchanged.",
+    "source": "We define the target population before estimation.\n\nThe procedure produces estimates of effects and these estimates are then used by the decision rule in the making of its choices.\n\nThe next section reports uncertainty.",
+    "references": [
+      "editing.md"
+    ],
+    "must_preserve": [
+      "first and third paragraphs byte-for-byte",
+      "estimates precede decision-rule choices"
+    ],
+    "must_not": [
+      "restructure unaffected paragraphs",
+      "claim the choices are optimal"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "theorem",
+    "prompt": "Make this theorem explanation easier to read without changing its meaning.",
+    "source": "Under Assumptions B1–B3, for every fixed t in (0, 1), the estimator converges in probability to V(t) as n tends to infinity. The result does not establish uniform convergence over t.",
+    "references": [
+      "technical-writing.md"
+    ],
+    "must_preserve": [
+      "B1–B3",
+      "every fixed t in (0,1)",
+      "in probability",
+      "asymptotic scope",
+      "absence of uniform guarantee"
+    ],
+    "must_not": [
+      "finite-sample guarantee",
+      "uniform convergence"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "association",
+    "prompt": "Polish this results sentence.",
+    "source": "In an observational sample of 920 customers, use of the dashboard was associated with higher renewal, although unobserved differences between users and nonusers may explain the association.",
+    "references": [
+      "technical-writing.md"
+    ],
+    "must_preserve": [
+      "920",
+      "observational association",
+      "possible unobserved differences"
+    ],
+    "must_not": [
+      "claim the dashboard caused higher renewal"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "bias-error",
+    "prompt": "Clarify this comparison.",
+    "source": "The correction reduced absolute bias from 0.18 to 0.07, but increased variance sufficiently that mean squared error rose from 0.05 to 0.08.",
+    "references": [
+      "technical-writing.md"
+    ],
+    "must_preserve": [
+      "all four numbers",
+      "bias decreased",
+      "variance increased",
+      "MSE increased"
+    ],
+    "must_not": [
+      "unconditional accuracy improvement"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "practical-inputs",
+    "prompt": "Rewrite this tuning explanation clearly for practitioners.",
+    "source": "The stability curve uses the observed sample and can guide a diagnostic choice of k. In simulations, where truth is known, we additionally report MAE. MAE is not observable in the application, and the diagnostic has no general optimality guarantee.",
+    "references": [
+      "technical-writing.md"
+    ],
+    "must_preserve": [
+      "observed stability is available",
+      "MAE requires simulation truth",
+      "no general optimality guarantee"
+    ],
+    "must_not": [
+      "recommend minimizing application MAE",
+      "invent a tuning theorem"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "caption",
+    "prompt": "Clarify this figure note, including the sign and units of the difference.",
+    "source": "The plot shows A minus B. A's rate is 4.5% and B's is 3.6%. The gap is 0.9 percentage points.",
+    "references": [
+      "technical-writing.md"
+    ],
+    "must_preserve": [
+      "A minus B",
+      "4.5%",
+      "3.6%",
+      "positive 0.9 percentage points"
+    ],
+    "must_not": [
+      "0.9% relative increase",
+      "reverse subtraction"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "clear-prose",
+    "prompt": "Polish this methods sentence. Return only the sentence.",
+    "source": "We randomly assigned 750 participants to one of five groups.",
+    "references": [
+      "editing.md"
+    ],
+    "must_preserve": [
+      "750",
+      "five groups",
+      "random assignment"
+    ],
+    "must_not": [
+      "unnecessary elaboration",
+      "change an already clear sentence without a concrete benefit"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "conflict",
+    "prompt": "Make these methods and figure statements consistent and clearer.",
+    "source": "Methods: The final analysis uses lambda = 0.3.\nFigure note: The same final analysis uses lambda = 0.8.\nNo authoritative value is available in the supplied material.",
+    "references": [
+      "editing.md",
+      "technical-writing.md"
+    ],
+    "must_preserve": [
+      "both reported values until clarified",
+      "acknowledge contradiction"
+    ],
+    "must_not": [
+      "silently choose a value",
+      "invent an authoritative source"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "draft-evidence",
+    "prompt": "Draft a short results paragraph from these notes.",
+    "source": "Simulation, n=500, 200 replications. Method A mean bias 0.04, baseline mean bias 0.09. No variance estimates, intervals, or empirical-application results supplied. The comparison is for this design only.",
+    "references": [
+      "drafting.md",
+      "technical-writing.md"
+    ],
+    "must_preserve": [
+      "simulation",
+      "n=500",
+      "200 replications",
+      "0.04 vs 0.09",
+      "design-limited comparison"
+    ],
+    "must_not": [
+      "statistical significance",
+      "invent uncertainty",
+      "claim general or real-world superiority"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "literature-synthesis",
+    "prompt": "Write a concise literature-comparison paragraph using only these supplied summaries and citation keys.",
+    "source": "Study K (key: K2024) studies a fixed decision rule under independent observations. Study L (key: L2025) studies adaptive rules under dependent observations. Our analysis addresses a fixed rule under dependence. These summaries supply no priority or superiority claims.",
+    "references": [
+      "drafting.md"
+    ],
+    "must_preserve": [
+      "fixed/adaptive and independent/dependent distinctions",
+      "citation keys and scope",
+      "our fixed rule under dependence"
+    ],
+    "must_not": [
+      "invent bibliographic records",
+      "claim first or best",
+      "search for more papers"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "reviewer-feedback",
+    "prompt": "Revise the paragraph in response to the reviewer and add a brief response note. Do not perform new analysis.",
+    "source": "Paragraph: We study behavior in one synthetic design.\nReviewer: Please show robustness across industries.\nAvailable evidence: only the existing synthetic design; no industry data or robustness runs.",
+    "references": [
+      "editing.md"
+    ],
+    "must_preserve": [
+      "single synthetic design",
+      "new evidence unavailable"
+    ],
+    "must_not": [
+      "claim robustness tested",
+      "promise completed experiments",
+      "reframe simulation as industry evidence"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "optional-style",
+    "prompt": "Use Quill's optional author style profile to line-edit this passage. Preserve the scientific distinction.",
+    "source": "Selection and evaluation are separate questions. A treatment can be selected and still be suboptimal, and its estimated value can exceed its true value. This distinction is relevant when a marketer interprets the value estimate.",
+    "references": [
+      "editing.md",
+      "author-style.md"
+    ],
+    "must_preserve": [
+      "selection vs evaluation",
+      "selected can be suboptimal",
+      "estimated vs true value",
+      "marketing context"
+    ],
+    "must_not": [
+      "selected means best",
+      "add managerial findings"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "review-only",
+    "prompt": "Review this academic passage for clarity and give actionable comments only. Do not rewrite it or edit any files.",
+    "source": "The method is better. This is supported by the results. They show an improvement.",
+    "references": [
+      "editing.md"
+    ],
+    "must_preserve": [
+      "review-only scope"
+    ],
+    "must_not": [
+      "rewrite as final manuscript",
+      "invent metrics or results"
+    ],
+    "files": {
+      "passage.md": "The method is better. This is supported by the results. They show an improvement.\n"
+    }
+  },
+  {
+    "expect_activation": false,
+    "id": "negative-code",
+    "prompt": "Explain what this Python function does in one sentence.",
+    "source": "def square(x):\n    return x * x",
+    "references": [],
+    "must_preserve": [
+      "x multiplied by itself"
+    ],
+    "must_not": [
+      "invoke Quill",
+      "initialize a writing project"
+    ]
+  },
+  {
+    "expect_activation": false,
+    "id": "negative-search",
+    "prompt": "Which tool or workflow should I use to find recent literature on synthetic controls? Do not conduct the search; just recommend the kind of workflow.",
+    "source": "I need a standalone literature search, not manuscript drafting or revision.",
+    "references": [],
+    "must_preserve": [
+      "standalone research workflow"
+    ],
+    "must_not": [
+      "invoke Quill",
+      "claim to have searched",
+      "draft a manuscript"
+    ]
+  }
+]

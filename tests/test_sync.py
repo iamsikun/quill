@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import os
 import subprocess
 import sys
@@ -8,12 +7,12 @@ from pathlib import Path
 
 import yaml
 
-from pepper.manifest import InstallManifest
-from pepper.assembly import assemble_paper, camera_ready
-from pepper.workspace import clear_session, create_journal_version, log_decision, new_paper, set_target, write_workflow_brief
-from pepper.renderers import render_claude_system_prompt, render_codex_system_prompt
-from pepper.sync import MANIFEST_PATH, dev_sync_root, find_repo_root, install_or_sync
-from pepper.validate import validate_repo
+from quill.assembly import assemble_paper, camera_ready
+from quill.workspace import clear_session, create_journal_version, log_decision, new_paper, set_target
+from quill.sync import find_repo_root, init_project
+from quill.validate import validate_repo
+from quill.importer import import_paper
+from quill.workspace import sync_context
 
 
 def _make_repo(tmp_path: Path) -> Path:
@@ -30,70 +29,64 @@ def test_find_repo_root_walks_up(tmp_path: Path) -> None:
     assert find_repo_root(nested) == repo
 
 
-def test_install_writes_both_adapter_sets_and_manifest(tmp_path: Path) -> None:
+def test_find_managed_workspace_without_git(tmp_path: Path) -> None:
+    init_project(tmp_path)
+    nested = tmp_path / "paper/conference/sections"
+    nested.mkdir(parents=True)
+    assert find_repo_root(nested) == tmp_path
+
+
+def test_legacy_pepper_workspace_keeps_config_and_templates(tmp_path: Path) -> None:
+    init_project(tmp_path)
+    (tmp_path / ".quill").rename(tmp_path / ".pepper")
+    config = tmp_path / ".pepper/config.yaml"
+    config.write_text(config.read_text() + "\n# Local configuration\n")
+    original = config.read_bytes()
+    custom_template = tmp_path / ".pepper/templates/neurips/local.sty"
+    custom_template.write_text("% Custom venue style\n")
+
+    assert not init_project(tmp_path).written_files
+    assert config.read_bytes() == original
+    assert not (tmp_path / ".quill").exists()
+    new_paper(tmp_path, title="Legacy paper", topic="Topic", contributions=["Claim"],
+              venue_key="neurips", paper_type="Theory")
+    nested = tmp_path / "paper/conference/sections"
+    assert find_repo_root(nested) == tmp_path
+    main = assemble_paper(tmp_path)
+    assert ".pepper/templates/neurips" in main.read_text()
+    assert validate_repo(tmp_path).ok
+    camera_ready(tmp_path)
+    assert (tmp_path / "paper/conference/camera-ready/local.sty").read_bytes() == custom_template.read_bytes()
+
+
+def test_quill_config_takes_precedence_when_both_exist(tmp_path: Path) -> None:
+    from quill.sync import project_assets_dir
+    init_project(tmp_path)
+    legacy = tmp_path / ".pepper"
+    legacy.mkdir()
+    (legacy / "config.yaml").write_text("unrelated: preserved\n")
+    assert project_assets_dir(tmp_path) == tmp_path / ".quill"
+    assert not init_project(tmp_path).written_files
+    assert (legacy / "config.yaml").read_text() == "unrelated: preserved\n"
+
+
+def test_init_preserves_config_and_needs_no_adapters(tmp_path: Path) -> None:
     repo = _make_repo(tmp_path)
-    result = install_or_sync(repo, adapters="claude,codex")
-    assert result.conflicts == []
-
-    manifest = InstallManifest.load(repo / MANIFEST_PATH)
-    assert manifest is not None
-    assert manifest.adapters == ["claude", "codex"]
-    assert ".claude/settings.json" in manifest.managed_files
-    assert ".pepper/adapters/codex/workflows/new-paper.md" in manifest.managed_files
-
-    assert "<!-- pepper:start -->" in (repo / "CLAUDE.md").read_text(encoding="utf-8")
-    assert "<!-- pepper:start -->" in (repo / "AGENTS.md").read_text(encoding="utf-8")
-    assert (repo / ".claude/commands/new-paper.md").exists()
-    assert (repo / ".pepper/adapters/codex/roles/intro-writer.md").exists()
-
-
-def test_install_can_limit_to_codex_only(tmp_path: Path) -> None:
-    repo = _make_repo(tmp_path)
-    result = install_or_sync(repo, adapters="codex")
-    assert result.conflicts == []
-    manifest = InstallManifest.load(repo / MANIFEST_PATH)
-    assert manifest is not None
-    assert manifest.adapters == ["codex"]
+    result = init_project(repo)
+    assert not result.conflicts
+    assert validate_repo(repo).ok
+    assert not (repo / "AGENTS.md").exists()
     assert not (repo / ".claude").exists()
-    assert not (repo / "CLAUDE.md").exists()
-    assert (repo / "AGENTS.md").exists()
-
-
-def test_sync_detects_local_conflict(tmp_path: Path) -> None:
-    repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude,codex")
-    target = repo / ".claude/settings.json"
-    target.write_text('{"modified": true}\n', encoding="utf-8")
-    result = install_or_sync(repo, adapters="claude,codex")
-    assert ".claude/settings.json" in result.conflicts
-
-
-def test_dev_sync_root_prunes_removed_generated_files(tmp_path: Path) -> None:
-    repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude,codex", force=True, write_manifest=False)
-    stale = repo / ".pepper/adapters/codex/roles/stale.md"
-    stale.parent.mkdir(parents=True, exist_ok=True)
-    stale.write_text("stale\n", encoding="utf-8")
-    dev_sync_root(repo, adapters="claude,codex")
-    assert not stale.exists()
-
-
-def test_validate_is_adapter_aware(tmp_path: Path) -> None:
-    repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="codex")
-    result = validate_repo(repo)
-    assert result.ok
-
-    agents = repo / "AGENTS.md"
-    agents.unlink()
-    result = validate_repo(repo)
-    assert not result.ok
-    assert any("missing Codex adapter file" in error for error in result.errors)
+    assert not (repo / ".agents").exists()
+    config = repo / ".quill/config.yaml"
+    config.write_text("custom: true\n")
+    assert not init_project(repo).written_files
+    assert config.read_text() == "custom: true\n"
 
 
 def test_new_paper_creates_workspace_and_context(tmp_path: Path) -> None:
     repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude,codex")
+    init_project(repo)
     (repo / "docs").mkdir()
     (repo / "src").mkdir()
 
@@ -117,7 +110,7 @@ def test_new_paper_creates_workspace_and_context(tmp_path: Path) -> None:
 
 def test_set_target_and_create_journal_version(tmp_path: Path) -> None:
     repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude,codex")
+    init_project(repo)
     new_paper(
         repo,
         title="Paper",
@@ -135,7 +128,7 @@ def test_set_target_and_create_journal_version(tmp_path: Path) -> None:
 
 def test_assemble_and_camera_ready_generate_outputs(tmp_path: Path) -> None:
     repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude,codex")
+    init_project(repo)
     new_paper(
         repo,
         title="Paper",
@@ -159,18 +152,9 @@ def test_assemble_and_camera_ready_generate_outputs(tmp_path: Path) -> None:
     assert (repo / "paper/conference/camera-ready/VERIFICATION.md").exists()
 
 
-def test_workflow_brief_writes_runtime_brief(tmp_path: Path) -> None:
-    repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude,codex")
-    path = write_workflow_brief(repo, "draft-paper", guidance="Keep it concise.")
-    text = path.read_text(encoding="utf-8")
-    assert "Pepper Workflow Brief: draft-paper" in text
-    assert "Keep it concise." in text
-
-
 def test_session_log_lifecycle(tmp_path: Path) -> None:
     repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude")
+    init_project(repo)
     new_paper(
         repo,
         title="Paper",
@@ -198,80 +182,10 @@ def test_session_log_lifecycle(tmp_path: Path) -> None:
     assert "removed tier" not in text
 
 
-def test_workflow_brief_includes_session_decisions(tmp_path: Path) -> None:
-    repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude")
-    new_paper(
-        repo,
-        title="Paper",
-        topic="Topic",
-        contributions=["One"],
-        venue_key="neurips",
-        paper_type="Theory",
-    )
-    log_decision(repo, "use stratified not cluster")
-    path = write_workflow_brief(repo, "draft-paper", guidance="Focus on methods.")
-    text = path.read_text(encoding="utf-8")
-    assert "Session Decisions" in text
-    assert "use stratified not cluster" in text
-
-
-def test_workflow_brief_embeds_section_content(tmp_path: Path) -> None:
-    repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude")
-    new_paper(
-        repo,
-        title="Paper",
-        topic="Topic",
-        contributions=["One"],
-        venue_key="neurips",
-        paper_type="Theory",
-    )
-    sections = repo / "paper/conference/sections"
-    (sections / "introduction.tex").write_text(
-        "\\section{Introduction}\nThis is the intro.\n", encoding="utf-8"
-    )
-    path = write_workflow_brief(
-        repo, "edit-section", guidance="introduction strengthen motivation",
-        section="introduction",
-    )
-    text = path.read_text(encoding="utf-8")
-    assert "Current Section Content" in text
-    assert "This is the intro." in text
-
-
-def test_workflow_brief_line_range_focus(tmp_path: Path) -> None:
-    repo = _make_repo(tmp_path)
-    install_or_sync(repo, adapters="claude")
-    new_paper(
-        repo,
-        title="Paper",
-        topic="Topic",
-        contributions=["One"],
-        venue_key="neurips",
-        paper_type="Theory",
-    )
-    sections = repo / "paper/conference/sections"
-    content = "\\section{Introduction}\nLine 2\nLine 3\nLine 4\nLine 5\n"
-    (sections / "introduction.tex").write_text(content, encoding="utf-8")
-    path = write_workflow_brief(
-        repo, "edit-section", guidance="fix wording",
-        section="introduction", lines="2-4",
-    )
-    text = path.read_text(encoding="utf-8")
-    assert "Edit Focus (lines 2-4)" in text
-    assert "Line 2" in text
-
-
-def test_rendered_system_prompts_reference_cli() -> None:
-    assert "canonical interface" in render_claude_system_prompt().lower()
-    assert "canonical interface" in render_codex_system_prompt().lower()
-
-
 def test_python_module_version_command() -> None:
     env = {**os.environ, "PYTHONPATH": "src"}
     completed = subprocess.run(
-        [sys.executable, "-m", "pepper", "version"],
+        [sys.executable, "-m", "quill", "version"],
         cwd=Path(__file__).resolve().parents[1],
         capture_output=True,
         text=True,
@@ -280,3 +194,17 @@ def test_python_module_version_command() -> None:
     )
     assert completed.returncode == 0
     assert "package version:" in completed.stdout
+
+
+def test_import_and_context_sync(tmp_path: Path) -> None:
+    repo = _make_repo(tmp_path)
+    init_project(repo)
+    source = tmp_path / "manuscript.tex"
+    source.write_text("\\documentclass{article}\n\\begin{document}\n"
+                      "\\section{Introduction}\nEvidence.\\label{sec:intro}\n\\end{document}\n")
+    target = import_paper(repo, source=source, title="Example", topic="Topic",
+                          contributions=["Supported claim"], venue_key="neurips", paper_type="Empirical")
+    assert target == "conference"
+    context = sync_context(repo).read_text()
+    assert "introduction.tex" in context
+    assert validate_repo(repo).ok

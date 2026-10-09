@@ -1,0 +1,1046 @@
+{
+  "date": "2026-10-09",
+  "evaluation_type": "Development smoke evaluation, not a held-out human study",
+  "judge": "Implementing assistant; initial arm labels concealed during qualitative review, then revealed. Followups unblinded.",
+  "case_file": "2026-10-09-cases.json",
+  "cases_sha256": "0abc9dc2602172ef17b4dafef24a18d4b209a38db2244daa8d4d307a1d340c5f",
+  "core_revisions": {
+    "initial": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+    },
+    "followup": {
+      "sha256": "d40285500111d6fb2ed5cc48ea31cca4336586001699917c4f98fd2f8550f799",
+      "text": "---\nname: pepper\ndescription: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, or addressing reviewer feedback. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.\n---\n\n# Pepper\n\nHelp the intended reader understand the precise claim, follow the reasoning, and\njudge the evidence with as little avoidable effort as possible. Preserve scientific\nmeaning first, improve understanding next, then refine expression and economy.\n\n## Establish the task\n\nUse the user's audience, purpose, format, and editing depth. Otherwise assume a\nresearcher familiar with the field's basic tools but new to this project. Follow\nthe manuscript's established terminology and structure. Ask only for missing\ninformation that materially affects the work; use the supplied passage and\nconversation when they are sufficient.\n\nWork directly with pasted prose or the user's existing files. Resolve bundled\nreferences below relative to this skill's directory, and manuscript paths relative\nto the selected project. Never use the installation directory as the manuscript\nworkspace. Read adjacent material when needed to understand scope or references.\n\nChoose the appropriate depth:\n\n| Request | Action |\n|---|---|\n| Copyedit or unspecified “polish” | Correct mechanics and clear local problems; preserve structure and effective sentences. |\n| Line edit or clarify | Improve sentence and paragraph continuity within the requested scope. |\n| Restructure or revise an argument | Reorganize the requested material around the reader's needs without strengthening its claims. |\n| Draft | Write the requested passage, section, or manuscript from the supplied research and evidence. |\n| Review or critique only | Return specific feedback; do not edit files. |\n\nFor substantial edits or feedback-driven revision, read\n[Editing](references/editing.md). For drafting, read\n[Drafting](references/drafting.md). A short polish can be completed using this core\nalone. These are working modes, not separate agents or mandatory sequential passes.\n\n## Preserve meaning\n\nPreserve claims, assumptions, quantifiers, comparisons, numbers, units, uncertainty,\nnotation, citations, and the scope of evidence. In ordinary prose edits, leave\nequations, citation commands, and reference labels intact unless their correction\nis explicitly in scope. Keep consequential conditions attached to conclusions.\n\nMaintain distinctions between estimate and estimand, selected and optimal, bias\nand total error, association and causation, simulation and empirical evidence,\nheuristic and guarantee, and asymptotic and finite-sample results. Preserve which\ninformation is available when a procedure is used, including the distinction\nbetween practical inputs and simulation-only or retrospective quantities.\n\nDo not invent results, mechanisms, citations, or novelty to complete a narrative.\nIf the sources conflict or a missing connection requires new evidence, flag the\nissue separately rather than resolving it by guesswork. Write the supported\nportions and identify material gaps. Clearly distinguish any requested hypothetical\nillustration from research findings.\n\nDo not make evidence more specific than the sources permit: an unnamed outcome\nis not necessarily a rate, and two studies allowing dependence need not use the\nsame dependence structure. Missing evidence in the supplied materials does not\nestablish that an analysis was never performed or that a design lacks a feature.\nDo not invent a limitation any more than a finding.\n\n## Write for the reader\n\nIdentify what the passage needs to help the reader understand and arrange the\ninformation accordingly. Connect new concepts to established context. Make the\nrelationship between claims explicit when the sources support it. Explain what\nan equation or technical term contributes when the reader needs that explanation.\n\nPrefer familiar words and verbs that express the relevant action. Retain necessary\ntechnical terms and use the same term for the same concept. Make referents,\ncomparisons, and numerical quantities unambiguous. Choose active or passive voice\naccording to the passage's focus; let sentence length follow the reasoning.\n\nRemove empty importance claims, unnecessary ceremony, and repetitive conclusions.\nPreserve useful signposting, deliberate technical repetition, and qualifications.\nDo not force every paragraph into one template, manufacture a personal voice, or\nrewrite an effective sentence merely to show that editing occurred.\n\nRead only the additional guidance needed for this task:\n\n- [Technical writing](references/technical-writing.md): section purpose,\n  mathematical exposition, results, literature synthesis, and captions.\n- [Examples](references/examples.md): difficult editing judgments, especially\n  changes that sound fluent but alter meaning and cases requiring restraint.\n- [Author style](references/author-style.md): only when the user requests this\n  personal profile or project instructions establish it. A supplied style sample\n  takes priority. Do not impose it on other authors by default.\n- [Pepper workspaces](references/pepper-workspaces.md): only for an existing\n  Pepper project or an explicit request for a managed workspace. Neither a CLI\n  nor a `paper/` directory is required to write or edit prose.\n\n## Complete and check the work\n\nPerform the requested writing in the current host's conversation using available\ntools. Do not stop after an outline, instruction brief, or description of what a\nwriter should do. Use a plan as an intermediate aid only when the task merits it.\n\nFor substantial work, address argument and continuity before expression. Compare\nthe revision with its sources for changed meaning, missing conditions, altered\nnumbers, notation, and citation scope. Check affected cross-references and nearby\ndependencies proportionally to the edit; a paragraph polish does not require a\nfull-manuscript audit. Keep unaffected file content unchanged for surgical edits.\n\nReturn one best version in the requested format, or identify the files edited.\nAdd brief notes only for unresolved substantive issues or consequential changes,\nunless the user asks for more explanation. Do not narrate routine grammar or\nword-choice edits. Keep editorial commentary outside the\nmanuscript. Report limitations of verification honestly. Do not add revision\nmarkers, logs, scaffolding, or new files to a small writing task unless requested.\n"
+    }
+  },
+  "shared_reference_hashes": {
+    "references/author-style.md": "c7d6d30951231ced1af13de8d5132a85d54e7a9a5967d77ed6a959c5f5b6657a",
+    "references/drafting.md": "f86e4899d63b52bbff39aa3c58c57d66ecf0da383e163a99b51d349be2122000",
+    "references/editing.md": "b6df7f7c16f97359b2ce15084e8dbf78a6bc7e165be5322866f5de978b55352f",
+    "references/examples.md": "92f9ecd1bd0ff705dc93a1d47cb13d0c6e16ea6ea556dd29bec32cd068fc0248",
+    "references/pepper-workspaces.md": "0b6f04e224654b503bdbd764887134707335fc8f3d909e4889bdd797570d4ea1",
+    "references/technical-writing.md": "22903e2fc8cd61ba8529004e376065de4cbb293e8f6dd9f88929afcbdcfa1820"
+  },
+  "limitations": [
+    "One response per case/arm, no independent human scoring or generalization claim.",
+    "Only Claude received the full three-arm comparison; Codex comparison remains untested.",
+    "Discovery used project copies; global install behavior was mechanically tested, not exercised in persistent user directories.",
+    "Host default model/settings were used. Default model identity was not emitted in Codex JSON.",
+    "Comparison arms disabled Claude tools and slash commands. A baseline still mentioned an institution absent from input, so full host-context isolation cannot be assumed.",
+    "Explicit-invocation skill selection was not independently exposed in either host trace.",
+    "Initial judgments are model judgments, not objective quality scores. Initial failures are retained; followup cases informed the refinement and are not held out.",
+    "Raw host streams are intentionally omitted; they can contain local paths and session/account metadata. Final outputs and sanitized selection evidence are retained."
+  ],
+  "initial_preferences": [
+    {
+      "case": "mechanics",
+      "preferred_arms": [
+        "plain"
+      ],
+      "reason": "Only the requested grammatical correction; skill arms add unneeded alternative interpretations."
+    },
+    {
+      "case": "surgical",
+      "preferred_arms": [
+        "core",
+        "references"
+      ],
+      "reason": "Both explicitly identify the estimates used by the rule and preserve the other paragraphs."
+    },
+    {
+      "case": "theorem",
+      "preferred_arms": [
+        "core"
+      ],
+      "reason": "Concise pointwise explanation with conditions and no extra editorial note; the other versions also preserve the theorem."
+    },
+    {
+      "case": "association",
+      "preferred_arms": [
+        "core"
+      ],
+      "reason": "Preserves the unspecified outcome measure as well as observational and uncertainty limits."
+    },
+    {
+      "case": "bias-error",
+      "preferred_arms": [
+        "core",
+        "references"
+      ],
+      "reason": "Keeps bias, variance, and total error distinct; extra derived calculations are unnecessary but qualified."
+    },
+    {
+      "case": "practical-inputs",
+      "preferred_arms": [
+        "core"
+      ],
+      "reason": "Separates usable inputs from simulation truth without inventing an implementation rule."
+    },
+    {
+      "case": "caption",
+      "preferred_arms": [
+        "core",
+        "references"
+      ],
+      "reason": "Makes the sign and percentage-point units recoverable without assuming which outcome is desirable."
+    },
+    {
+      "case": "clear-prose",
+      "preferred_arms": [
+        "core",
+        "references"
+      ],
+      "reason": "Leaves the already clear sentence unchanged; plain unnecessarily recasts it."
+    },
+    {
+      "case": "conflict",
+      "preferred_arms": [
+        "core",
+        "references"
+      ],
+      "reason": "Flags both numbers and does not choose a value. Both are verbose and use draft placeholders rather than preserving the two statements in place."
+    },
+    {
+      "case": "draft-evidence",
+      "preferred_arms": [
+        "core",
+        "references"
+      ],
+      "reason": "Supports the comparison within the design and distinguishes missing supplied uncertainty from nonexistent analysis."
+    },
+    {
+      "case": "literature-synthesis",
+      "preferred_arms": [
+        "references"
+      ],
+      "reason": "Compares fixed/adaptive rules and the presence of dependence without implying identical dependence structures."
+    },
+    {
+      "case": "reviewer-feedback",
+      "preferred_arms": [
+        "references"
+      ],
+      "reason": "States the evidence limit without inventing design properties or promising analyses."
+    },
+    {
+      "case": "optional-style",
+      "preferred_arms": [
+        "references"
+      ],
+      "reason": "Uses the requested profile while preserving selection versus evaluation; the other arms were not given that profile, so this is a context-availability check."
+    },
+    {
+      "case": "review-only",
+      "preferred_arms": [
+        "core",
+        "references"
+      ],
+      "reason": "Specific questions about claim, comparator, and evidence without supplying invented research prose."
+    },
+    {
+      "case": "negative-code",
+      "preferred_arms": [],
+      "reason": "No quality ranking; all give a correct direct explanation. Activation is tested separately."
+    },
+    {
+      "case": "negative-search",
+      "preferred_arms": [],
+      "reason": "No quality ranking or verification of recommended search products. Activation is tested separately."
+    }
+  ],
+  "responses": [
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "mechanics",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "4b9b5a87ed0dfc7dab573b228efb11e65bd10d212126dea5caf67ef68f704e61",
+      "final_text": "The estimates are computed for each of the 48 districts.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "mechanics",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "e78119d5ac20e92d6edb7169c571979efe95095979dfe19d56d196109c4e19f6",
+      "final_text": "The estimates are computed for each of the 48 districts.\n\n*Note:* I assumed \"estimates\" (one per district) was intended and corrected the verb. If a single estimate is meant, use \"The estimate is computed for each of the 48 districts.\"",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "mechanics",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "c6c16973f8e7f5510e07893490def01c24eada6b1d3ab55a4a8aa51501266ba7",
+      "final_text": "The estimates are computed for each of the 48 districts.\n\n*Note:* If one estimate is computed per district, \"The estimate is computed for each of the 48 districts\" would also be correct.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "surgical",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "af10687839023f773dd22eec86758f476626fc7ee33ae430879cd23cde32aeb4",
+      "final_text": "We define the target population before estimation.\n\nThe procedure estimates effects, which the decision rule then uses to make its choices.\n\nThe next section reports uncertainty.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "surgical",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "5b06e54c898765fa1bd3f36d42f35e75b6bc6847f9e26819bafc28e080e39ac8",
+      "final_text": "We define the target population before estimation.\n\nThe procedure estimates the effects, and the decision rule uses these estimates to make its choices.\n\nThe next section reports uncertainty.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "surgical",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "947165eef189c265d8d7e1c7daef1a0534fa018edaadefa124b631450c05e703",
+      "final_text": "We define the target population before estimation.\n\nThe procedure estimates effects, and the decision rule then uses these estimates to make its choices.\n\nThe next section reports uncertainty.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "theorem",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "053f6691cf66b454e3479cdd38c9faa41d854b47b52097fa0ab4d2b041393198",
+      "final_text": "**Rewritten:**\n\nAssume B1–B3 hold. Pick any value of t strictly between 0 and 1 and keep it fixed. Then, as the sample size n grows, the estimator converges in probability to V(t).\n\nThis is a pointwise result: it holds for each t separately. It does not show that the convergence is uniform across all t in (0, 1).",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "theorem",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "9a0df226176e06ff37d3f27a2375f6070435b7074a5823c97764390237c9aae4",
+      "final_text": "Under Assumptions B1–B3, the estimator converges in probability to V(t) as n → ∞ for each fixed t ∈ (0, 1). This is a pointwise result; it does not establish uniform convergence over t.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "theorem",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "bf5c1ab8c674dfa54d60d40f0b52863bcdaf0906f4671cedfc13b954eb90dc1a",
+      "final_text": "Under Assumptions B1–B3, the estimator converges in probability to V(t) as n → ∞ for each fixed t in (0, 1). This is a pointwise result: it does not establish that the convergence is uniform over t.\n\n*Note:* I kept \"for each fixed t\" and added \"pointwise\" only as a label for what that quantifier already says, so the contrast with uniform convergence is explicit. No assumptions, quantifiers, or scope were changed.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "association",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "934c5479c660c55f8105e2cd5f80f232ba449ae3e1d332ead047a4897089ff27",
+      "final_text": "**Polished sentence:**\n\nIn an observational sample of 920 customers, dashboard use was associated with higher renewal rates, although this association may reflect unobserved differences between users and nonusers rather than an effect of the dashboard itself.\n\n**What changed:**\n- \"use of the dashboard\" became \"dashboard use,\" which is more concise.\n- \"higher renewal\" became \"higher renewal rates,\" which names a measurable outcome.\n- The caveat now says outright that the result is not causal (\"rather than an effect of the dashboard itself\"), so readers can't take it as evidence that the dashboard drives renewal.\n\nIf you have the effect size, you could add it after \"renewal rates,\" for example \"(X% vs. Y%).\"",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Changes the unspecified renewal outcome to renewal rates without evidence."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "association",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "2a10003c862f6ae21a446dabe5fca460accf2ec37ca1395ba5cc40b7b31ce89b",
+      "final_text": "In an observational sample of 920 customers, dashboard use was associated with higher renewal, although unobserved differences between users and nonusers may account for this association.\n\n*Note:* The original sentence was already clear and appropriately qualified. I made only light changes and kept the associational framing and the confounding caveat. I left \"higher renewal\" as written. If the measure is a rate or a probability, stating that, and giving the numbers if available, would make the comparison more precise.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "association",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "41775df52a786fbc64079d94ef8053160f7010f120a73a70039b8fd65da703d9",
+      "final_text": "In an observational sample of 920 customers, dashboard use was associated with higher renewal rates, although unobserved differences between users and nonusers may account for this association.\n\nNote: \"renewal\" became \"renewal rates.\" If the outcome is a different measure, such as renewal probability, use that term instead. The sentence still describes an association, not a causal effect.",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Changes renewal to renewal rates in the manuscript, then asks the user to check that assumption in a note."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "bias-error",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "5ad8594fafdc647908df4d5e64906aaaaee5bf01d263363898e99bb8d8fd0676",
+      "final_text": "**Clarified version:**\n\n> The correction cut absolute bias by more than half (from 0.18 to 0.07), but it also raised variance enough to outweigh that gain. As a result, overall accuracy got worse: mean squared error (MSE) increased from 0.05 to 0.08.\n\n**Why this happens (bias–variance decomposition):**\n\nMSE = bias² + variance\n\n| | Before correction | After correction |\n|---|---|---|\n| Absolute bias | 0.18 | 0.07 |\n| Bias² | 0.0324 | 0.0049 |\n| Variance (MSE − bias²) | ≈ 0.018 | ≈ 0.075 |\n| MSE | 0.05 | 0.08 |\n\n- The squared-bias contribution fell by about **0.028**.\n- Variance rose by about **0.058**, roughly a fourfold increase.\n- The net effect is an MSE increase of **0.03** (about 60% higher).\n\n**Takeaway:** The correction makes estimates more accurate *on average* (less systematic error), but individual estimates are much more scattered. If the goal is to minimize total error, the uncorrected estimator performs better. If unbiasedness matters more, for example when results will be averaged across many studies, the correction may still be worth using.\n\n*Note: The implied variances assume the reported MSE and bias values are exact. Because the inputs are rounded, the derived variances are approximate.*",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Adds an unsupported recommendation about using the correction when averaging across studies."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "bias-error",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "07ad72f8c2ca45f5c26ae9795c4a54215bc3fd2af1e505812207bbb4f0ffd1a7",
+      "final_text": "The correction reduced absolute bias from 0.18 to 0.07, but the increase in variance more than offset this gain: mean squared error rose from 0.05 to 0.08.\n\n**Note:** If these quantities follow the standard decomposition MSE = bias² + variance on a common scale, the implied variance rises from about 0.018 to about 0.075. Reporting those values would show the trade-off directly, but only if the decomposition matches how the quantities were computed.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "bias-error",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "3b782bd1d30406e7c536c5463632a4b7869d529c7daa28e16155e1edf34106f6",
+      "final_text": "The correction reduced absolute bias from 0.18 to 0.07 but increased variance enough that mean squared error rose from 0.05 to 0.08. The lower bias therefore came at the cost of higher total error.\n\n**Notes**\n\n- The added second sentence states the consequence explicitly: reduced bias did not mean reduced total error. It only restates what the numbers show. Drop it if the surrounding text already makes that point.\n- The figures are consistent with MSE = bias² + variance. They imply that variance rose from about 0.018 to about 0.075, roughly a fourfold increase. You could report these values if the variance increase matters to the argument. I left them out because they are derived, not taken from your source, and they assume both quantities refer to the same estimator and outcome.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "practical-inputs",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "6e5a226ff352fc5b04aeb037800c24c90993fa2f88518406290cba0e1c0a201d",
+      "final_text": "**Choosing k in practice**\n\nThe stability curve is computed from the observed data alone, so you can use it in any real application to help choose k. Look for a range of k where the estimate stops changing much; a value in that range is a reasonable choice.\n\nTreat this as a diagnostic, not a guarantee. There is no general result showing that the k suggested by the stability curve is optimal, so it may not give the most accurate estimate in every setting.\n\nIn our simulations, the true value is known, so we also report mean absolute error (MAE) to show how accurate each choice of k actually is. You cannot compute MAE in a real application, because the truth is unknown there. The simulation MAE results show how well the stability-based choice tends to work; they are not a tuning tool you can apply to your own data.\n\n**In short:**\n- **Stability curve:** available in practice; use it to guide the choice of k.\n- **MAE:** available only in simulations; use it to judge how well the method works, not to tune k.\n- **No optimality guarantee:** the stability-based choice is a sensible heuristic, not a proven best choice.",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Invents a stability-plateau selection rule and claims the simulation evaluates that choice."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "practical-inputs",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "2fc03883ab4680b82ed52c3ab7cb15ec1cfb9f3efa475d0421a6cb661998d764",
+      "final_text": "To choose k in practice, use the stability curve, which is computed from the observed sample alone. It can guide a diagnostic choice of k, but it carries no general guarantee of selecting an optimal k. In our simulations, where the truth is known, we also report the mean absolute error (MAE). MAE cannot be computed in an application, so it is not available for tuning there.\n\n---\n\nNotes:\n- I spelled out \"MAE\" on first use; drop the expansion if it is already defined earlier.\n- I did not say that the stability curve tracks MAE or approximates the MAE-minimizing k, because the source does not support that. If your simulations show agreement between the two, you could add that as a simulation finding, without making it a guarantee.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "practical-inputs",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "04d7413318553b4eb743cc7dd9b36151c7925fc6571a269daf4162efad034668",
+      "final_text": "**Choosing k in practice.** The stability curve is computed from the observed sample alone, so it is available in any application. Use it to guide a diagnostic choice of k. In our simulations, where the true values are known, we also report the mean absolute error (MAE) for each k. MAE requires the truth, so it cannot be computed in an application and should not be used to select k. The stability curve is a diagnostic, not a guaranteed route to the best k: it has no general optimality guarantee.\n\n---\n\n*Notes:*\n- I spelled out \"MAE\" on first use. If the manuscript already defines it, keep the abbreviation alone.\n- The source does not say what part of the curve indicates a good k (for example, a plateau or the point where estimates stabilize). Practitioners would benefit from that instruction, but it should come from your method rather than be inferred here.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "caption",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "0f9fe4fee766526dc8921c9d84b3774d3c47da00c933b7810469c8eae5336784",
+      "final_text": "**Revised figure note:**\n\n> The plotted value is the difference A − B in rates. A's rate is 4.5% and B's is 3.6%, so the difference is **+0.9 percentage points** (4.5% − 3.6%). The positive sign means A's rate is higher than B's. Values above zero favor A, and values below zero would mean B's rate is higher.\n\n**What was clarified:**\n\n1. **Sign:** The original gave the gap as \"0.9\" with no direction. Because the plot shows A minus B and A is larger, the difference is positive (+0.9). Stating the sign tells readers which way the comparison runs.\n\n2. **Units:** The difference is in **percentage points (pp)**, not percent. A 0.9 pp absolute difference is not the same as a 0.9% relative difference. In relative terms, A's rate is about 25% higher than B's (0.9 / 3.6 = 0.25). The note now says \"percentage points\" explicitly so the two aren't confused.\n\n3. **Order of subtraction:** \"A − B\" is written out with the actual numbers so readers can check the arithmetic and know how to read points above or below zero on the plot.\n\n**Optional shorter version (for a caption):**\n\n> Difference in rates, A − B (percentage points). A = 4.5%, B = 3.6%; difference = +0.9 pp (A higher).",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Says higher rates favor A, although the source does not establish that higher is preferable."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "caption",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "6c6eb62b14f462b1823bc7cfec5e9ba5fc7c259e486571046673b6baf4cc41d1",
+      "final_text": "**Revised figure note**\n\nThe plot shows the difference A − B in percentage points; positive values indicate that A's rate exceeds B's. A's rate is 4.5% and B's is 3.6%, so the difference is +0.9 percentage points.\n\n**Notes**\n\n- I stated the unit as percentage points and kept \"percent\" only for the rates themselves. The relative difference is 25%, so the two units should not be used interchangeably.\n- The source does not say what the rates measure or whether the plot covers more than one value, such as a series over time. If it does, the 4.5%, 3.6%, and +0.9 values should be tied to a specific point, for example \"at [time/condition], A's rate is …\".",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "caption",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "f12f4831aa2d0beee0e0dd3f0b8d1e31adb812b35558d1797418b85f2d078702",
+      "final_text": "**Revised note:**\n\n> *Note:* The plot shows the difference in rates, A minus B, in percentage points. Positive values indicate that A's rate exceeds B's. A's rate is 4.5% and B's is 3.6%, so the difference is +0.9 percentage points.\n\n**Brief notes:**\n\n- I kept the difference in **percentage points**. It is an absolute difference between two rates, not a relative change. The corresponding relative difference would be 25% higher for A, but I did not add it because the source does not report it.\n- The source does not say what the rates measure, the sample, or whether the figure shows uncertainty (for example, confidence intervals). If any of these matter for reading the figure, add them to the note.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "clear-prose",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "4bfb56e059ca91f446e1071cbd74f35e4110520b06e14196319d53eb765cfe2e",
+      "final_text": "Participants (N = 750) were randomly assigned to one of five groups.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "clear-prose",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "e7508b8f1c392c5e5299a6e872d798a1387ade9860995d54f98dbd036bdf4dff",
+      "final_text": "We randomly assigned 750 participants to one of five groups.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "clear-prose",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "e08b7b9897cc7fe7b2e6ec0b852d63db86b4ec76ace55e9259519ffc57f62acd",
+      "final_text": "We randomly assigned 750 participants to one of five groups.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "conflict",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "ec8b3b3c53dabb801b368c445f430a0a907be751352a0372789a83a1531180f4",
+      "final_text": "The two statements give different values for the same analysis (λ = 0.3 vs. λ = 0.8), and nothing in the material says which is correct. Rather than guess, I've used a single placeholder in both places so they can't drift apart again.\n\n**Revised text**\n\n*Methods:*\n> All results in the final analysis were obtained with the regularization parameter set to λ = **[VALUE]**.\n\n*Figure note:*\n> Results shown are from the final analysis (λ = **[VALUE]**; see Methods).\n\n**Changes**\n\n- **One value, one placeholder.** Both statements now use the same `[VALUE]`. Fill it in once you've confirmed the correct value.\n- **The figure note points to Methods.** If the value changes later, there is one authoritative place to update, and readers know where to look.\n- **Clearer wording.** \"Final analysis\" is tied explicitly to the reported results. \"Regularization parameter\" is my assumption about what λ is, so substitute the correct term (e.g., smoothing weight, penalty) if it's something else.\n\n**To find the correct value**, check:\n\n1. The analysis code or config file used to generate the final figures. This is the most reliable source.\n2. Whether 0.8 came from an earlier or exploratory run, or a sensitivity analysis, that was mistakenly carried into the figure note (or vice versa).\n3. Whether both values were actually used for different panels or conditions. If so, state each one explicitly, e.g., \"λ = 0.3 (main analysis); λ = 0.8 (sensitivity analysis, panel B).\"\n\nIf you tell me which value is correct, or that both apply to different parts of the analysis, I can finalize the wording.",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Assigns lambda the role of regularization parameter without support, despite flagging the assumption outside the draft."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "conflict",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "5152db492b53f17ed1d8c5d610bdd5259aac96bbafc9e9243527caf35ae82d16",
+      "final_text": "**Unresolved conflict:** The Methods state λ = 0.3 and the figure note states λ = 0.8 for the same final analysis. The supplied material does not say which is correct, so I have not chosen one. Both statements below use a single placeholder so they will match once you confirm the value.\n\n**Methods**\n> The final analysis uses λ = [VALUE].\n\n**Figure note**\n> Results are from the final analysis (λ = [VALUE]; see Methods).\n\n**Notes**\n\n- **Choosing the value:** Check the analysis code, configuration files, or run logs for the λ used to produce the reported results and figure. Then replace both placeholders with that value.\n- **If both values are correct:** The figure may come from a different analysis, such as a sensitivity check. In that case, the figure note should not call it \"the same final analysis.\" It could instead read: \"Results from a sensitivity analysis with λ = 0.8; the final analysis uses λ = 0.3 (see Methods).\" Use this wording only if the records confirm it.\n- **Other edits:** I wrote \"lambda\" as the symbol λ for consistency, and the figure note now points to the Methods so the value is defined in one place. If λ is not defined elsewhere, add a brief definition in the Methods, such as what it controls.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "conflict",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "330e21f74401db326ca50438d848fe004fc204962cc298db38bc7d0c94a3c52f",
+      "final_text": "The two statements conflict, and the supplied material doesn't say which value is correct, so I can't make them consistent without guessing. Below are clearer versions that share one placeholder. Replace it with the verified value once you have checked it against the analysis code or run configuration.\n\n**Methods:**\n> The final analysis uses λ = [VALUE].\n\n**Figure note:**\n> Results are from the final analysis (λ = [VALUE]; see Methods).\n\n**Notes**\n\n- **Unresolved conflict:** The Methods give λ = 0.3, and the figure note gives λ = 0.8 for the same final analysis. One of them is wrong, or the figure may come from a different analysis, such as a sensitivity run. The authoritative source would be the script or configuration that produced the reported results and the figure.\n- **If the figure actually uses a different analysis**, keep the values distinct and say so. For example: \"Results from a sensitivity analysis with λ = 0.8; the primary analysis uses λ = 0.3 (Methods).\" Use this only if it is true.\n- **Notation:** I wrote \"λ\" for \"lambda.\" In LaTeX this would be `$\\lambda$`. Match whatever symbol the manuscript already uses.\n- **Cross-reference:** The figure note points to the Methods so the value is defined in one place, which makes future mismatches less likely. If your venue requires captions to stand alone, keep the explicit value in both places.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "draft-evidence",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "ac7a74b810e1b69f4ecb96bd716d77f688195ce9ecd64fec7896e484f939310a",
+      "final_text": "In a simulation study with sample size n = 500 and 200 replications, Method A showed lower average bias than the baseline: its mean bias was 0.04, against 0.09 for the baseline. That is a reduction of about 56% in this setting. No variance estimates or interval estimates were computed, so these results describe only the size of the average bias. They do not tell us how variable either estimator is, and they do not establish whether the difference between methods is larger than Monte Carlo error. This comparison applies only to this one simulation design. Further work is needed to see whether Method A's advantage holds at other sample sizes, under other data-generating conditions, or in empirical applications.",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Converts uncertainty estimates not supplied into a claim that none were computed."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "draft-evidence",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "c884dd618f72cefbcd2d40d7810d233768d63bd0cf5a7d31f425c22ec2c5444f",
+      "final_text": "In the simulation design with sample size *n* = 500 and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline. In this design, Method A therefore reduced average bias relative to the baseline. These results concern bias alone. We do not report the variability of either estimator across replications or the uncertainty of the bias estimates, so they do not establish differences in total error or the precision of the comparison. They also do not show whether the reduction holds under other sample sizes, data-generating processes, or empirical data.\n\n**Notes**\n\n- Variance, MSE, or Monte Carlo standard errors would let the paragraph address total error and whether the 0.04 vs. 0.09 difference exceeds simulation noise. The source material does not provide these.\n- I described the bias values as reported. If they are absolute biases, or if the signs differ across settings, say so, so readers interpret \"reduced bias\" correctly.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "draft-evidence",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "9b2283c76c8ddc775f3a4317e1789321afd037243fbe3002f39933b9c73721d0",
+      "final_text": "In a simulation with sample size $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline. This is an absolute reduction of 0.05, so Method A's mean bias was less than half that of the baseline under this design. This comparison concerns bias only. It does not show whether Method A also has lower variance or mean squared error, and it does not establish how the methods compare under other sample sizes, data-generating designs, or empirical data.\n\n---\n\n**Notes**\n\n- **Uncertainty is missing.** Without Monte Carlo standard errors, I could not say whether the 0.05 difference is large relative to simulation noise. If you have the replication-level estimates, the Monte Carlo standard error of each mean bias would be worth reporting.\n- **Variance and MSE are missing.** Lower bias alone does not imply better overall accuracy. If variance or MSE results exist, adding them would make the comparison more complete.\n- **The sign of the bias is unclear.** Both values are reported as positive. If they are actually absolute biases or signed biases with mixed directions, the wording should say so explicitly, for example \"mean absolute bias.\"\n- **Some details are left out.** I did not name the estimand, the data-generating process, or the methods' full names because the notes did not supply them. Insert them where the manuscript defines them.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "literature-synthesis",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "4c614b3540ab0ddc6bb5046a195173174caecf8fb48573e637ec721590910b2d",
+      "final_text": "Prior work has examined decision rules along two distinct axes: whether the rule is fixed or adaptive, and whether observations are independent or dependent. K2024 studies a fixed decision rule under the assumption of independent observations, while L2025 considers adaptive rules in a setting where observations are dependent. Our analysis occupies a configuration not covered by either summary: we retain the fixed decision rule of K2024 but relax its independence assumption, adopting the dependent-observation setting examined in L2025. In this sense, our work shares its rule structure with K2024 and its observational structure with L2025, and can be viewed as complementary to both rather than as a replacement for either. We make no claim that this combination is the first of its kind or that it improves on the results of either study; the comparison is intended only to situate our setting relative to these two lines of work.",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Infers the same dependence setting as L and a configuration not covered, neither established by the summaries."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "literature-synthesis",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "3940c186d1bad136b77af8961d5060f8cdee1791f7e9c726516b65907bb89fb0",
+      "final_text": "Existing analyses differ in whether the decision rule is fixed or adaptive and whether the observations are independent or dependent. \\citet{K2024} study a fixed decision rule under independent observations, whereas \\citet{L2025} study adaptive rules under dependent observations. Our analysis addresses a fixed decision rule under dependent observations, a setting that combines the rule type considered by \\citet{K2024} with the dependence structure considered by \\citet{L2025}.\n\n---\n\nNote: I didn't claim the setting is new or unaddressed, and I didn't call either study more general or more limited, because the summaries don't support those claims. In particular, they don't say whether a fixed rule is a special case of the adaptive rules in \\citet{L2025}. If it is, the comparison should say how our results relate to theirs in that case.",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Says our analysis uses the dependence structure considered by L; the summaries establish only the presence of dependence."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "literature-synthesis",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "8bd600797b45eadf63f28ee2810504e4c823319ccf478f99808f64761a63c50e",
+      "final_text": "Related analyses differ in two aspects of the setting: whether the decision rule is fixed or adaptive, and whether the observations are independent or dependent. \\cite{K2024} studies a fixed decision rule under independent observations, whereas \\cite{L2025} studies adaptive rules under dependent observations. Our analysis combines elements of both settings: like \\cite{K2024}, it considers a fixed rule, and like \\cite{L2025}, it allows the observations to be dependent.\n\n*Note:* The paragraph makes no claims of priority, superiority, or a gap in the literature, because the summaries do not support them. It also does not say whether results from either study carry over to the fixed-rule, dependent-observation setting. If you have support for such a claim, it could be added with the appropriate evidence.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "reviewer-feedback",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "3dd808b13655c59dfba8671167a2e538871d3a275be807eea291831d0fe2b1d0",
+      "final_text": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Because the analysis rests on one stylized environment, it does not speak to differences across industries, and we make no claim that the patterns we document generalize to particular sectors. Whether the results hold under industry-specific features, such as different cost structures, market concentration, or institutional settings, remains an open question. We regard testing robustness across industries as an important direction for future work, and we interpret our findings as evidence about behavior within this design rather than as general conclusions.\n\n**Response to reviewer**\n\nWe thank the reviewer for raising robustness across industries. We agree it matters for how far our findings extend. Our current evidence comes from one synthetic design only. We have no industry-level data and have not run any robustness analyses, so we cannot show cross-industry robustness without new analysis, which is outside the scope of this revision. We have instead revised the paragraph to (i) state plainly that the study uses a single synthetic design, (ii) say explicitly that we do not claim generalization across industries, and (iii) name cross-industry robustness as a limitation and a direction for future work. We hope this clarifies the scope of our contribution. We would be glad to pursue industry-level analysis in follow-up work if suitable data become available.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "reviewer-feedback",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "d65996c28a4667a90d05df8184b96d7c0e1bb3d3d191ccc1885ba91e92a91458",
+      "final_text": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Because this design does not represent any particular industry, our results show how behavior responds under its specified conditions; they do not establish whether the same patterns hold across industries. Assessing robustness across industries would require industry-specific data or additional designs calibrated to different industrial settings, which we leave to future work.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. Our current evidence comes from one synthetic design, and we have no industry data or robustness analyses across industries. We therefore cannot demonstrate cross-industry robustness in this revision. Instead, we have revised the paragraph to state this scope explicitly: the findings apply to the synthetic design studied and should not be read as evidence about behavior across industries. We also identify cross-industry validation as a direction for future work. If the editor and reviewer consider such analyses essential, we would need to obtain industry data or construct and run additional designs, which would be new analysis beyond this revision.\n\n---\n\n*Note:* The original paragraph gives no detail about the design or the behavior studied, so the revision adds only a scope statement and makes no claims about what the design captures. If the manuscript describes design features that plausibly vary by industry (e.g., cost structure, market concentration), naming them here would make the limitation more specific.",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Asserts that the synthetic design represents no particular industry; the supplied evidence does not establish that."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "reviewer-feedback",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "2149eeb6590b5ff51dd942f1adf0ec5d99946b1496293672ace01e21a5c1cae4",
+      "final_text": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Because the analysis uses no industry data, our results describe behavior within this design only; they do not establish whether the same patterns hold across industries. Testing robustness across industries would require industry-specific data or additional runs, which we leave to future work.\n\n**Response to reviewer**\n\nWe thank the reviewer for raising robustness across industries. Our current evidence comes from a single synthetic design, and we have no industry data or robustness runs that could address this question. Rather than imply broader generality, we revised the paragraph to state the scope of the evidence explicitly. It now notes that the results apply within this design and that cross-industry robustness remains untested. We added that robustness testing would require new data or analysis, which this revision does not include.\n\n**Note:** Fully addressing the request requires new data or analysis. This revision only clarifies scope.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "optional-style",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "6885152369bcdb5e50aef7335916dbe202c9669a73b9362a4889a4f96883183f",
+      "final_text": "Pepper's author style profile wasn't included in the provided context, and it's optional, so this edit applies general line-editing for clarity and precision.\n\n**Edited passage:**\n\n> Selecting a treatment and evaluating it are separate questions. A treatment can be the one selected and still be suboptimal, and its estimated value can exceed its true value. A marketer should keep this distinction in mind when interpreting the value estimate.\n\n**Changes and rationale:**\n\n- **\"Selection and evaluation\" → \"Selecting a treatment and evaluating it\":** This names what is being selected and evaluated, so the reader knows from the first sentence that both questions concern the same treatment.\n- **\"can be selected\" → \"can be the one selected\":** This frames selection as a comparison among candidates, which sets up \"suboptimal\" more precisely.\n- **\"This distinction is relevant when…\" → \"A marketer should keep this distinction in mind when…\":** The original sentence is passive and vague. The revision states who must act and what they must do.\n\n**Scientific distinction preserved:** The edit keeps two separate claims:\n\n1. **Selection** can be wrong: the chosen treatment may not be the best one.\n2. **Evaluation** can be biased: the selected treatment's estimated value may exceed its true value, which is the optimistic bias that comes from choosing the highest estimate.\n\nNeither claim is merged into the other, and neither is overstated. \"Can\" stays in both, so suboptimality and overestimation remain possibilities rather than certainties.\n\nIf you share Pepper's style profile, I can revise to match its voice, sentence rhythm, and terminology.",
+      "fidelity_judgment": "fail",
+      "fidelity_failure": "Adds selection on the highest estimate as an explanation for bias, without source support."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "optional-style",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "faa4040082a186dbce0d0fa08f6c50bd00047484e7eb9a4160b3305764ac9498",
+      "final_text": "Selecting a treatment and evaluating it are separate questions. A treatment can be selected and still be suboptimal, and its estimated value can exceed its true value. A marketer should keep this distinction in mind when interpreting the value estimate.\n\n---\n\n**Note:** I couldn't apply the optional author style profile. It's in `references/author-style.md`, which wasn't included, and this task didn't allow loading it. This is a general line edit; send the profile or a style sample and I'll revise to match.\n\nThe edit keeps three distinctions intact: selection versus evaluation, selected versus optimal, and estimated versus true value. It also keeps \"can,\" so both outcomes remain possibilities rather than claims that they always occur. I didn't name a mechanism, such as selection-induced optimism, because the source doesn't state one.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "optional-style",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "71d078581c7a096a05d2843ae19b7365cae5680295dcf7dbc2adeb2147173112",
+      "final_text": "Selection and evaluation answer separate questions. A treatment can be selected without being optimal, and its estimated value can exceed its true value. This distinction matters when a marketer interprets the value estimate: the fact that a treatment was selected does not show that it is the best available option, and its estimate should not be read as its true value.\n\n---\n\nNotes:\n\n- I kept \"selected vs. optimal\" and \"estimated vs. true value\" as separate claims, and kept \"can\" in both so neither reads as a guarantee.\n- The profile favors explicit mechanisms, but the passage does not say *why* the estimate can exceed the true value. If the paper establishes a reason, such as selection favoring treatments with favorable estimation error, adding one clause here would strengthen the sentence. I did not add it because it is not in the supplied text.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "review-only",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "8a286123bfb90e5e421a962bd59a382895a13d16b4455ce7d809eba9bb24fa61",
+      "final_text": "**Clarity review: actionable comments**\n\n1. **Name the method.** \"The method\" has no clear referent. State which method you mean, by name or with a short description, so the sentence can be read on its own.\n\n2. **Say what it is being compared to.** \"Better\" needs a baseline. Name the comparison method, prior approach, or control condition.\n\n3. **Say what \"better\" means.** Give the dimension being judged, such as accuracy, speed, robustness, cost, or sample efficiency. A reader can't tell what kind of superiority you are claiming.\n\n4. **Point to the specific results.** \"The results\" is too vague. Refer to the table, figure, experiment, or dataset (e.g., \"Table 2,\" \"the held-out test set\").\n\n5. **Give the size of the improvement.** \"An improvement\" should come with numbers: an absolute or relative change, the metric, and ideally the variance, confidence intervals, or significance tests. Without these, readers can't judge whether the gain matters.\n\n6. **Fix the ambiguous pronouns.** \"This\" in sentence 2 and \"They\" in sentence 3 have uncertain referents. Replace each with a specific noun phrase (\"This claim,\" \"These results\").\n\n7. **Combine the sentences.** The three short sentences repeat one idea in pieces: claim, support, evidence. Merging them into one or two sentences that state the claim with its evidence would be tighter and easier to follow.\n\n8. **Use active, specific verbs.** \"Is supported by\" is passive and weak. Consider a construction in which the evidence acts directly, such as results that demonstrate, show, or indicate something specific.\n\n9. **Match the claim's strength to the evidence.** \"Is better\" is an unqualified, absolute claim. If the gains hold only on certain datasets or settings, scope the claim to match (\"on benchmarks X and Y\").\n\n10. **Add context or a mechanism if the space allows.** A brief clause on *why* the method improves results, or under what conditions, would strengthen the passage and help readers judge whether it generalizes.\n\n**Overall:** The passage asserts a conclusion but leaves out the referents, comparison, metric, and magnitude needed to evaluate it. Adding those specifics will do the most for clarity and credibility.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "review-only",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "7e498e9b4c4db920e538d5eef775c34352cd485582451442954c1f0af98d0620",
+      "final_text": "**Comments on clarity**\n\n1. **Name the method.** \"The method\" has no referent in this excerpt. State which method (e.g., the proposed estimator, Algorithm 2) so the reader knows what the claim concerns.\n\n2. **Specify the comparison.** \"Better\" needs a baseline and a criterion: better than what (a named competing method, the current standard, an ablation), and on which property (accuracy, bias, runtime, coverage)? Without both, the claim cannot be evaluated.\n\n3. **Identify the results.** \"The results\" should point to a specific table, figure, or experiment, and indicate the setting (simulation or empirical data, which datasets, which conditions). This also tells the reader how far the evidence extends.\n\n4. **Quantify the improvement.** Report the size of the improvement with units or a metric (e.g., absolute or relative reduction in error), and include uncertainty if available (standard errors, intervals, number of replications). \"An improvement\" alone does not let the reader judge whether it matters.\n\n5. **Match the claim's scope to the evidence.** \"Is better\" reads as a general, unconditional claim. If the improvement holds only in certain regimes, sample sizes, or datasets, attach those conditions to the conclusion. If it fails or reverses in some settings, say so.\n\n6. **Resolve ambiguous pronouns.** \"This\" in sentence 2 and \"They\" in sentence 3 have weak antecedents. Make each referent explicit.\n\n7. **Remove redundancy.** The three sentences make one point three times: claim, support exists, support shows improvement. Once the comparison and evidence are stated concretely, one or two sentences should suffice. The second sentence adds nothing the third does not.\n\n8. **Consider order for the reader.** A claim followed by its specific supporting evidence (figure/table reference and magnitude) usually works best. Alternatively, present the evidence first if the surrounding section is results-driven. Choose based on the paragraph's role.\n\n9. **Check whether a mechanism or explanation is needed.** If the surrounding text does not explain *why* the method improves performance, consider whether a brief, supported explanation belongs here or in the discussion. Do not add one unless the research supports it.\n\n**Note:** The passage is too underspecified to assess against its sources. These comments identify the missing information the author needs to supply. They are not substitutions I can make.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "review-only",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "ee00db05d988cd2093fb32f30a5f6166510741487aea8098e9186cbb1166d78c",
+      "final_text": "**Review comments**\n\n1. **Unspecified claim.** \"The method is better\" doesn't say better than what, or in what respect. Name the method, the baseline or competing methods, and the criterion (e.g., accuracy, bias, runtime, coverage). Without these, the reader cannot judge the claim.\n\n2. **Unidentified evidence.** \"The results\" doesn't tell the reader which results support the claim. Point to the specific table, figure, or experiment, and say whether the evidence comes from simulation, empirical data, or theory.\n\n3. **Missing magnitude and uncertainty.** \"An improvement\" gives no size or reliability. Report the quantity being compared, the difference (absolute or relative, with units), and any uncertainty measure the analysis provides, such as standard errors, intervals, or the number of replications. If no uncertainty was assessed, say so rather than implying a firm result.\n\n4. **Missing scope conditions.** State the settings in which the improvement holds, such as sample sizes, data regimes, or parameter ranges. Also say whether it holds uniformly or only in some conditions. If the method underperforms anywhere, include that qualification near the claim.\n\n5. **Ambiguous referent.** \"They\" could refer to \"the results\" or to unnamed authors or methods. Once the results are named explicitly, the pronoun problem goes away.\n\n6. **Redundant structure.** The three sentences make one claim three times with weakening specificity: claim, then that evidence exists, then that the evidence shows the claim. Use a single statement linking the specific evidence to the specific conclusion. Add a second sentence only if it contributes new information, such as a mechanism or a limitation.\n\n7. **Calibrate the verb to the evidence.** \"Better\" and \"supported\" can imply a general or causal superiority. Check that the strength of the wording matches what the experiments establish. For example, \"achieves lower error in our simulations\" is a different claim from \"is better.\"\n\n**Information needed before this passage can be revised:** the method and comparator names, the metric, the numerical results with uncertainty, the source location (table/figure), and the conditions under which the comparison was made. The passage as written does not contain enough content to revise without inventing these details.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "negative-code",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "891557874ad631fe5118a373c43499fe04e77b8cfc4dbef263b11060d430dfce",
+      "final_text": "The `square` function takes a single argument `x` and returns its square: `x` multiplied by itself.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "negative-code",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "54c44a30093111e8046094695f45d25cb5e1725f349a6a471a540fd254025137",
+      "final_text": "The function `square` takes a value `x` and returns `x * x`, which is the square of `x` for numbers and whatever the `*` operator produces for other types that support it.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "negative-code",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "54c44a30093111e8046094695f45d25cb5e1725f349a6a471a540fd254025137",
+      "final_text": "The function `square` takes an input `x` and returns its product with itself (`x * x`), which for numeric inputs is the square of `x`.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "plain",
+      "case": "negative-search",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "a6b7ca301f9170934a7918c6edc27a546f8c2af94a1974eea6ffc31b40e594dc",
+      "final_text": "**Recommendation: a dedicated, standalone literature-search workflow, run separately from any manuscript drafting or revision tool.**\n\nSince you only need to find and screen recent work on synthetic controls, use a search-and-triage pipeline rather than a writing assistant. A writing tool will tend to pull citations into prose; you want a reviewable list of sources.\n\n**Suggested workflow**\n\n1. **Define scope first.** Set a date window (e.g., 2022–present), the fields you care about (econometrics, epidemiology, political science, ML), and the subtopics. Examples: augmented, penalized or Bayesian SC; synthetic difference-in-differences; inference and conformal methods; staggered adoption; and applied policy evaluations.\n\n2. **Search preprint servers and indexed databases together.** Methods work in this area moves fast and often appears first as preprints.\n   - **arXiv** (econ.EM, stat.ME) and **SSRN/NBER** for recent methods papers.\n   - **Google Scholar**, **Semantic Scholar**, or **OpenAlex** for broad coverage and citation counts.\n   - **Web of Science / Scopus** (via [institution redacted] library access) for reproducible, exportable queries.\n   - **PubMed** if you need health-policy applications.\n\n3. **Use citation chaining.** Start from anchor papers: Abadie, Diamond & Hainmueller (2010); Abadie (2021, *JEL* review); Arkhangelsky et al. (2021, SDID); Ben-Michael, Feller & Rothstein (2021, ASCM). Use forward-citation tools such as **Connected Papers**, **ResearchRabbit**, **Litmaps**, or Semantic Scholar's \"cited by\" to surface recent descendants.\n\n4. **Set up alerts.** Saved searches on Google Scholar and arXiv RSS feeds will catch new papers going forward.\n\n5. **Manage and screen in a reference manager.** Export to **Zotero** (free, with good browser capture) and tag by subtopic. Do a quick title/abstract screen. If you want something systematic, log your queries and counts in a PRISMA-style flow.\n\n6. **Optional AI assistance for triage only.** Tools like **Elicit**, **Consensus**, or **Undermind** can speed up discovery and summarization. Verify every citation against the original source, because these tools can misattribute findings.\n\n**Bottom line:** combine arXiv/SSRN, Scholar/Semantic Scholar, and forward citation chaining from the key anchor papers, and manage the results in Zotero. Keep this pipeline separate from manuscript work so the output stays a clean, auditable source list.",
+      "redactions": [
+        "An institution-specific access suggestion absent from the synthetic prompt was redacted; possible host-context contamination or hallucination."
+      ],
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "negative-search",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "c16b3b5bc76aac990c58ef7393d41e2e598d573d47e21adccc004b3a7a740cef",
+      "final_text": "This falls outside Pepper's scope: Pepper drafts and edits manuscripts and explicitly excludes standalone literature searches. A dedicated search workflow suits this better. Here is one.\n\n**1. Define the scope first.**\nDecide which strand you need:\n- Methodological work, such as augmented or penalized synthetic control, synthetic difference-in-differences, inference, or multiple treated units\n- Applied studies in a particular field\n- Software and implementation\n\nAlso set a time window (for example, 2021 onward) and list your key terms: \"synthetic control,\" \"synthetic difference-in-differences,\" \"augmented synthetic control,\" \"panel data counterfactual,\" and \"comparative case study.\"\n\n**2. Search indexed databases, not just a general web engine.**\n- **Google Scholar** for broad coverage and \"cited by\" chaining\n- **Semantic Scholar** or **OpenAlex** for filtering by date and field, and for API-based exports\n- **arXiv** (stat.ME, econ.EM) and **SSRN/NBER** for recent working papers that have not yet been published\n- **Web of Science** or **Scopus**, if your institution provides access, for systematic, reproducible queries\n\n**3. Chain citations.**\nStart from anchor papers such as Abadie et al. (2010, 2015), Abadie (2021, *JEL* review), Ben-Michael et al. (augmented SCM), and Arkhangelsky et al. (synthetic DiD). Then search forward through their recent citations. Tools like **Connected Papers**, **ResearchRabbit**, or **Litmaps** make this faster.\n\n**4. Screen and record.**\nExport results to **Zotero** (or a similar reference manager), remove duplicates, and screen by title and abstract against your scope. For a formal review, record the queries, dates, and inclusion criteria in a PRISMA-style log.\n\n**5. Verify before citing.**\nConfirm each paper's publication status and version, since preprints change. Read the methods directly rather than relying on abstracts or AI summaries.\n\n**Using AI tools:** An assistant with web or database search, such as Claude with web search, Elicit, or Consensus, can speed up discovery and summarization. However, check every citation it returns against the original source, because invented or misattributed references are a known failure mode.\n\nOnce you have gathered and vetted the sources, Pepper can help you draft or revise a literature-synthesis section from them.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "negative-search",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "c16b3b5bc76aac990c58ef7393d41e2e598d573d47e21adccc004b3a7a740cef",
+      "final_text": "A standalone literature search falls outside the Pepper writing skill, which covers drafting and revising manuscripts. Pepper becomes useful later, once you have sources and want to write a related-work section or synthesis from them.\n\nFor the search itself, I'd use a citation-driven workflow anchored in recent surveys:\n\n1. **Start from anchor papers and recent reviews.** Abadie, Diamond & Hainmueller (2010) and Abadie's 2021 *JEL* review, \"Using Synthetic Controls,\" are the anchors. Find any newer surveys and use their reference lists as a map of the field.\n\n2. **Trace citations forward with a scholarly graph tool.** Semantic Scholar, Google Scholar (\"Cited by\"), OpenAlex, or Web of Science/Scopus will show recent work citing the anchors. Filter by date to keep the last few years. Connected Papers, Litmaps, or ResearchRabbit can show clusters visually.\n\n3. **Check preprint servers and working-paper series.** Much of this literature appears first on arXiv (econ.EM, stat.ME), SSRN, and NBER. Set saved searches or alerts for \"synthetic control\" and related terms:\n   - synthetic difference-in-differences\n   - augmented synthetic control\n   - matrix completion for panel data\n   - conformal or inference methods for synthetic control\n\n4. **Organize the results by subtopic** so they can be synthesized later:\n   - estimation variants (augmented, penalized, Bayesian, synthetic DiD)\n   - inference (placebo/permutation, conformal, design-based)\n   - multiple treated units and staggered adoption\n   - links to factor models and matrix completion\n   - applied best-practice guidance\n\n5. **Manage references in a citation manager** such as Zotero, with tags for each subtopic. Export BibTeX so the citations can go straight into a manuscript.\n\n6. **Optionally, use an AI research assistant** such as Elicit, Consensus, or a web-search-enabled agent to triage abstracts. Verify every citation against the primary source, because these tools can misattribute or invent references.\n\nAfter you've collected and read the papers, bring the sources or your notes back. I can then help draft or revise a literature synthesis that accurately represents each work's claims and scope.",
+      "fidelity_judgment": "pass"
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "association",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "followup",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "18b6d9a37f01666635ef1857923b19a3f34e054d2f49abafc5152dcfd7b7204f",
+      "final_text": "In an observational sample of 920 customers, dashboard use was associated with higher renewal, although unobserved differences between users and nonusers may account for this association.",
+      "fidelity_judgment": "pass",
+      "assessment": "Preserves renewal without adding a metric definition; no extra note."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "literature-synthesis",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "followup",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "748726da2ae3258ebecc9259f345a5a966b683a4d57dc12b362d11da25f0d71d",
+      "final_text": "Prior work has examined related settings along two dimensions: whether the decision rule is fixed or adaptive, and whether observations are independent or dependent. \\cite{K2024} studies a fixed decision rule under independent observations, whereas \\cite{L2025} studies adaptive rules under dependent observations. Our analysis considers a fixed rule under dependent observations. It shares the fixed rule with \\cite{K2024} and the presence of dependence with \\cite{L2025}.\n\n*Notes:*\n- I avoided calling this combination a \"gap\" or claiming it is new, because the summaries support neither.\n- I did not say that our dependence structure matches that of L2025, or that a fixed rule is a special case of L2025's adaptive rules. If either is true, a sentence stating it would clarify the comparison.",
+      "fidelity_judgment": "pass",
+      "assessment": "Now describes the presence of dependence, not an identical structure; unnecessary notes remain."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "mechanics",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "followup",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "c134af3cab26b42d7db6828c77cef7e3c2fcd5cbb69a56bd4d81cd908e92f9c9",
+      "final_text": "The estimates are computed for each of the 48 districts.\n\n*Note:* If a single estimate is intended, use \"The estimate is computed for each of the 48 districts.\"",
+      "fidelity_judgment": "pass",
+      "assessment": "Correct sentence, but still adds an unrequested singular alternative."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "core",
+      "case": "reviewer-feedback",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "followup",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "2ab870f9765fcf9e010714ccbcdcb56bedf9ad32deef94ef852c3c4f13b727fa",
+      "final_text": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Because the analysis uses only this design and no industry-specific data, the results show behavior under the conditions it specifies; they do not establish whether the same patterns hold across industries. Assessing robustness across industries would require industry data or additional analyses, which are outside the scope of this study.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. The current study uses only one synthetic design, and we have no industry data or robustness analyses that would support a claim of cross-industry robustness. We did not add such a claim. Instead, we revised the paragraph to state that the evidence comes from a single synthetic design, that the findings apply to the conditions of that design, and that cross-industry robustness remains untested. We agree that evaluating the results across industries is an important direction for future work.\n\n---\n\n*Note:* The revision states the limitation without describing features of the synthetic design, because the supplied material does not specify them. If the paper already explains why this design was chosen or what it represents, the authors could cite that explanation here. If the authors plan to run industry analyses before resubmission, the response should be updated to describe them. No new analysis was performed or implied.",
+      "fidelity_judgment": "pass",
+      "assessment": "No invented design representation; limits are grounded in supplied evidence. Response remains longer than needed."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "association",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "followup",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "45a8cd3b8df5c2ccdef076aff206ef81c895cfa3177d9730d20936b912893e33",
+      "final_text": "In an observational sample of 920 customers, dashboard use was associated with higher renewal, although unobserved differences between users and nonusers may explain this association.",
+      "fidelity_judgment": "pass",
+      "assessment": "Preserves renewal without adding a metric definition; no extra note."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "literature-synthesis",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "followup",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "2566d0cbfad36dbd5bedd15925870d9580be0b7960712cdbeeb755709f204ca5",
+      "final_text": "Existing analyses differ in two respects: whether the decision rule is fixed or adaptive, and whether observations are independent or dependent. \\cite{K2024} studies a fixed decision rule under independent observations, whereas \\cite{L2025} studies adaptive rules under dependent observations. Our analysis combines features of both settings: like \\cite{K2024}, it considers a fixed rule, and like \\cite{L2025}, it allows dependent observations.\n\n---\n\n**Notes:**\n- The paragraph does not claim novelty, priority, or that this combination is absent from the literature. The summaries do not support those claims.\n- It does not say whether our dependence structure matches that of \\cite{L2025}, because the summaries do not specify it.\n- Adjust the `\\cite` command to match your manuscript, for example `\\citet`.",
+      "fidelity_judgment": "pass",
+      "assessment": "Preserves both comparison dimensions; unnecessary notes remain."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "mechanics",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "followup",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "1c2f607eff932ead3ebd010c34961af7d2939887b19700f0283ffce2fb6acf51",
+      "final_text": "The estimates are computed for each of the 48 districts.",
+      "fidelity_judgment": "pass",
+      "assessment": "Returns only the requested correction."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "references",
+      "case": "reviewer-feedback",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "followup",
+      "model_reported": "claude-opus-5-5[1m]",
+      "prompt_sha256": "688580383194db93d48eb35dff71b5732b854cf3078baabbfa524167fc278704",
+      "final_text": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Because the analysis uses no industry data, our results describe behavior under this design only and do not establish robustness across industries.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. Our current evidence comes from one synthetic design, and we have no industry-specific data or robustness analyses. Showing robustness across industries would require new data and analysis. In this revision, we have instead stated this scope explicitly in the paragraph, so readers do not read the results as applying across industries.\n\n---\n\n*Note:* The revision narrows the stated scope rather than adding evidence. If you plan to run cross-industry analyses later, the response could say so, but only as a plan, not as completed work.",
+      "fidelity_judgment": "pass",
+      "assessment": "Grounded revision and response; the final editorial note is dispensable."
+    }
+  ],
+  "discovery": [
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "implicit",
+      "case": "clear-prose",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5",
+      "prompt_sha256": "d227c321625a0c085a049164668ec872dc72333200cbea7a79e543343766412b",
+      "final_text": "We randomly assigned 750 participants to one of five groups.",
+      "selection": "confirmed",
+      "evidence": "Skill tool invoked pepper."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "implicit",
+      "case": "negative-code",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5",
+      "prompt_sha256": "815cc460427df881027efe03024a7df3570845289d3d31ff5fc318008f1bed59",
+      "final_text": "The function `square` takes one argument `x` and returns `x * x`, which is `x` multiplied by itself, so `square(4)` gives `16`.",
+      "selection": "no_activation_observed",
+      "evidence": "No Skill call or Pepper file-read in the tool trace."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "implicit",
+      "case": "negative-search",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5",
+      "prompt_sha256": "65b297a77b32b92eeebe08dde7adb899a7d492d985f0198602f29bf87b6314e0",
+      "final_text": "I'd skip the available writing skill (`pepper`). It's for drafting and revising manuscripts, and it says outright that it doesn't cover standalone literature searches. What you need is a search workflow along these lines:\n\n**1. Pick the right databases**\n- **Google Scholar**: the widest coverage. Use the \"Since 2023\" filter and the \"Cited by\" links on the founding papers.\n- **SSRN, NBER Working Papers and arXiv (econ.EM, stat.ME)**: most new synthetic control methods show up here as preprints first.\n- **RePEc/IDEAS and EconLit**: for peer-reviewed economics and policy-evaluation work.\n- **Semantic Scholar or OpenAlex**: free tools that let you filter by date and follow citation graphs.\n\n**2. Start from the foundational papers and move forward through citations**\nBegin with Abadie & Gardeazabal (2003), Abadie, Diamond & Hainmueller (2010, 2015) and Abadie's 2021 JEL review. Then look at which recent papers cite them. Newer branches worth tracing include:\n- synthetic difference-in-differences (Arkhangelsky et al.)\n- augmented synthetic control (Ben-Michael, Feller & Rothstein)\n- penalized and matrix-completion approaches\n- conformal and placebo-based inference\n- staggered adoption and multiple treated units\n\n**3. Build structured search queries**\nExample: `(\"synthetic control\" OR \"synthetic controls\" OR \"synthetic difference-in-differences\") AND (inference OR \"staggered adoption\" OR \"augmented\")`, limited to the last 2–3 years. Change the second half to fit your angle: methods, an application area, or software.\n\n**4. Use citation-mapping tools to find gaps**\nSeed **Connected Papers**, **ResearchRabbit** or **Litmaps** with 3–5 key papers. These tools show clusters of related work and recent papers that keyword searches miss.\n\n**5. Set up alerts**\nCreate Google Scholar alerts for the main queries and for new citations of the foundational papers. Add arXiv or NBER email digests.\n\n**6. Track what you find in a reference manager**\nStore results in **Zotero** (free) or a similar tool. Tag each paper by type (methods, inference, application, software), and record your search terms and dates so you can rerun or report the search later.\n\n**7. Optionally, check software and practice**\nLook at package documentation and changelogs for `Synth`, `augsynth`, `synthdid` and `scpi`. They often point to the newest methods papers.\n\nIf you later want to turn the results into a literature review section or a related-work paragraph, that's when the manuscript-writing skill would apply.",
+      "selection": "no_activation_observed",
+      "evidence": "No Skill call or Pepper file-read in the tool trace."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "implicit",
+      "case": "review-only",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5",
+      "prompt_sha256": "6b030cef6098cfb60346a8b7dcab287984b1f42abd2839e6303db541798de6b3",
+      "final_text": "Here are my comments on the passage, as requested: no rewrite and no file edits.\n\n1. **Name the method.** \"The method\" could mean the proposed approach, a variant of it, or a baseline. Use the manuscript's exact name for it so readers know which procedure the claim is about.\n\n2. **Give a comparison point for \"better.\"** \"Better\" needs a \"than what\": a specific baseline, earlier work, or an ablation. It also needs a \"by which measure,\" such as accuracy, bias, runtime, or coverage. Without both, the reader can't judge the claim.\n\n3. **Separate the claim from the evidence.** \"Is better\" sounds like a general fact, but the support is \"the results.\" State the claim at the scope the evidence actually covers: which datasets, simulation settings, or conditions. Don't let the opening sentence promise more than the experiments show.\n\n4. **Point to specific results.** \"The results\" doesn't tell the reader where to look. Cite the table, figure, or section, and say whether these are simulation or empirical results.\n\n5. **Quantify \"an improvement.\"** Report how big it is and in what units (absolute or relative change), with uncertainty if you have it, such as standard errors, intervals, or the number of replications. If the improvement is not uniform, say where it holds and where it doesn't.\n\n6. **Fix the unclear \"They.\"** \"They\" could refer to \"the results\" or, loosely, to the authors. Repeat the noun or restructure so the referent is obvious.\n\n7. **Merge the three sentences into one line of reasoning.** Right now they make one point three times: the claim, a statement that evidence exists, and a vague description of that evidence. A single passage that gives the comparison, the metric, the size of the effect, and where to find it would carry more information with less repetition.\n\n8. **Consider adding why it works, if you can support it.** If the paper explains why the method improves on the alternative (for example, a modeling choice or the use of extra information), one clause linking the result to that explanation would help. Don't add an explanation the paper doesn't support.\n\n9. **Check for missing conditions.** If the advantage depends on sample size, tuning, or having certain inputs available, state those conditions next to the conclusion. Otherwise readers will assume the result holds in general.\n\n**Information the author needs to supply:** the method's name, the comparator, the metric, the effect size and uncertainty, and where the results appear. None of these can be inferred from the passage as written.",
+      "selection": "confirmed",
+      "evidence": "Skill tool invoked pepper."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "implicit",
+      "case": "theorem",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5",
+      "prompt_sha256": "9986260bd459777743cc254972b5f1d738faf9782a2ce7f998ab8b2cdf2ac90f",
+      "final_text": "**Revised:**\n\n> Suppose Assumptions B1–B3 hold, and fix any t in (0, 1). Then, as n → ∞, the estimator converges in probability to V(t). This is a pointwise result: it applies to each t on its own and does not establish that the convergence is uniform over t.\n\n**Notes:**\n- Splitting off the assumptions and \"fix any t\" puts the conditions first, so the conclusion reads as one short sentence.\n- \"Pointwise\" names the limitation before the caveat explains it. The caveat still only says uniform convergence isn't *established*. It doesn't say uniform convergence fails.\n- Nothing else changed: the assumptions, the open interval (0, 1), convergence in probability, the limit V(t) and n → ∞ are all as in the original.",
+      "selection": "confirmed",
+      "evidence": "Skill tool invoked pepper."
+    },
+    {
+      "host": "claude",
+      "host_version": "2.1.295 (Claude Code)",
+      "arm": "explicit",
+      "case": "clear-prose",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": "claude-opus-5-5",
+      "prompt_sha256": "55d735c901f69f77d6edee17d1cb32a9a409068b4b4b8e7656458cdebd967240",
+      "final_text": "We randomly assigned 750 participants to one of five groups.",
+      "selection": "inconclusive",
+      "evidence": "Explicit request completed with faithful text; no separate skill-load event was exposed. Output/self-report is insufficient to prove selection. Pepper was present in the host slash-command and skill inventories."
+    },
+    {
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "arm": "explicit",
+      "case": "theorem",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": null,
+      "prompt_sha256": "524ad4609a51e00d4c413859feb3a6e86fba730e3ac6740341191c316e88dc7a",
+      "final_text": "Under Assumptions B1–B3, choose any fixed \\(t \\in (0,1)\\). As \\(n \\to \\infty\\), the estimator converges in probability to \\(V(t)\\). This result holds for each fixed \\(t\\), but it does not establish uniform convergence over \\(t\\).",
+      "selection": "inconclusive",
+      "evidence": "Explicit request completed with faithful text; no separate skill-load event was exposed. Output/self-report is insufficient to prove selection."
+    },
+    {
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "arm": "implicit",
+      "case": "clear-prose",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": null,
+      "prompt_sha256": "d227c321625a0c085a049164668ec872dc72333200cbea7a79e543343766412b",
+      "final_text": "We randomly assigned 750 participants to one of five groups.",
+      "selection": "confirmed",
+      "evidence": "Command trace read the installed project skill SKILL.md."
+    },
+    {
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "arm": "implicit",
+      "case": "negative-code",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": null,
+      "prompt_sha256": "815cc460427df881027efe03024a7df3570845289d3d31ff5fc318008f1bed59",
+      "final_text": "The function `square(x)` returns the square of `x` by multiplying it by itself.",
+      "selection": "no_activation_observed",
+      "evidence": "No Skill call or Pepper file-read in the tool trace."
+    },
+    {
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "arm": "implicit",
+      "case": "negative-search",
+      "exit_code": 0,
+      "fixtures_unchanged": true,
+      "phase": "initial",
+      "model_reported": null,
+      "prompt_sha256": "65b297a77b32b92eeebe08dde7adb899a7d492d985f0198602f29bf87b6314e0",
+      "final_text": "Use a **scholarly literature-discovery workflow** built around an academic search engine or bibliographic database, with date filtering and citation chaining.\n\nA suitable workflow would:\n\n1. Define what “recent” means—for example, the past three years.\n2. Search combinations of “synthetic control,” “synthetic control methods,” and relevant methodological or application terms.\n3. Follow forward citations from foundational papers and review references in recent papers.\n4. Include working papers and preprints, clearly distinguishing them from peer-reviewed publications.\n5. Deduplicate results and record each paper’s contribution, publication status, and relevance, alongside the search queries and dates.\n\nFor this standalone task, choose a literature-search or research-discovery tool. The **Pepper** skill is scoped to manuscript drafting and revision and does not cover standalone literature searches.",
+      "selection": "no_activation_observed",
+      "evidence": "No Skill call or Pepper file-read in the tool trace."
+    }
+  ]
+}
