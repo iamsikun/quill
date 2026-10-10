@@ -13,18 +13,26 @@ spec.loader.exec_module(runner)
 
 def test_cases_and_prompts_keep_grading_separate():
     cases = json.loads((ROOT / 'evals/cases.json').read_text())
-    assert len(cases) == len({c['id'] for c in cases}) == 16
+    assert len(cases) == len({c['id'] for c in cases}) == 21
     assert sum(not c['expect_activation'] for c in cases) == 2
+    assert {c['id'] for c in cases if c.get('rhetorical_checks')} == {
+        'over-hedging', 'defensive-framing', 'redundant-caveats',
+        'ambitious-positioning', 'observation-mechanism',
+    }
     for case in cases:
         assert case['must_preserve'] and case['must_not']
         for reference in case['references']:
             assert (runner.SKILL / 'references' / reference).is_file()
-        # A grading-only sentinel must never enter a model prompt.
-        graded = {**case, 'must_preserve': ['GRADING_SENTINEL'], 'must_not': ['GRADING_SENTINEL']}
-        for arm in runner.ARMS:
-            prompt = runner.build_prompt(graded, arm, 'codex')
-            assert 'GRADING_SENTINEL' not in prompt
-            assert case['prompt'] in prompt and case['source'] in prompt
+        # Every grading field stays private in every comparison/discovery arm.
+        graded = {**case, **{
+            field: [f'GRADING_SENTINEL_{field}']
+            for field in ('must_preserve', 'must_not', 'rhetorical_checks')
+        }}
+        for host in ('codex', 'claude'):
+            for arm in runner.ARMS:
+                prompt = runner.build_prompt(graded, arm, host)
+                assert 'GRADING_SENTINEL' not in prompt
+                assert case['prompt'] in prompt and case['source'] in prompt
 
 
 def test_comparison_and_discovery_have_distinct_contexts():

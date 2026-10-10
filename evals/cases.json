@@ -260,6 +260,130 @@
     }
   },
   {
+    "expect_activation": true,
+    "id": "over-hedging",
+    "prompt": "Line-edit this results paragraph using the supplied notes. Return only the revised paragraph.",
+    "source": "Notes: Across 200 simulated datasets, each with n=500 from design D, method A had mean absolute error 0.08 and the baseline had mean absolute error 0.12. No uncertainty estimates or other designs are supplied.\nDraft: In these simulations, our results may potentially suggest that method A could possibly have lower mean absolute error than the baseline, with values of 0.08 and 0.12, respectively.",
+    "references": [
+      "editing.md",
+      "technical-writing.md"
+    ],
+    "must_preserve": [
+      "observed mean absolute error of 0.08 for method A versus 0.12 for the baseline",
+      "comparison restricted to the supplied simulation design"
+    ],
+    "must_not": [
+      "claim statistical significance or invent uncertainty estimates",
+      "claim improvement across untested designs or in real applications"
+    ],
+    "rhetorical_checks": [
+      "states the observed error comparison directly within its simulation scope",
+      "removes stacked hedges that obscure the reported comparison"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "defensive-framing",
+    "prompt": "Substantively revise this introduction paragraph using the supplied research notes. Return only the revised paragraph.",
+    "source": "Research notes: The project's central question is whether profitable decisions can be learned as a distribution and generated directly. In the existing workflow, each new demand forecast requires solving an assortment optimization problem. The proposed approach trains a generator on profitable assortments, then generates an assortment for a new forecast. In 40 synthetic test instances, its average revenue was 98% of the solver's average revenue. Mean online generation time was 0.1 seconds, compared with 2 seconds for the solver; these times exclude one-time model training.\nDraft: We offer a small technical variation on assortment heuristics. The generator is another way to produce assortments. On 40 synthetic instances it achieved 98% of the solver's average revenue, with mean online times of 0.1 versus 2 seconds, excluding model training.",
+    "references": [
+      "drafting.md",
+      "editing.md"
+    ],
+    "must_preserve": [
+      "research question about learning a distribution of profitable decisions and generating them directly",
+      "assortment prototype and 40 synthetic test instances",
+      "average revenue at 98% of the solver's average revenue",
+      "mean online generation time of 0.1 seconds versus solver time of 2 seconds, excluding model training"
+    ],
+    "must_not": [
+      "invent a priority claim or universal replacement for optimization",
+      "claim higher revenue than the solver or a measured end-to-end speed advantage including training",
+      "generalize the demonstrated results beyond the tested assortment setting"
+    ],
+    "rhetorical_checks": [
+      "organizes the paragraph around the supplied conceptual question and approach",
+      "explains the contribution beyond describing it as a small technical variation",
+      "keeps the intellectual motivation distinct from the scope of the prototype evidence"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "redundant-caveats",
+    "prompt": "Revise this abstract for clarity and concision. Return only the revised abstract.",
+    "source": "We study a correction for bias in a selected policy's value estimate. In 200 replications of one synthetic design with n=500, the correction reduced mean bias from 0.09 to 0.04. However, the evaluation uses only one synthetic design. The correction requires known selection probabilities. These results should be interpreted cautiously because they come from a single synthetic design. The evaluation does not extend beyond that same design. The findings may therefore be limited to the design studied.",
+    "references": [
+      "drafting.md",
+      "editing.md"
+    ],
+    "must_preserve": [
+      "correction concerns bias in a selected policy's value estimate",
+      "200 replications of one synthetic design with n=500",
+      "mean bias reduced from 0.09 to 0.04",
+      "known selection probabilities are required"
+    ],
+    "must_not": [
+      "remove the simulation setting or generalize beyond the evaluated design",
+      "omit the selection-probability requirement",
+      "invent a variance, accuracy, or statistical significance result"
+    ],
+    "rhetorical_checks": [
+      "removes repeated statements of the same single-design restriction",
+      "integrates material scope and the input requirement without obscuring the supported finding"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "ambitious-positioning",
+    "prompt": "Rewrite this introduction paragraph to sharpen its positioning using the project notes. Return only the revised paragraph.",
+    "source": "Project notes: The research asks whether decision-making can be organized around learning and sampling a distribution of profitable decisions. The motivation is to move some computation from repeated optimization into training a generator. A prototype has been implemented for one synthetic assortment setting. Comparative experiments are planned and have not been run; there are no performance results or theoretical guarantees. The broader research direction includes other decision problems, which have not been studied in this project.\nDraft: Our approach replaces optimization with generation across decision problems. By learning profitable decisions, it eliminates the need to solve difficult optimization problems and outperforms existing solvers.",
+    "references": [
+      "drafting.md",
+      "editing.md"
+    ],
+    "must_preserve": [
+      "research question about learning and sampling a distribution of profitable decisions",
+      "motivation to move some computation from repeated optimization to generator training",
+      "current work is an implemented prototype in one synthetic assortment setting",
+      "comparative experiments are planned, not completed"
+    ],
+    "must_not": [
+      "claim demonstrated superiority, elimination of optimization, or replacement across decision problems",
+      "invent performance results or theoretical guarantees",
+      "present the broader research direction as already demonstrated"
+    ],
+    "rhetorical_checks": [
+      "presents the substantive question and proposed approach clearly despite incomplete evidence",
+      "corrects the unsupported performance and generality claims without reducing the whole motivation to a minor technical exercise",
+      "distinguishes the research direction from the present prototype without making apologies the paragraph's main message"
+    ]
+  },
+  {
+    "expect_activation": true,
+    "id": "observation-mechanism",
+    "prompt": "Revise this results paragraph using the study notes. Return only the revised paragraph.",
+    "source": "Study notes: In a randomized study, 240 participants were assigned to a scheduling interface with a suggested default or to the same interface without a default. Mean completion time was 9 minutes with the default and 12 minutes without it. Choice overload was not measured. The researchers propose reduced choice overload as one possible explanation; the study does not establish that mechanism.\nDraft: The results may possibly indicate that participants using the default could have completed the task more quickly, with mean times of 9 versus 12 minutes. This might perhaps suggest that the default reduced choice overload.",
+    "references": [
+      "editing.md",
+      "technical-writing.md"
+    ],
+    "must_preserve": [
+      "mean completion times of 9 minutes with the default and 12 minutes without it",
+      "observed time comparison comes from the randomized study",
+      "reduced choice overload is a possible explanation, not an established mechanism"
+    ],
+    "must_not": [
+      "state that choice overload was measured or that its reduction was established",
+      "invent statistical significance or an uncertainty interval",
+      "generalize the time comparison to unstudied populations or tasks"
+    ],
+    "rhetorical_checks": [
+      "reports the observed time comparison directly",
+      "uses uncertainty for the proposed explanation without transferring that uncertainty to the observed means",
+      "avoids stacked hedges while retaining the mechanism's uncertain status"
+    ]
+  },
+  {
     "expect_activation": false,
     "id": "negative-code",
     "prompt": "Explain what this Python function does in one sentence.",

@@ -4,7 +4,7 @@ description: Draft and revise academic manuscripts, improve arguments and techni
 license: MIT
 metadata:
   author: Sikun Xu
-  version: "0.4.2"
+  version: "0.5.0"
 ---
 
 # Quill
@@ -32,7 +32,7 @@ Choose the appropriate depth:
 |---|---|
 | Copyedit or unspecified “polish” | Correct mechanics and clear local problems; preserve structure and effective sentences. |
 | Line edit or clarify | Improve sentence and paragraph continuity within the requested scope. |
-| Restructure or revise an argument | Reorganize the requested material around the reader's needs without strengthening its claims. |
+| Restructure or revise an argument | Strengthen framing and exposition while preserving scientific scope, assumptions, and genuine uncertainty. |
 | Draft | Write the requested passage, section, or manuscript from the supplied research and evidence. |
 | Review or critique only | Return specific feedback; do not edit files. |
 
@@ -79,7 +79,8 @@ comparisons, and numerical quantities unambiguous. Choose active or passive voic
 according to the passage's focus; let sentence length follow the reasoning.
 
 Remove empty importance claims, unnecessary ceremony, and repetitive conclusions.
-Preserve useful signposting, deliberate technical repetition, and qualifications.
+Preserve supported research stakes and significance, useful signposting, deliberate
+technical repetition, and qualifications that affect meaning.
 Do not force every paragraph into one template, manufacture a personal voice, or
 rewrite an effective sentence merely to show that editing occurred.
 
@@ -96,6 +97,42 @@ Read only the additional guidance needed for this task:
   Quill project or an explicit request for a managed workspace. Neither a CLI
   nor a `paper/` directory is required to write or edit prose.
 
+## Write with earned confidence
+
+Make the strongest argument the supplied research supports. Distinguish the
+importance of the question, the conceptual contribution, and the specific findings
+established by theory or evidence. Make the question's stakes and the contribution
+clear without inflating novelty or extending the findings beyond their support.
+Preserve the author's supported ambition; a restricted demonstration need not
+reduce a substantive idea to a minor technical improvement. Distinguish the
+proposed research direction from what the present work has demonstrated.
+When positioning work in progress, make its material evaluation status clear:
+an implemented method and a tested method are different contributions. Preserve
+whether a relevant comparison is planned or completed without listing every
+result the project does not yet have.
+
+State established findings directly. Prefer explicit scope to habitual or stacked
+hedges: “Under assumptions A–C, we establish X” rather than “Our analysis may
+suggest that X could hold under certain conditions.” Keep qualifications that
+communicate genuine uncertainty, assumptions, or scope. Report observed findings
+directly; qualify proposed explanations when the evidence does not establish the
+mechanism. Removing a hedge must not turn an association into a causal claim or
+a limited comparison into a general result.
+
+Place material limitations where they affect interpretation, including alongside
+a finding when needed. Remove repeated caveats that add no information; do not
+bury necessary conditions in a separate limitations section. Do not insert
+speculative objections or apologies to preempt hypothetical reviewers.
+A precise positive statement of what the evidence establishes often supplies
+the boundary; do not follow it with a catalogue of claims the paper never makes.
+
+When a claim exceeds the evidence, correct that claim without weakening the whole
+argument. In writing, build the supported case; in review, identify substantive
+weaknesses; in revision, resolve identified problems while preserving supported
+contributions. Keep critique and rebuttal commentary outside manuscript prose.
+Apply these principles within the authorized editing depth: ordinary polishing
+does not authorize reframing the research.
+
 ## Complete and check the work
 
 Perform the requested writing in the current host's conversation using available
@@ -104,13 +141,22 @@ writer should do. Use a plan as an intermediate aid only when the task merits it
 
 For substantial work, address argument and continuity before expression. Compare
 the revision with its sources for changed meaning, missing conditions, altered
-numbers, notation, and citation scope. Check affected cross-references and nearby
-dependencies proportionally to the edit; a paragraph polish does not require a
-full-manuscript audit. Keep unaffected file content unchanged for surgical edits.
+numbers, notation, and citation scope. Check for weakened supported conclusions
+or positioning and newly added caveats as well as overclaims. Check affected
+cross-references and nearby dependencies proportionally to the edit; a paragraph
+polish does not require a full-manuscript audit. Keep unaffected file content
+unchanged for surgical edits.
 
-Return one best version in the requested format, or identify the files edited.
-Add brief notes only for unresolved substantive issues or consequential changes,
-unless the user asks for more explanation. Do not narrate routine grammar or
-word-choice edits. Keep editorial commentary outside the
-manuscript. Report limitations of verification honestly. Do not add revision
-markers, logs, scaffolding, or new files to a small writing task unless requested.
+Return the requested deliverables in the requested format, or identify the files
+edited. Keep routine scientific and editing checks in working reasoning. Add a
+separate note only when a material issue remains unresolved after delivering the
+requested text and needs the author's attention. Do not repeat an issue already
+handled in that text or in a requested reviewer response. Evidence unnecessary
+to the claim being made is not, by itself, an unresolved issue.
+
+Once the requested deliverables are complete and scientifically accurate, stop.
+Give additional explanation or critique when requested. Do not append hypothetical
+analyses, a verification checklist, or explanations of routine editing choices.
+Keep editorial commentary outside the manuscript. Report verification limits
+honestly when they affect the requested result. Do not add revision markers,
+logs, scaffolding, or new files to a small writing task unless requested.

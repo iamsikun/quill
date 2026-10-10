@@ -5,11 +5,14 @@ Project instructions and current submission requirements determine formatting.
 
 ## Abstract and introduction
 
-Make the research question, substantive contribution, evidence, and limits
-recoverable. Establish enough context to understand the contribution; avoid a
-long generic preamble or inflated significance claims. Use contribution lists
-only when useful and consistent with the manuscript. Do not force business
-motivation onto a paper whose purpose is different.
+Lead with the research question and substantive contribution, making their stakes
+clear from the supplied context. Make the evidence and its scope recoverable without
+letting repeated qualifications dominate the abstract or introduction. Keep a
+material restriction alongside the claim when omitting it would mislead; do not
+repeat it as an apology in each paragraph. Avoid a long generic preamble or inflated
+significance claims. Use contribution lists only when useful and consistent with
+the manuscript. Do not force business motivation onto a paper whose purpose is
+different.
 
 ## Literature synthesis
 
@@ -44,10 +47,12 @@ changes. Distinguish quantities available in practice from ground truth or error
 observable only in simulation. Do not recommend an operational tuning rule that
 requires unavailable information.
 
-Interpret what the evidence establishes without simply repeating tables. A
-transition should explain the next analysis's role, such as testing generalization,
-examining a limitation, or extending a setting. Do not add an unsupported mechanism
-to make an observed relationship sound more satisfying.
+State the observed comparison directly within its setting, and distinguish it from
+any proposed explanation whose mechanism remains uncertain. Interpret what the
+evidence establishes without simply repeating tables. A transition should explain
+the next analysis's role, such as testing generalization, examining a limitation,
+or extending a setting. Do not add an unsupported mechanism to make an observed
+relationship sound more satisfying.
 
 ## Captions and notes
 

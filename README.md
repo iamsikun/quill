@@ -269,7 +269,7 @@ copies of the writing instructions.
 uv sync
 uv run pytest -q
 uv build
-QUILL_WHEEL="$PWD/dist/quill-0.4.2-py3-none-any.whl" uv run pytest -q
+QUILL_WHEEL="$PWD/dist/quill-0.5.0-py3-none-any.whl" uv run pytest -q
 ```
 
 `uv run python scripts/validate.py` checks the skill against the Agent Skills spec and

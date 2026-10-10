@@ -1,0 +1,1650 @@
+{
+  "date": "2026-10-10",
+  "status": "unreleased development revision",
+  "base_version": "0.4.2",
+  "before_definition": "Final instruction snapshot in 2026-10-10-earned-confidence.json; not the released 0.4.2 instructions.",
+  "study": {
+    "date": "2026-10-10",
+    "cases": [
+      "draft-evidence",
+      "reviewer-feedback",
+      "conflict",
+      "review-only"
+    ],
+    "arms": [
+      "core",
+      "references"
+    ],
+    "versions": [
+      "before",
+      "after"
+    ],
+    "samples_per_cell": 3,
+    "model_override": null,
+    "host": "claude",
+    "max_concurrent_sessions": 3,
+    "output_word_limit": 350
+  },
+  "session_count": 48,
+  "host_version": "2.1.296 (Claude Code)",
+  "response_models": [
+    "claude-opus-5-5"
+  ],
+  "command": [
+    "claude",
+    "-p",
+    "--no-session-persistence",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "{\"mcpServers\":{}}",
+    "--safe-mode",
+    "--disable-slash-commands",
+    "--tools",
+    ""
+  ],
+  "runner_sha256": "2eaa364541c947409461f62c945cd9d5ab3e316db3e996caa000ece3524d9385",
+  "rubric": {
+    "fidelity": "Pass when factual statements, including editorial advice, stay within supplied evidence and preserve distinctions needed to interpret the requested output. Fail on consequential unsupported assertions, changed results, or hidden contradictions. Score requested format and editing scope separately under discipline.",
+    "discipline_scale": {
+      "2": "Fits: delivers the requested output completely and directly, including necessary qualifications, clarification requests, or review comments without distracting additions.",
+      "1": "Usable with cleanup: delivers the essential output but adds dispensable advice, process narration, repetition, or other avoidable material.",
+      "0": "Misses the request: omits an essential deliverable, substitutes a plan or advice for the requested work, conceals a blocking conflict, or violates requested editing scope."
+    },
+    "general": "Judge relevance and completeness, not word count, hedge frequency, or exact wording. Score outputs independently, retain ties and variation, and do not infer which instructions produced an answer. Host failures are unscored. Compare writing quality among fidelity-passing outputs; do not combine the two dimensions.",
+    "cases": {
+      "draft-evidence": {
+        "fidelity": "Preserve simulation setting, n=500, 200 replications, mean bias 0.04 versus 0.09, and restriction to this design. Do not infer significance, variance, intervals, broader accuracy, or application performance. Not supplied must not become not computed.",
+        "discipline": "Return a usable short results paragraph with design scope incorporated naturally. No additional analysis plan, requests for unnecessary information, or repeated missing-evidence commentary. Omitting a list of unsupplied statistics is acceptable."
+      },
+      "reviewer-feedback": {
+        "fidelity": "Preserve the single synthetic design and absence of industry data or robustness runs. Do not invent properties the design lacks, claim completed robustness work, or present proposed work as completed.",
+        "discipline": "Supply both a revised paragraph and a brief response note. The paragraph can state warranted scope; the note must explain that existing evidence cannot establish cross-industry robustness. This explanation is requested content, not unwanted advice. Do not replace it with an unsolicited research program or promise new work."
+      },
+      "conflict": {
+        "fidelity": "Identify methods' lambda=0.3 versus figure note's lambda=0.8 conflict without an authoritative value. Do not choose, average, relabel as different analyses, invent the parameter's role, or present either value as established.",
+        "discipline": "Make the unresolved conflict clear and identify the minimal clarification needed. A concise clarification request or explicitly provisional consistent wording is acceptable. Do not reward apparent completion obtained by hiding the conflict. Both source values and their locations must remain recoverable."
+      },
+      "review-only": {
+        "fidelity": "Do not fabricate the method, comparator, metric, results, or mechanism. Suggested missing information must remain a request or conditional suggestion rather than an asserted fact.",
+        "discipline": "Return actionable clarity comments identifying what better/improvement means, what comparison supports it, and which results or references should be made explicit. Do not rewrite the passage or substitute a manuscript paragraph. Specific review comments are requested content, not unwanted advice. General remarks without concrete revision actions do not satisfy the request."
+      }
+    }
+  },
+  "rubric_sha256": "4218b32a44ae660b51fb65609c805ba8044bfb37ecf520d7efcc53695dea6087",
+  "rubric_timing": "Fixed before generating any answers; kept out of generation prompts.",
+  "cases": [
+    {
+      "expect_activation": true,
+      "id": "draft-evidence",
+      "prompt": "Draft a short results paragraph from these notes.",
+      "source": "Simulation, n=500, 200 replications. Method A mean bias 0.04, baseline mean bias 0.09. No variance estimates, intervals, or empirical-application results supplied. The comparison is for this design only.",
+      "references": [
+        "drafting.md",
+        "technical-writing.md"
+      ],
+      "must_preserve": [
+        "simulation",
+        "n=500",
+        "200 replications",
+        "0.04 vs 0.09",
+        "design-limited comparison"
+      ],
+      "must_not": [
+        "statistical significance",
+        "invent uncertainty",
+        "claim general or real-world superiority"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "reviewer-feedback",
+      "prompt": "Revise the paragraph in response to the reviewer and add a brief response note. Do not perform new analysis.",
+      "source": "Paragraph: We study behavior in one synthetic design.\nReviewer: Please show robustness across industries.\nAvailable evidence: only the existing synthetic design; no industry data or robustness runs.",
+      "references": [
+        "editing.md"
+      ],
+      "must_preserve": [
+        "single synthetic design",
+        "new evidence unavailable"
+      ],
+      "must_not": [
+        "claim robustness tested",
+        "promise completed experiments",
+        "reframe simulation as industry evidence"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "conflict",
+      "prompt": "Make these methods and figure statements consistent and clearer.",
+      "source": "Methods: The final analysis uses lambda = 0.3.\nFigure note: The same final analysis uses lambda = 0.8.\nNo authoritative value is available in the supplied material.",
+      "references": [
+        "editing.md",
+        "technical-writing.md"
+      ],
+      "must_preserve": [
+        "both reported values until clarified",
+        "acknowledge contradiction"
+      ],
+      "must_not": [
+        "silently choose a value",
+        "invent an authoritative source"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "review-only",
+      "prompt": "Review this academic passage for clarity and give actionable comments only. Do not rewrite it or edit any files.",
+      "source": "The method is better. This is supported by the results. They show an improvement.",
+      "references": [
+        "editing.md"
+      ],
+      "must_preserve": [
+        "review-only scope"
+      ],
+      "must_not": [
+        "rewrite as final manuscript",
+        "invent metrics or results"
+      ],
+      "files": {
+        "passage.md": "The method is better. This is supported by the results. They show an improvement.\n"
+      }
+    }
+  ],
+  "instruction_snapshots": {
+    "before": {
+      "SKILL.md": "---\nname: quill\ndescription: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, or addressing reviewer feedback. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.\nlicense: MIT\nmetadata:\n  author: Sikun Xu\n  version: \"0.4.2\"\n---\n\n# Quill\n\nHelp the intended reader understand the precise claim, follow the reasoning, and\njudge the evidence with as little avoidable effort as possible. Preserve scientific\nmeaning first, improve understanding next, then refine expression and economy.\n\n## Establish the task\n\nUse the user's audience, purpose, format, and editing depth. Otherwise assume a\nresearcher familiar with the field's basic tools but new to this project. Follow\nthe manuscript's established terminology and structure. Ask only for missing\ninformation that materially affects the work; use the supplied passage and\nconversation when they are sufficient.\n\nWork directly with pasted prose or the user's existing files. Resolve bundled\nreferences below relative to this skill's directory, and manuscript paths relative\nto the selected project. Never use the installation directory as the manuscript\nworkspace. Read adjacent material when needed to understand scope or references.\n\nChoose the appropriate depth:\n\n| Request | Action |\n|---|---|\n| Copyedit or unspecified “polish” | Correct mechanics and clear local problems; preserve structure and effective sentences. |\n| Line edit or clarify | Improve sentence and paragraph continuity within the requested scope. |\n| Restructure or revise an argument | Strengthen framing and exposition while preserving scientific scope, assumptions, and genuine uncertainty. |\n| Draft | Write the requested passage, section, or manuscript from the supplied research and evidence. |\n| Review or critique only | Return specific feedback; do not edit files. |\n\nFor substantial edits or feedback-driven revision, read\n[Editing](references/editing.md). For drafting, read\n[Drafting](references/drafting.md). A short polish can be completed using this core\nalone. These are working modes, not separate agents or mandatory sequential passes.\n\n## Preserve meaning\n\nPreserve claims, assumptions, quantifiers, comparisons, numbers, units, uncertainty,\nnotation, citations, and the scope of evidence. In ordinary prose edits, leave\nequations, citation commands, and reference labels intact unless their correction\nis explicitly in scope. Keep consequential conditions attached to conclusions.\n\nMaintain distinctions between estimate and estimand, selected and optimal, bias\nand total error, association and causation, simulation and empirical evidence,\nheuristic and guarantee, and asymptotic and finite-sample results. Preserve which\ninformation is available when a procedure is used, including the distinction\nbetween practical inputs and simulation-only or retrospective quantities.\n\nDo not invent results, mechanisms, citations, or novelty to complete a narrative.\nIf the sources conflict or a missing connection requires new evidence, flag the\nissue separately rather than resolving it by guesswork. Write the supported\nportions and identify material gaps. Clearly distinguish any requested hypothetical\nillustration from research findings.\n\nDo not make evidence more specific than the sources permit: an unnamed outcome\nis not necessarily a rate, and two studies allowing dependence need not use the\nsame dependence structure. Missing evidence in the supplied materials does not\nestablish that an analysis was never performed or that a design lacks a feature.\nDo not invent a limitation any more than a finding.\n\n## Write for the reader\n\nIdentify what the passage needs to help the reader understand and arrange the\ninformation accordingly. Connect new concepts to established context. Make the\nrelationship between claims explicit when the sources support it. Explain what\nan equation or technical term contributes when the reader needs that explanation.\n\nPrefer familiar words and verbs that express the relevant action. Retain necessary\ntechnical terms and use the same term for the same concept. Make referents,\ncomparisons, and numerical quantities unambiguous. Choose active or passive voice\naccording to the passage's focus; let sentence length follow the reasoning.\n\nRemove empty importance claims, unnecessary ceremony, and repetitive conclusions.\nPreserve supported research stakes and significance, useful signposting, deliberate\ntechnical repetition, and qualifications that affect meaning.\nDo not force every paragraph into one template, manufacture a personal voice, or\nrewrite an effective sentence merely to show that editing occurred.\n\nRead only the additional guidance needed for this task:\n\n- [Technical writing](references/technical-writing.md): section purpose,\n  mathematical exposition, results, literature synthesis, and captions.\n- [Examples](references/examples.md): difficult editing judgments, especially\n  changes that sound fluent but alter meaning and cases requiring restraint.\n- [Author style](references/author-style.md): only when the user requests this\n  personal profile or project instructions establish it. A supplied style sample\n  takes priority. Do not impose it on other authors by default.\n- [Quill workspaces](references/quill-workspaces.md): only for an existing\n  Quill project or an explicit request for a managed workspace. Neither a CLI\n  nor a `paper/` directory is required to write or edit prose.\n\n## Write with earned confidence\n\nMake the strongest argument the supplied research supports. Distinguish the\nimportance of the question, the conceptual contribution, and the specific findings\nestablished by theory or evidence. Make the question's stakes and the contribution\nclear without inflating novelty or extending the findings beyond their support.\nPreserve the author's supported ambition; a restricted demonstration need not\nreduce a substantive idea to a minor technical improvement. Distinguish the\nproposed research direction from what the present work has demonstrated.\nWhen positioning work in progress, make its material evaluation status clear:\nan implemented method and a tested method are different contributions. Preserve\nwhether a relevant comparison is planned or completed without listing every\nresult the project does not yet have.\n\nState established findings directly. Prefer explicit scope to habitual or stacked\nhedges: “Under assumptions A–C, we establish X” rather than “Our analysis may\nsuggest that X could hold under certain conditions.” Keep qualifications that\ncommunicate genuine uncertainty, assumptions, or scope. Report observed findings\ndirectly; qualify proposed explanations when the evidence does not establish the\nmechanism. Removing a hedge must not turn an association into a causal claim or\na limited comparison into a general result.\n\nPlace material limitations where they affect interpretation, including alongside\na finding when needed. Remove repeated caveats that add no information; do not\nbury necessary conditions in a separate limitations section. Do not insert\nspeculative objections or apologies to preempt hypothetical reviewers.\nA precise positive statement of what the evidence establishes often supplies\nthe boundary; do not follow it with a catalogue of claims the paper never makes.\n\nWhen a claim exceeds the evidence, correct that claim without weakening the whole\nargument. In writing, build the supported case; in review, identify substantive\nweaknesses; in revision, resolve identified problems while preserving supported\ncontributions. Keep critique and rebuttal commentary outside manuscript prose.\nApply these principles within the authorized editing depth: ordinary polishing\ndoes not authorize reframing the research.\n\n## Complete and check the work\n\nPerform the requested writing in the current host's conversation using available\ntools. Do not stop after an outline, instruction brief, or description of what a\nwriter should do. Use a plan as an intermediate aid only when the task merits it.\n\nFor substantial work, address argument and continuity before expression. Compare\nthe revision with its sources for changed meaning, missing conditions, altered\nnumbers, notation, and citation scope. Check for weakened supported conclusions\nor positioning and newly added caveats as well as overclaims. Check affected\ncross-references and nearby dependencies proportionally to the edit; a paragraph\npolish does not require a full-manuscript audit. Keep unaffected file content\nunchanged for surgical edits.\n\nReturn one best version in the requested format, or identify the files edited.\nAdd brief notes only for unresolved issues that block the requested writing or\nmaterially affect its interpretation, or for consequential changes. Keep routine\nfidelity checks in working reasoning; do not append hypothetical problems, requests\nfor additional analyses, or a verification checklist to otherwise complete prose.\nGive more explanation when requested. Do not narrate routine grammar or word-choice\nedits. Keep editorial commentary outside the manuscript. Report limitations of\nverification honestly. Do not add revision\nmarkers, logs, scaffolding, or new files to a small writing task unless requested.\n",
+      "agents/openai.yaml": "interface:\n  display_name: \"Quill\"\n  short_description: \"Academic writing with scientific meaning preserved\"\n  default_prompt: \"Use $quill to revise this academic passage for clarity while preserving its scientific meaning.\"\npolicy:\n  allow_implicit_invocation: true\n",
+      "references/author-style.md": "# Optional author style profile\n\nLoad this profile only when requested or established by project instructions. It\ndistills preferences described in the user's supplied GPT 6 Astra Pro guidance.\nThe earlier manuscript and the separate skill mentioned there were not supplied\nas source artifacts here; no manuscript-specific finding is independently verified.\nA current user-provided writing sample takes priority over this profile.\n\nUse concrete research stakes and explicit mechanisms where the evidence supports\nthem. Explain the behavior behind an important technical concept, then use its\nestablished name consistently. Anticipate the reader's likely confusion without\nadding repetitive signposts or explaining every familiar term.\n\nMake transitions identify what previous evidence accomplished and why the next\nquestion follows. Make numerical comparisons interpretable, including their sign,\nunits, baseline, and operational meaning. Keep qualifications and exceptions close\nto the claims they limit. Distinguish practical guidance from retrospective evidence.\n\nFor economics and marketing audiences, explain decision relevance when it belongs\nto the research question. Favor connected prose when that helps the argument, but\nretain useful lists and adapt to another genre when requested. Do not imitate\nparticular paragraph lengths, repeated phrases, or managerial framing mechanically.\n\nThis profile adjusts presentation, not scientific scope. It does not authorize new\nanecdotes, personality, business claims, or embellishment of novelty.\n",
+      "references/drafting.md": "# Drafting from research materials\n\nDetermine the passage's job, audience, and available evidence. Use the supplied\nnotes, results, manuscript, and conversation before asking for additional context.\nDo not require a venue, a fixed number of contributions, or a new workspace merely\nto start writing. If an essential fact is missing, ask a focused question or state\nthe limitation while drafting supported material.\n\nFor a substantial section or paper, identify the central question, conceptual\ncontribution, and most important supported conclusion. Use these to form a compact\nargument outline connecting reasoning, evidence, and limits. Tie substantive\nclaims to the actual provided source. This may remain working context; do not\ncreate an administrative evidence ledger for a small task. Preserve the difference\nbetween established findings, interpretations, proposals, and open questions.\n\nOrganize the narrative around what the work helps readers understand, rather than\na sequence of technical steps or a tour of source files. Explain why the question\nmatters using the supplied research motivation; do not substitute a minor technical\ngap for a supported substantive question. State the contribution concretely without\ninflating or understating it. A broader proposed direction can frame a restricted\ndemonstration if their different evidentiary status is clear. Adapt the organization\nto the work: theoretical, methodological, and empirical papers need different\nexposition, and an existing manuscript may already have a sound structure.\n\nUse supplied, verified references for literature synthesis. Compare sources along\nthe dimensions relevant to the argument instead of summarizing one paper per\nsentence. Do not invent a bibliographic record, claim a paper establishes something\nwithout adequate source support, or turn drafting into an unrequested literature\nsearch. Identify missing citation support separately.\n\nRead the actual result sources before writing quantitative claims. Include the\nmetric, comparison, setting, uncertainty, and qualifications that determine their\nmeaning. Do not fill missing results with plausible values or convert an intended\nexperiment into a completed one. When positioning preliminary work, retain the\nstatus of relevant planned evaluations in a concise statement; describing a\nprototype alone may leave its evaluation status unclear. Missing evidence need\nnot become a list of caveats when the drafted claim is already precisely scoped.\nIf the user wants an incomplete draft, mark any\nplaceholders explicitly so they cannot be mistaken for findings.\n\nDeliver the requested prose after outlining. For a full manuscript, write the\nsupported sections and explain material omissions. Check terminology and claims\nacross the sections you changed. Preserve the user's file organization and output\nformat; use a managed Quill workspace only when it is already in use or requested.\n",
+      "references/editing.md": "# Editing and revision\n\n## Match the authorized depth\n\nRead the passage before deciding that it needs a rewrite. For a file edit, identify\nthe actual file and requested span; do not infer a filename from the first word of\nthe user's request. Read enough surrounding context to resolve references and\nscientific scope. If several files are plausible, resolve the ambiguity before\nediting. A user's selection is the edit boundary, not the read boundary.\n\nCopyediting corrects mechanics and unambiguous local problems. Line editing can\nrecast sentences and improve paragraph continuity. Structural revision can move\nand reshape the requested argument. Drafting supplies new prose from evidence.\nAn unspecified “polish” authorizes restrained editing, not structural revision.\n\nKeep untouched portions byte-identical for a surgical file edit. Do not normalize\nunrelated whitespace, citation commands, notation, or line endings. Preserve the\nauthor's effective sentences. If a larger problem falls outside the requested\nscope, identify it briefly without performing the larger revision.\n\n## Diagnose before polishing\n\nFor a substantial revision, ask:\n\n1. What is the actual claim, and what supports it?\n2. Does each next step have the context the reader needs?\n3. Can the same reasoning be expressed more directly?\n4. Did the revision lose a condition, change a comparison, or imply unsupported\n   certainty?\n5. Did it weaken a supported conclusion or conceptual contribution, or add caveats\n   that make the argument less direct without improving its accuracy?\n\nThese are priorities, not mandatory passes. Return to the argument if sentence\nediting exposes a missing premise. Supply a connection only when the sources\nsupport it; otherwise flag the gap. Distinguish an exposition problem from an\nunresolved scientific question.\n\nWithin the requested scope, preserve the author's scientifically justified\nconviction and positioning. Replace vague statements of potential usefulness with\nthe supported contribution when the sources establish it. Narrow an unsupported\nclaim locally; do not shrink the research question or weaken unaffected findings.\nRetain qualifications that change interpretation and remove those that merely\nrepeat a restriction already clear to the reader.\n\n## Reviewer feedback\n\nMap the supplied comments to passages and requested actions. For a large revision,\nkeep a compact working map of addressed, unresolved, and unsupported requests.\nUse it to complete the authorized work; do not require a separate approval of the\nmap when the user has already authorized those changes.\n\nDo not treat a reviewer's assertion as established evidence. If a requested change\nrequires new analysis, identify that requirement and revise only what the existing\nevidence supports. Resolve the specific objection while retaining the supported\ncore argument; do not turn the manuscript into a running rebuttal or introduce\nunspecified reviewer concerns. Keep rebuttal prose separate from manuscript prose.\nDescribe completed changes accurately, with locations when available; never claim\nan experiment or revision was performed when it was only proposed.\n\n## Delivery\n\nFor review-only requests, provide actionable observations and short examples\nwithout changing source files. For edits, deliver the revised prose or files and\nonly the notes needed to explain consequential changes or unresolved problems.\nDo not append generic praise, a repeated summary, or `% REVISED`/`% POLISHED`\ncomments unless requested.\n",
+      "references/examples.md": "# Editing judgments\n\nAll examples below are constructed illustrations, not quotations or findings from\nthe user's manuscript. Use their reasoning, not their wording as a template.\n\n| Source or issue | Useful revision or decision | Harmful change |\n|---|---|---|\n| “Selection-induced estimation bias constitutes an impediment to value assessment.” The supplied analysis explains selection on favorable errors. | “We may overestimate the selected treatment's value because treatments with favorable estimation errors are more likely to be selected.” The mechanism is explicit and source-supported. | Add this mechanism when the source does not establish it. |\n| “The chosen action need not be optimal, and its value can still be overestimated.” | Keep selected and optimal distinct, even if “selected” repeats nearby. | Replace “chosen” with “best” for variety. |\n| “Under Assumptions A–C, the estimator is consistent as the sample size grows.” | Preserve the assumptions and asymptotic scope while simplifying surrounding prose. | “The estimator is accurate in any sample.” |\n| “Treatment and retention were positively associated in the observational sample.” | Keep the association, design, and population visible. | “Treatment increased retention.” |\n| “Bias fell, but variance rose enough that mean squared error increased.” | Retain both components and the overall comparison. | “The method improved accuracy.” |\n| “Rates were 3.0% and 2.4%; the first exceeded the second by 0.6 percentage points.” | If useful, explain that the relative increase is 25% using 2.4% as the denominator. | Call the difference a 0.6% relative increase. |\n| “The diagnostic uses observed stability. We evaluate MAE using known simulation truth.” | Keep tuning inputs separate from evaluation quantities. | “Practitioners should choose the parameter minimizing MAE” when truth is unavailable. |\n| “We randomly assigned 600 participants to one of three groups.” | Leave it unchanged if it fits the context. | “A randomized allocation procedure was implemented across a tripartite grouping.” |\n| Methods say 0.4; the caption says 0.7 for the same parameter. | Flag the conflict and request the authoritative value. Preserve both until resolved. | Pick either value because it appears more plausible. |\n| Notes ask whether learning from past proofs can guide theorem search; the prototype ranks candidate lemmas for one proof system. An introduction calls this “a minor ranking adjustment.” | “We investigate whether learning from past proofs can guide theorem search. Our prototype studies this idea by ranking candidate lemmas in one proof system.” The framing restores the supplied question while retaining the demonstration's scope. | Claim the prototype automates mathematical discovery generally, or retain the minor framing solely to avoid possible objections. |\n| In a laboratory task, 180 participants were randomly assigned to layouts A or B. Mean error counts were 2.1 and 3.4, respectively. Reduced distraction is a proposed, unmeasured explanation. | “Participants assigned to layout A made fewer errors on average than those assigned to B (2.1 versus 3.4). Reduced distraction may explain this difference.” Preserve the sample and laboratory context in surrounding prose. | Hedge the observed means as though they were unknown, or claim the study established reduced distraction as the mechanism. |\n\n## Basis and limits\n\nThe design follows the supplied reader-centered writing guidance: make claims,\nreasoning, evidence, and conditions recoverable; distinguish meaning constraints\nfrom stylistic preferences; and demonstrate restraint as well as transformation.\nThese illustrations are guidance, not evidence that the skill outperforms a strong\nplain prompt. Evaluate new inputs separately from development examples.\n",
+      "references/quill-workspaces.md": "# Optional managed workspaces\n\nPasted prose and ordinary manuscript files need no Quill setup. Do not run the\nCLI or create project state merely because this skill was selected.\n\nWhen the project already uses Quill or its predecessor Pepper, read `paper/state.yaml` for the active target,\n`paper/shared/context.md` for the source map, and that target's `target.yaml` for\nmetadata. Read an existing session log, outline, or revision plan only as relevant.\nResolve paths relative to the project, not the installed skill. Missing state must\nnot prevent a self-contained edit. Preserve the user's current file organization.\n\nFor an explicit request to create a managed workspace, first check that the\noptional `quill` CLI is available. `quill init` installs configuration and\ntemplate assets without installing skills or changing host instructions.\n`quill new-paper --help` and `quill import-paper --help` describe required inputs.\nAsk for essential missing metadata rather than inventing contributions or a venue.\nDo not install software as an incidental step in a prose edit.\n\nUseful deterministic helpers, when the task warrants them:\n\n- `quill set-target TARGET` selects an existing target.\n- `quill sync-context` updates managed context from section files.\n- `quill log-decision TEXT` records a requested persistent editorial decision.\n- `quill validate` checks managed project structure and references; it does not\n  certify scientific correctness or readability.\n- `quill assemble` regenerates a managed `main.tex`; use only when regeneration\n  is intended, since it can replace an existing document shell.\n\nWriting is performed by the current host using this skill. There are no CLI writing\nbriefs to execute and no required specialist agents. Assembly, compilation, and\nsubmission packaging are separate operations, not automatic consequences of editing.\n\nExisting `.pepper/` configuration and templates remain supported; new projects use\n`.quill/`. Do not rename existing manuscript configuration as part of a prose edit.\n\nIf legacy Pepper adapters still inject conflicting defaults, explain that\n`quill migrate --dry-run` previews their removal and `quill migrate` removes\nunchanged, manifest-owned adapters. Do not migrate an unrelated project or discard\ncustomized files. Continue a self-contained writing task when migration is unnecessary.\n",
+      "references/technical-writing.md": "# Section purpose and technical exposition\n\nUse these as questions about the reader's needs, not templates or venue rules.\nProject instructions and current submission requirements determine formatting.\n\n## Abstract and introduction\n\nLead with the research question and substantive contribution, making their stakes\nclear from the supplied context. Make the evidence and its scope recoverable without\nletting repeated qualifications dominate the abstract or introduction. Keep a\nmaterial restriction alongside the claim when omitting it would mislead; do not\nrepeat it as an apology in each paragraph. Avoid a long generic preamble or inflated\nsignificance claims. Use contribution lists only when useful and consistent with\nthe manuscript. Do not force business motivation onto a paper whose purpose is\ndifferent.\n\n## Literature synthesis\n\nExplain the relationship between the supplied literature and the present claim:\ndifferent assumptions, estimands, settings, methods, or evidence. Preserve the\nscope of cited findings. A citation should support the proposition to which it is\nattached. There is no minimum number of recent papers or requirement to vary the\nname of a technical concept.\n\n## Methods and mathematical exposition\n\nIntroduce the objects and distinctions a reader needs to interpret the method.\nKeep assumptions and quantifiers attached to conclusions. Explain the purpose or\nimplication of an equation when it is not evident from context; avoid automatically\nadding “Intuitively” or a fixed number of explanatory sentences after every formula.\n\nKeep established notation stable. Do not silently repair a theorem, change a\nquantifier, replace an estimand with its estimate, or turn asymptotic evidence into\na finite-sample guarantee. Flag an apparent mathematical error separately unless\ncorrecting it is part of the task and adequately supported.\n\n## Results and discussion\n\nSpecify which outcome, population, setting, baseline, and uncertainty support a\ncomparison. Keep exceptions with comparative claims. Reduced bias does not imply\nreduced mean squared error; non-significance does not establish equivalence.\nAn observational association does not establish a causal effect.\n\nFor numerical differences and ratios, preserve the operation, direction, units,\nand denominator. Distinguish percentage-point differences from relative percentage\nchanges. Distinguish quantities available in practice from ground truth or errors\nobservable only in simulation. Do not recommend an operational tuning rule that\nrequires unavailable information.\n\nState the observed comparison directly within its setting, and distinguish it from\nany proposed explanation whose mechanism remains uncertain. Interpret what the\nevidence establishes without simply repeating tables. A transition should explain\nthe next analysis's role, such as testing generalization, examining a limitation,\nor extending a setting. Do not add an unsupported mechanism to make an observed\nrelationship sound more satisfying.\n\n## Captions and notes\n\nMake comparisons interpretable independently of the surrounding prose where\npractical. Define abbreviations, the sign of a difference, units, uncertainty\nsummaries, and sample restrictions when they matter. Preserve labels and existing\nLaTeX conventions during prose edits. Do not change float placement, bibliography\nstyle, or notation systems as a side effect of copyediting.\n"
+    },
+    "after_replacements": {
+      "SKILL.md": "---\nname: quill\ndescription: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, or addressing reviewer feedback. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.\nlicense: MIT\nmetadata:\n  author: Sikun Xu\n  version: \"0.4.2\"\n---\n\n# Quill\n\nHelp the intended reader understand the precise claim, follow the reasoning, and\njudge the evidence with as little avoidable effort as possible. Preserve scientific\nmeaning first, improve understanding next, then refine expression and economy.\n\n## Establish the task\n\nUse the user's audience, purpose, format, and editing depth. Otherwise assume a\nresearcher familiar with the field's basic tools but new to this project. Follow\nthe manuscript's established terminology and structure. Ask only for missing\ninformation that materially affects the work; use the supplied passage and\nconversation when they are sufficient.\n\nWork directly with pasted prose or the user's existing files. Resolve bundled\nreferences below relative to this skill's directory, and manuscript paths relative\nto the selected project. Never use the installation directory as the manuscript\nworkspace. Read adjacent material when needed to understand scope or references.\n\nChoose the appropriate depth:\n\n| Request | Action |\n|---|---|\n| Copyedit or unspecified “polish” | Correct mechanics and clear local problems; preserve structure and effective sentences. |\n| Line edit or clarify | Improve sentence and paragraph continuity within the requested scope. |\n| Restructure or revise an argument | Strengthen framing and exposition while preserving scientific scope, assumptions, and genuine uncertainty. |\n| Draft | Write the requested passage, section, or manuscript from the supplied research and evidence. |\n| Review or critique only | Return specific feedback; do not edit files. |\n\nFor substantial edits or feedback-driven revision, read\n[Editing](references/editing.md). For drafting, read\n[Drafting](references/drafting.md). A short polish can be completed using this core\nalone. These are working modes, not separate agents or mandatory sequential passes.\n\n## Preserve meaning\n\nPreserve claims, assumptions, quantifiers, comparisons, numbers, units, uncertainty,\nnotation, citations, and the scope of evidence. In ordinary prose edits, leave\nequations, citation commands, and reference labels intact unless their correction\nis explicitly in scope. Keep consequential conditions attached to conclusions.\n\nMaintain distinctions between estimate and estimand, selected and optimal, bias\nand total error, association and causation, simulation and empirical evidence,\nheuristic and guarantee, and asymptotic and finite-sample results. Preserve which\ninformation is available when a procedure is used, including the distinction\nbetween practical inputs and simulation-only or retrospective quantities.\n\nDo not invent results, mechanisms, citations, or novelty to complete a narrative.\nIf the sources conflict or a missing connection requires new evidence, flag the\nissue separately rather than resolving it by guesswork. Write the supported\nportions and identify material gaps. Clearly distinguish any requested hypothetical\nillustration from research findings.\n\nDo not make evidence more specific than the sources permit: an unnamed outcome\nis not necessarily a rate, and two studies allowing dependence need not use the\nsame dependence structure. Missing evidence in the supplied materials does not\nestablish that an analysis was never performed or that a design lacks a feature.\nDo not invent a limitation any more than a finding.\n\n## Write for the reader\n\nIdentify what the passage needs to help the reader understand and arrange the\ninformation accordingly. Connect new concepts to established context. Make the\nrelationship between claims explicit when the sources support it. Explain what\nan equation or technical term contributes when the reader needs that explanation.\n\nPrefer familiar words and verbs that express the relevant action. Retain necessary\ntechnical terms and use the same term for the same concept. Make referents,\ncomparisons, and numerical quantities unambiguous. Choose active or passive voice\naccording to the passage's focus; let sentence length follow the reasoning.\n\nRemove empty importance claims, unnecessary ceremony, and repetitive conclusions.\nPreserve supported research stakes and significance, useful signposting, deliberate\ntechnical repetition, and qualifications that affect meaning.\nDo not force every paragraph into one template, manufacture a personal voice, or\nrewrite an effective sentence merely to show that editing occurred.\n\nRead only the additional guidance needed for this task:\n\n- [Technical writing](references/technical-writing.md): section purpose,\n  mathematical exposition, results, literature synthesis, and captions.\n- [Examples](references/examples.md): difficult editing judgments, especially\n  changes that sound fluent but alter meaning and cases requiring restraint.\n- [Author style](references/author-style.md): only when the user requests this\n  personal profile or project instructions establish it. A supplied style sample\n  takes priority. Do not impose it on other authors by default.\n- [Quill workspaces](references/quill-workspaces.md): only for an existing\n  Quill project or an explicit request for a managed workspace. Neither a CLI\n  nor a `paper/` directory is required to write or edit prose.\n\n## Write with earned confidence\n\nMake the strongest argument the supplied research supports. Distinguish the\nimportance of the question, the conceptual contribution, and the specific findings\nestablished by theory or evidence. Make the question's stakes and the contribution\nclear without inflating novelty or extending the findings beyond their support.\nPreserve the author's supported ambition; a restricted demonstration need not\nreduce a substantive idea to a minor technical improvement. Distinguish the\nproposed research direction from what the present work has demonstrated.\nWhen positioning work in progress, make its material evaluation status clear:\nan implemented method and a tested method are different contributions. Preserve\nwhether a relevant comparison is planned or completed without listing every\nresult the project does not yet have.\n\nState established findings directly. Prefer explicit scope to habitual or stacked\nhedges: “Under assumptions A–C, we establish X” rather than “Our analysis may\nsuggest that X could hold under certain conditions.” Keep qualifications that\ncommunicate genuine uncertainty, assumptions, or scope. Report observed findings\ndirectly; qualify proposed explanations when the evidence does not establish the\nmechanism. Removing a hedge must not turn an association into a causal claim or\na limited comparison into a general result.\n\nPlace material limitations where they affect interpretation, including alongside\na finding when needed. Remove repeated caveats that add no information; do not\nbury necessary conditions in a separate limitations section. Do not insert\nspeculative objections or apologies to preempt hypothetical reviewers.\nA precise positive statement of what the evidence establishes often supplies\nthe boundary; do not follow it with a catalogue of claims the paper never makes.\n\nWhen a claim exceeds the evidence, correct that claim without weakening the whole\nargument. In writing, build the supported case; in review, identify substantive\nweaknesses; in revision, resolve identified problems while preserving supported\ncontributions. Keep critique and rebuttal commentary outside manuscript prose.\nApply these principles within the authorized editing depth: ordinary polishing\ndoes not authorize reframing the research.\n\n## Complete and check the work\n\nPerform the requested writing in the current host's conversation using available\ntools. Do not stop after an outline, instruction brief, or description of what a\nwriter should do. Use a plan as an intermediate aid only when the task merits it.\n\nFor substantial work, address argument and continuity before expression. Compare\nthe revision with its sources for changed meaning, missing conditions, altered\nnumbers, notation, and citation scope. Check for weakened supported conclusions\nor positioning and newly added caveats as well as overclaims. Check affected\ncross-references and nearby dependencies proportionally to the edit; a paragraph\npolish does not require a full-manuscript audit. Keep unaffected file content\nunchanged for surgical edits.\n\nReturn the requested deliverables in the requested format, or identify the files\nedited. Keep routine scientific and editing checks in working reasoning. Add a\nseparate note only when a material issue remains unresolved after delivering the\nrequested text and needs the author's attention. Do not repeat an issue already\nhandled in that text or in a requested reviewer response. Evidence unnecessary\nto the claim being made is not, by itself, an unresolved issue.\n\nOnce the requested deliverables are complete and scientifically accurate, stop.\nGive additional explanation or critique when requested. Do not append hypothetical\nanalyses, a verification checklist, or explanations of routine editing choices.\nKeep editorial commentary outside the manuscript. Report verification limits\nhonestly when they affect the requested result. Do not add revision markers,\nlogs, scaffolding, or new files to a small writing task unless requested.\n",
+      "references/drafting.md": "# Drafting from research materials\n\nDetermine the passage's job, audience, and available evidence. Use the supplied\nnotes, results, manuscript, and conversation before asking for additional context.\nDo not require a venue, a fixed number of contributions, or a new workspace merely\nto start writing. If an essential fact is missing, ask a focused question or state\nthe limitation while drafting supported material.\n\nFor a substantial section or paper, identify the central question, conceptual\ncontribution, and most important supported conclusion. Use these to form a compact\nargument outline connecting reasoning, evidence, and limits. Tie substantive\nclaims to the actual provided source. This may remain working context; do not\ncreate an administrative evidence ledger for a small task. Preserve the difference\nbetween established findings, interpretations, proposals, and open questions.\n\nOrganize the narrative around what the work helps readers understand, rather than\na sequence of technical steps or a tour of source files. Explain why the question\nmatters using the supplied research motivation; do not substitute a minor technical\ngap for a supported substantive question. State the contribution concretely without\ninflating or understating it. A broader proposed direction can frame a restricted\ndemonstration if their different evidentiary status is clear. Adapt the organization\nto the work: theoretical, methodological, and empirical papers need different\nexposition, and an existing manuscript may already have a sound structure.\n\nUse supplied, verified references for literature synthesis. Compare sources along\nthe dimensions relevant to the argument instead of summarizing one paper per\nsentence. Do not invent a bibliographic record, claim a paper establishes something\nwithout adequate source support, or turn drafting into an unrequested literature\nsearch. Identify missing citation support needed for the requested passage\nseparately.\n\nRead the actual result sources before writing quantitative claims. Include the\nmetric, comparison, setting, uncertainty, and qualifications that determine their\nmeaning. Do not fill missing results with plausible values or convert an intended\nexperiment into a completed one. When positioning preliminary work, retain the\nstatus of relevant planned evaluations in a concise statement; describing a\nprototype alone may leave its evaluation status unclear. Missing evidence need\nnot become a list of caveats when the drafted claim is already precisely scoped.\nIf the user wants an incomplete draft, mark any\nplaceholders explicitly so they cannot be mistaken for findings.\n\nKeep the outline and checks in working context; deliver the requested prose. For\na full manuscript, write the supported sections and explain material omissions.\nApply the core delivery rule: add a separate note only when a material issue remains\nunresolved after drafting. Information unnecessary to the current claim is not an\nunresolved issue. Once the requested prose is scientifically accurate and complete,\nstop rather than appending unrequested advice about further work.\n\nCheck terminology and claims across the sections you changed. Preserve the user's\nfile organization and output format; use a managed Quill workspace only when it is\nalready in use or requested.\n",
+      "references/editing.md": "# Editing and revision\n\n## Match the authorized depth\n\nRead the passage before deciding that it needs a rewrite. For a file edit, identify\nthe actual file and requested span; do not infer a filename from the first word of\nthe user's request. Read enough surrounding context to resolve references and\nscientific scope. If several files are plausible, resolve the ambiguity before\nediting. A user's selection is the edit boundary, not the read boundary.\n\nCopyediting corrects mechanics and unambiguous local problems. Line editing can\nrecast sentences and improve paragraph continuity. Structural revision can move\nand reshape the requested argument. Drafting supplies new prose from evidence.\nAn unspecified “polish” authorizes restrained editing, not structural revision.\n\nKeep untouched portions byte-identical for a surgical file edit. Do not normalize\nunrelated whitespace, citation commands, notation, or line endings. Preserve the\nauthor's effective sentences. If an out-of-scope problem still materially affects\nthe accuracy or interpretation of the requested prose, identify it briefly without\nperforming the larger revision.\n\n## Diagnose before polishing\n\nFor a substantial revision, ask:\n\n1. What is the actual claim, and what supports it?\n2. Does each next step have the context the reader needs?\n3. Can the same reasoning be expressed more directly?\n4. Did the revision lose a condition, change a comparison, or imply unsupported\n   certainty?\n5. Did it weaken a supported conclusion or conceptual contribution, or add caveats\n   that make the argument less direct without improving its accuracy?\n\nThese are priorities, not mandatory passes. Return to the argument if sentence\nediting exposes a missing premise. Supply a connection only when the sources\nsupport it; otherwise flag the gap when it is material to the requested argument.\nDistinguish an exposition problem from an unresolved scientific question.\n\nWithin the requested scope, preserve the author's scientifically justified\nconviction and positioning. Replace vague statements of potential usefulness with\nthe supported contribution when the sources establish it. Narrow an unsupported\nclaim locally; do not shrink the research question or weaken unaffected findings.\nRetain qualifications that change interpretation and remove those that merely\nrepeat a restriction already clear to the reader.\n\n## Reviewer feedback\n\nMap the supplied comments to passages and requested actions. For a large revision,\nkeep a compact working map of addressed, unresolved, and unsupported requests.\nUse it to complete the authorized work; do not require a separate approval of the\nmap when the user has already authorized those changes.\n\nDo not treat a reviewer's assertion as established evidence. If a requested change\nrequires new analysis, identify that requirement and revise only what the existing\nevidence supports. Resolve the specific objection while retaining the supported\ncore argument; do not turn the manuscript into a running rebuttal or introduce\nunspecified reviewer concerns. Keep rebuttal prose separate from manuscript prose.\nDescribe completed changes accurately, with locations when available; never claim\nan experiment or revision was performed when it was only proposed.\n\n## Delivery\n\nFor review-only requests, provide actionable observations and short examples\nwithout changing source files. For edits, deliver the revised prose or files and\nany requested response. Apply the core delivery rule: add a separate note only\nwhen a material issue remains unresolved. Do not add an author note repeating a\nlimitation or requirement already explained in the requested prose or reviewer\nresponse. Once the requested text is scientifically accurate and complete, stop.\nDo not append generic praise, a repeated summary, or `% REVISED`/`% POLISHED`\ncomments unless requested.\n"
+    }
+  },
+  "skill_hashes": {
+    "before": {
+      "SKILL.md": "98f63dbdaa76e81d82fc3363b8445a985d5bbffed5c25679c10f1359ab5af587",
+      "agents/openai.yaml": "9ebfd33cbfa11100285837deeb4c5f44a7ab0a3be182e08e4577bab390a4f9ed",
+      "references/author-style.md": "c7d6d30951231ced1af13de8d5132a85d54e7a9a5967d77ed6a959c5f5b6657a",
+      "references/drafting.md": "2adc9d43bacaeec9a309e8d73fccf0f23f1d506770ab9cbcf6a98d8f22a71f18",
+      "references/editing.md": "0017d22465a51e32124806d8a2308c76945cf6c4d17c364f6eba0e0c61870dec",
+      "references/examples.md": "1bd009d2148bad40dcb6ec2fefc2e9dc03da756595d124ff3d775696fb17a24d",
+      "references/quill-workspaces.md": "4dda4a4cf0fed93227ddb60176989b3a6bdcf6e22d566d571f64962835efd71a",
+      "references/technical-writing.md": "20be76632e36b3891b2c1015c83ca0bd48e96d9bff20f7642934024416f07d74"
+    },
+    "after": {
+      "SKILL.md": "9a7563819d03ffb4b1fb77c96d85083376fff5a2841b358d6ad5af661af5b556",
+      "agents/openai.yaml": "9ebfd33cbfa11100285837deeb4c5f44a7ab0a3be182e08e4577bab390a4f9ed",
+      "references/author-style.md": "c7d6d30951231ced1af13de8d5132a85d54e7a9a5967d77ed6a959c5f5b6657a",
+      "references/drafting.md": "b40ecbd1ac0cb8b16d21681b4a6d071e6cdc42018a1b99dca0d7639729fe7d10",
+      "references/editing.md": "0a0b0bddc544fcb19c634ac255b84f2a37a896f57b5fe5a6b55f22683117681c",
+      "references/examples.md": "1bd009d2148bad40dcb6ec2fefc2e9dc03da756595d124ff3d775696fb17a24d",
+      "references/quill-workspaces.md": "4dda4a4cf0fed93227ddb60176989b3a6bdcf6e22d566d571f64962835efd71a",
+      "references/technical-writing.md": "20be76632e36b3891b2c1015c83ca0bd48e96d9bff20f7642934024416f07d74"
+    }
+  },
+  "run_order_seed": 20261010,
+  "run_order": [
+    [
+      "review-only",
+      "core",
+      "after",
+      1
+    ],
+    [
+      "conflict",
+      "core",
+      "before",
+      3
+    ],
+    [
+      "conflict",
+      "core",
+      "before",
+      1
+    ],
+    [
+      "reviewer-feedback",
+      "core",
+      "after",
+      3
+    ],
+    [
+      "conflict",
+      "core",
+      "after",
+      2
+    ],
+    [
+      "review-only",
+      "references",
+      "after",
+      1
+    ],
+    [
+      "conflict",
+      "references",
+      "after",
+      2
+    ],
+    [
+      "reviewer-feedback",
+      "core",
+      "after",
+      1
+    ],
+    [
+      "reviewer-feedback",
+      "core",
+      "before",
+      2
+    ],
+    [
+      "conflict",
+      "references",
+      "before",
+      2
+    ],
+    [
+      "conflict",
+      "core",
+      "after",
+      1
+    ],
+    [
+      "draft-evidence",
+      "references",
+      "before",
+      2
+    ],
+    [
+      "conflict",
+      "references",
+      "after",
+      1
+    ],
+    [
+      "review-only",
+      "core",
+      "before",
+      3
+    ],
+    [
+      "draft-evidence",
+      "core",
+      "after",
+      2
+    ],
+    [
+      "reviewer-feedback",
+      "core",
+      "before",
+      1
+    ],
+    [
+      "conflict",
+      "references",
+      "before",
+      1
+    ],
+    [
+      "draft-evidence",
+      "references",
+      "before",
+      3
+    ],
+    [
+      "review-only",
+      "core",
+      "after",
+      2
+    ],
+    [
+      "draft-evidence",
+      "core",
+      "before",
+      2
+    ],
+    [
+      "review-only",
+      "references",
+      "before",
+      3
+    ],
+    [
+      "draft-evidence",
+      "core",
+      "after",
+      1
+    ],
+    [
+      "reviewer-feedback",
+      "references",
+      "after",
+      3
+    ],
+    [
+      "draft-evidence",
+      "references",
+      "after",
+      1
+    ],
+    [
+      "review-only",
+      "core",
+      "before",
+      2
+    ],
+    [
+      "draft-evidence",
+      "references",
+      "before",
+      1
+    ],
+    [
+      "draft-evidence",
+      "core",
+      "after",
+      3
+    ],
+    [
+      "conflict",
+      "references",
+      "after",
+      3
+    ],
+    [
+      "reviewer-feedback",
+      "references",
+      "before",
+      2
+    ],
+    [
+      "review-only",
+      "references",
+      "after",
+      2
+    ],
+    [
+      "review-only",
+      "core",
+      "before",
+      1
+    ],
+    [
+      "reviewer-feedback",
+      "references",
+      "before",
+      1
+    ],
+    [
+      "conflict",
+      "references",
+      "before",
+      3
+    ],
+    [
+      "draft-evidence",
+      "core",
+      "before",
+      1
+    ],
+    [
+      "conflict",
+      "core",
+      "after",
+      3
+    ],
+    [
+      "review-only",
+      "core",
+      "after",
+      3
+    ],
+    [
+      "draft-evidence",
+      "references",
+      "after",
+      2
+    ],
+    [
+      "draft-evidence",
+      "references",
+      "after",
+      3
+    ],
+    [
+      "review-only",
+      "references",
+      "before",
+      2
+    ],
+    [
+      "review-only",
+      "references",
+      "after",
+      3
+    ],
+    [
+      "reviewer-feedback",
+      "references",
+      "before",
+      3
+    ],
+    [
+      "conflict",
+      "core",
+      "before",
+      2
+    ],
+    [
+      "reviewer-feedback",
+      "references",
+      "after",
+      1
+    ],
+    [
+      "reviewer-feedback",
+      "core",
+      "after",
+      2
+    ],
+    [
+      "draft-evidence",
+      "core",
+      "before",
+      3
+    ],
+    [
+      "review-only",
+      "references",
+      "before",
+      1
+    ],
+    [
+      "reviewer-feedback",
+      "core",
+      "before",
+      3
+    ],
+    [
+      "reviewer-feedback",
+      "references",
+      "after",
+      2
+    ]
+  ],
+  "blind_label_seed": 20261012,
+  "assessment_method": "Two independent model assessors: one scored both regression cases, one both controls. Each saw case source, fixed rubric and all 12 anonymously shuffled answers per case. Revision, arm, and sample labels were withheld until all scores were saved.",
+  "summary": [
+    {
+      "case": "draft-evidence",
+      "arm": "core",
+      "before": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "2": 1,
+          "1": 2
+        }
+      },
+      "after": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "2": 3
+        }
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "arm": "references",
+      "before": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 2,
+          "fail": 1
+        },
+        "discipline": {
+          "2": 2,
+          "1": 1
+        }
+      },
+      "after": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "2": 2,
+          "1": 1
+        }
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "arm": "core",
+      "before": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "1": 2,
+          "2": 1
+        }
+      },
+      "after": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "2": 3
+        }
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "arm": "references",
+      "before": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "2": 3
+        }
+      },
+      "after": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 2,
+          "fail": 1
+        },
+        "discipline": {
+          "2": 3
+        }
+      }
+    },
+    {
+      "case": "conflict",
+      "arm": "core",
+      "before": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "1": 2,
+          "2": 1
+        }
+      },
+      "after": {
+        "samples": 3,
+        "fidelity": {
+          "fail": 1,
+          "pass": 2
+        },
+        "discipline": {
+          "1": 1,
+          "2": 2
+        }
+      }
+    },
+    {
+      "case": "conflict",
+      "arm": "references",
+      "before": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 2,
+          "fail": 1
+        },
+        "discipline": {
+          "1": 3
+        }
+      },
+      "after": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 2,
+          "fail": 1
+        },
+        "discipline": {
+          "2": 1,
+          "1": 2
+        }
+      }
+    },
+    {
+      "case": "review-only",
+      "arm": "core",
+      "before": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "2": 2,
+          "1": 1
+        }
+      },
+      "after": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "2": 3
+        }
+      }
+    },
+    {
+      "case": "review-only",
+      "arm": "references",
+      "before": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "2": 3
+        }
+      },
+      "after": {
+        "samples": 3,
+        "fidelity": {
+          "pass": 3
+        },
+        "discipline": {
+          "2": 3
+        }
+      }
+    }
+  ],
+  "runs": [
+    {
+      "case": "draft-evidence",
+      "version": "before",
+      "arm": "core",
+      "sample": 3,
+      "blind_label": "A",
+      "answer": "In the simulation design with sample size $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline's bias. This comparison concerns bias alone and applies to the simulated design considered here.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "d38e23e3b0022841cc7899546ede3de1fdf5c2f81491f9b17706c06988eb0e53",
+      "exit_code": 0,
+      "elapsed_seconds": 6.63,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves the simulation, n=500, 200 replications, both mean biases, and the design-specific restriction. The less-than-half comparison is arithmetically supported, and the bias-only qualification avoids broader performance claims.",
+        "discipline": 2,
+        "discipline_reason": "Provides a complete short results paragraph with its scope incorporated directly."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "before",
+      "arm": "references",
+      "sample": 3,
+      "blind_label": "B",
+      "answer": "In the simulation design with $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline's value. This comparison concerns bias alone and applies to this design.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "8fff4cdc55b2bb81c0b411a2b52033cdbc8cc262c89d09bf8eb581e9feef9c94",
+      "exit_code": 0,
+      "elapsed_seconds": 7.03,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Accurately reports the setting, replication count, mean biases, and design limitation. The derived less-than-half comparison is supported and confined to bias.",
+        "discipline": 2,
+        "discipline_reason": "Delivers the requested paragraph without additional advice or process commentary."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "before",
+      "arm": "references",
+      "sample": 1,
+      "blind_label": "C",
+      "answer": "In the simulation with $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, which is less than half the baseline's bias. This comparison applies to bias in this simulation design; it does not by itself establish lower variance or mean squared error.\n\n*Note:* The paragraph reports no variance, interval, or Monte Carlo uncertainty estimates because none were supplied. If they are available, adding them would show whether the 0.05 difference is large relative to simulation error.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "8fff4cdc55b2bb81c0b411a2b52033cdbc8cc262c89d09bf8eb581e9feef9c94",
+      "exit_code": 0,
+      "elapsed_seconds": 6.78,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves all supplied results and scope. The qualification about variance and mean squared error and the conditional suggestion about Monte Carlo uncertainty do not invent results or assert that the estimates were never computed.",
+        "discipline": 1,
+        "discipline_reason": "The results paragraph is usable, but the separate note repeats missing-evidence commentary and adds an unsolicited suggestion to obtain uncertainty estimates."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "before",
+      "arm": "core",
+      "sample": 2,
+      "blind_label": "D",
+      "answer": "In the simulation with sample size n = 500 and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline's bias. This comparison concerns bias alone and applies to this simulation design.\n\n*Note:* Monte Carlo standard errors were not supplied, so the paragraph does not say whether the 0.05 difference exceeds simulation noise. If you have them or can compute them, add them after the two bias values.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "d38e23e3b0022841cc7899546ede3de1fdf5c2f81491f9b17706c06988eb0e53",
+      "exit_code": 0,
+      "elapsed_seconds": 7.77,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Reports all required simulation facts correctly and limits the comparison to bias in this design. It correctly describes Monte Carlo standard errors as not supplied and makes no significance claim.",
+        "discipline": 1,
+        "discipline_reason": "Supplies the paragraph but adds dispensable author advice about computing or inserting standard errors."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "after",
+      "arm": "core",
+      "sample": 2,
+      "blind_label": "E",
+      "answer": "In the simulation design with sample size *n* = 500 and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline. In this design, Method A therefore reduced mean bias by more than half relative to the baseline.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "4dea140e5cde2b6096315cfd58a201445340afb9ea42be117f612cfd1ce93285",
+      "exit_code": 0,
+      "elapsed_seconds": 5.84,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves the simulation design, sample size, replications, and both bias values. A reduction of more than half is supported by 0.04 versus 0.09 and is expressly restricted to this design.",
+        "discipline": 2,
+        "discipline_reason": "Directly provides a complete short results paragraph without unnecessary additions."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "after",
+      "arm": "references",
+      "sample": 3,
+      "blind_label": "F",
+      "answer": "In the simulation study (n = 500, 200 replications), Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline's bias in this design.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "2d32a376b4f2bf9ec6484bc2cbb054eb268b659d6bf5c8d4e9aac1d74eaff721",
+      "exit_code": 0,
+      "elapsed_seconds": 5.22,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Includes all required setting and numerical facts and correctly confines the less-than-half bias comparison to this design.",
+        "discipline": 2,
+        "discipline_reason": "The compact paragraph is complete; it need not list unsupplied statistics."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "before",
+      "arm": "references",
+      "sample": 2,
+      "blind_label": "G",
+      "answer": "In the simulation design with $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, a reduction of 0.05, or less than half the baseline value. This comparison concerns bias alone and applies to this design. Because variance estimates were not computed, these results do not establish whether Method A also reduces total estimation error.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "8fff4cdc55b2bb81c0b411a2b52033cdbc8cc262c89d09bf8eb581e9feef9c94",
+      "exit_code": 0,
+      "elapsed_seconds": 6.67,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "fail",
+        "fidelity_reason": "Unsupportedly states that variance estimates were not computed, although the source says only that they were not supplied. In addition, 'a reduction of 0.05, or less than half the baseline value' misdescribes the reduction: 0.05 exceeds half of 0.09; the remaining bias of 0.04 is less than half.",
+        "discipline": 2,
+        "discipline_reason": "Provides the requested results paragraph with scope and an uncertainty qualification, without a separate analysis plan or author advice. Its scientific errors are scored under fidelity."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "after",
+      "arm": "core",
+      "sample": 3,
+      "blind_label": "H",
+      "answer": "In the simulation design with $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline. Method A therefore reduced mean bias by 0.05, to less than half the baseline value, in this design.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "4dea140e5cde2b6096315cfd58a201445340afb9ea42be117f612cfd1ce93285",
+      "exit_code": 0,
+      "elapsed_seconds": 6.5,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves the setting, replication count, and reported mean biases. The reduction by 0.05 to less than half the baseline is correctly distinguished and confined to this design.",
+        "discipline": 2,
+        "discipline_reason": "Returns a complete short paragraph and no extraneous material."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "after",
+      "arm": "references",
+      "sample": 1,
+      "blind_label": "I",
+      "answer": "In a simulation with sample size $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline's bias. This comparison applies to the simulation design considered here. Because it concerns bias alone, it does not establish how the two methods compare in variance or overall error.\n\n*Note:* The notes do not include a Monte Carlo standard error for the bias estimates, so readers cannot yet judge whether the 0.05 difference exceeds simulation noise. Adding it would strengthen the comparison.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "2d32a376b4f2bf9ec6484bc2cbb054eb268b659d6bf5c8d4e9aac1d74eaff721",
+      "exit_code": 0,
+      "elapsed_seconds": 7.77,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Accurately reports all required facts, restricts the comparison to the simulated design, and distinguishes bias from variance and overall error. The note correctly says Monte Carlo standard errors are absent from the notes, without asserting they were not computed.",
+        "discipline": 1,
+        "discipline_reason": "The requested paragraph is complete, but the separate note adds avoidable missing-evidence commentary and advice to add standard errors."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "after",
+      "arm": "references",
+      "sample": 2,
+      "blind_label": "J",
+      "answer": "In the simulation design with sample size $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline's bias. This comparison concerns bias alone and applies to this simulation design.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "2d32a376b4f2bf9ec6484bc2cbb054eb268b659d6bf5c8d4e9aac1d74eaff721",
+      "exit_code": 0,
+      "elapsed_seconds": 6.51,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves every supplied simulation fact and correctly limits the supported numerical comparison to bias in this design.",
+        "discipline": 2,
+        "discipline_reason": "Delivers the requested short paragraph directly with the necessary scope qualification."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "before",
+      "arm": "core",
+      "sample": 1,
+      "blind_label": "K",
+      "answer": "In the simulation design with sample size $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline. Method A therefore reduced the average bias by more than half relative to the baseline in this setting.\n\n---\n\n*Note:* The notes give no Monte Carlo standard errors, so the paragraph does not say whether the difference exceeds simulation variability. If you have those values, add them after the bias estimates.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "d38e23e3b0022841cc7899546ede3de1fdf5c2f81491f9b17706c06988eb0e53",
+      "exit_code": 0,
+      "elapsed_seconds": 6.54,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Reports the simulation, sample size, replications, and mean biases correctly. The design-specific reduction by more than half is supported; the note accurately identifies standard errors as unsupplied and does not infer significance.",
+        "discipline": 1,
+        "discipline_reason": "The paragraph is usable, but the separate note and instruction to add standard errors are dispensable additions to a request for a short results paragraph."
+      }
+    },
+    {
+      "case": "draft-evidence",
+      "version": "after",
+      "arm": "core",
+      "sample": 1,
+      "blind_label": "L",
+      "answer": "In simulations with sample size $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline's bias in this design.",
+      "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+      "prompt_sha256": "4dea140e5cde2b6096315cfd58a201445340afb9ea42be117f612cfd1ce93285",
+      "exit_code": 0,
+      "elapsed_seconds": 5.36,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves all required simulation and numerical facts, with the comparison explicitly restricted to this design and no unsupported uncertainty or application claims.",
+        "discipline": 2,
+        "discipline_reason": "Provides the complete requested paragraph without unnecessary additions."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "after",
+      "arm": "core",
+      "sample": 2,
+      "blind_label": "A",
+      "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Our findings therefore describe behavior under this design; whether they hold across industries remains to be tested.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. We agree that robustness across industries would be an informative test. The present study, however, uses a single synthetic design and no industry data, so we cannot assess cross-industry robustness without new data and analysis outside the scope of this revision. We have revised the paragraph to state this scope explicitly, so that readers interpret the findings as results for the studied design rather than as general results across industries.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "9fc1aea7b089e48096c2d9410e450b8c830fc75ba37a40299197981924dede37",
+      "exit_code": 0,
+      "elapsed_seconds": 8.07,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves the single synthetic design and lack of industry data, explicitly leaving cross-industry robustness untested. It neither claims additional analyses nor promises them.",
+        "discipline": 2,
+        "discipline_reason": "Supplies both a revised paragraph and a brief response explaining why the existing evidence cannot answer the reviewer. The scope explanation is requested content."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "after",
+      "arm": "core",
+      "sample": 1,
+      "blind_label": "B",
+      "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Our results therefore describe behavior under this design; this study does not examine whether they hold across industries.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. Our analysis uses one synthetic design and does not include industry data, so we cannot assess cross-industry robustness without new data and analyses beyond the scope of this revision. We have revised the paragraph to state this scope explicitly so that readers do not take the results as evidence about particular industries.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "9fc1aea7b089e48096c2d9410e450b8c830fc75ba37a40299197981924dede37",
+      "exit_code": 0,
+      "elapsed_seconds": 7.28,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Correctly confines the results to one synthetic design and explains that cross-industry assessment needs evidence not available in the study. No completed or promised robustness work is invented.",
+        "discipline": 2,
+        "discipline_reason": "Both requested deliverables are complete and directly address the evidentiary limitation."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "before",
+      "arm": "core",
+      "sample": 2,
+      "blind_label": "C",
+      "answer": "**Revised paragraph**\n\n> We study behavior in a single synthetic design. All results reported here are therefore specific to this design; whether they hold across industries is a question this study does not address.\n\n*Alternative if you prefer not to state the boundary explicitly:* \"We study behavior in a single synthetic design, and the results we report apply to that design.\" The first version answers the reviewer more directly. The second keeps the scope implicit.\n\n**Response to reviewer**\n\n> We thank the reviewer for this suggestion. The present study uses one synthetic design and does not include industry-level data or robustness analyses, so we cannot show robustness across industries without new data and analysis outside the current study. We have revised the paragraph to state that the findings apply to this synthetic design and that cross-industry generalization is not addressed. We agree that evaluating the results across industries would be a valuable extension.\n\n**Note**\n\nThe reviewer asked for evidence the study does not contain, so the revision clarifies scope rather than adding a robustness claim. If you can run cross-industry analyses later, the paragraph and the response would need to be rewritten around those results. The final sentence of the response treats such work as a possible extension, not a commitment. Remove it if you do not want to signal future work.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "74b0131ceb785a57b1a81867ec343c07f90022bcaa8ba726281115100f8bc059",
+      "exit_code": 0,
+      "elapsed_seconds": 8.03,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Both paragraph versions and the response preserve the single-design limitation and absence of industry evidence or robustness analyses. The alternative makes the design scope explicit while leaving the cross-industry boundary implicit, so the editorial comparison is defensible. Future analyses are conditional, not claimed or promised.",
+        "discipline": 1,
+        "discipline_reason": "Provides the essential paragraph and response, but adds an unsolicited alternative, commentary comparing versions, and a separate author note about later analyses and deleting a sentence."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "after",
+      "arm": "references",
+      "sample": 3,
+      "blind_label": "D",
+      "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. The results therefore characterize behavior under this design; they do not test whether the same patterns hold across industries.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. Showing robustness across industries would require industry-level data and new robustness analyses, neither of which is part of the present study. We have not performed these analyses. Instead, we revised the paragraph to state explicitly that the evidence comes from one synthetic design and does not address variation across industries.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "e59b6dfc2ec810e73f87b7e3e1db977e97ec1832982bcdbd4228ef7592073f6d",
+      "exit_code": 0,
+      "elapsed_seconds": 7.13,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Accurately states the single synthetic design and that industry-level evidence and robustness analyses are absent. The explicit statement that those analyses were not performed agrees with the supplied absence of robustness runs.",
+        "discipline": 2,
+        "discipline_reason": "Provides the revised paragraph and an appropriately brief explanation of why cross-industry robustness cannot be shown."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "before",
+      "arm": "references",
+      "sample": 3,
+      "blind_label": "E",
+      "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Our findings therefore describe that design. Testing whether they hold across industries would require industry data, which this study does not use.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. Showing robustness across industries would require industry-level data and new robustness analyses. The present study has neither, so we have not added such results. Instead, we revised the paragraph to state the scope of the evidence explicitly. It now says that the findings come from one synthetic design and that cross-industry robustness remains untested.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "32369c66af8316d223f25102c663c71eb8047a046dc4656ebedcbb8d25bd8699",
+      "exit_code": 0,
+      "elapsed_seconds": 7.35,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves the single design, absent industry data, and untested robustness. The response describes a scope clarification rather than claiming new evidence or completed work.",
+        "discipline": 2,
+        "discipline_reason": "Supplies both requested pieces and explains the relevant limitation without an unsolicited research program."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "before",
+      "arm": "references",
+      "sample": 2,
+      "blind_label": "F",
+      "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Our findings therefore characterize behavior under this design; we do not evaluate whether they hold across industries.\n\n**Response to reviewer**\n\nWe thank the reviewer for raising robustness across industries. Our analysis uses a single synthetic design, and we do not currently have the industry data or robustness runs needed to assess performance across industries. We therefore did not add such results. Instead, we revised the paragraph to state that our findings apply to this synthetic design and that cross-industry robustness is not evaluated in this work. A cross-industry assessment would require new data and analysis.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "32369c66af8316d223f25102c663c71eb8047a046dc4656ebedcbb8d25bd8699",
+      "exit_code": 0,
+      "elapsed_seconds": 6.5,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Keeps the findings restricted to the synthetic design and explicitly acknowledges the lack of industry data and robustness runs. New evidence is described as necessary, not already obtained or promised.",
+        "discipline": 2,
+        "discipline_reason": "Delivers both requested pieces; the short explanation about new data and analysis supports the requested reviewer response."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "before",
+      "arm": "core",
+      "sample": 1,
+      "blind_label": "G",
+      "answer": "**Revised paragraph**\n\n> We study behavior in one synthetic design. The results that follow therefore characterize behavior under this design. Whether they hold across industries remains to be established.\n\n**Response to reviewer**\n\n> We thank the reviewer for raising the question of robustness across industries. Our evidence comes from a single synthetic design. We do not have industry-level data or robustness analyses that would show how the results vary across industries. We have therefore revised the paragraph to state this scope explicitly, so that the findings are read as results for this design rather than as general cross-industry results. Extending the analysis to industry data is a natural next step.\n\n*Note to author:* The response does not promise new analyses. If you plan to run industry-level robustness checks for this revision, replace the last two sentences of the response with a description of those analyses once they are complete. You can also delete the final sentence if you do not want to frame industry extensions as future work.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "74b0131ceb785a57b1a81867ec343c07f90022bcaa8ba726281115100f8bc059",
+      "exit_code": 0,
+      "elapsed_seconds": 9.32,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Accurately identifies the one synthetic design and missing industry evidence. The proposed extension and conditional author advice do not assert completed robustness work or commit to new analyses.",
+        "discipline": 1,
+        "discipline_reason": "The revised paragraph and response are usable, but the extra note about replacing sentences after future checks and optionally deleting the extension sentence adds unnecessary author-facing advice."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "after",
+      "arm": "references",
+      "sample": 2,
+      "blind_label": "H",
+      "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Because this design does not vary industry, our results describe behavior within it; we do not test whether they hold across industries.\n\n**Response to reviewer**\n\nWe thank the reviewer for raising robustness across industries. The present study uses one synthetic design and no industry data, so we cannot assess cross-industry robustness without new data and analysis, which are beyond this revision. Instead, we revised the paragraph to state that the results apply to the single synthetic design studied and that we have not tested them across industries.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "e59b6dfc2ec810e73f87b7e3e1db977e97ec1832982bcdbd4228ef7592073f6d",
+      "exit_code": 0,
+      "elapsed_seconds": 7.76,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "fail",
+        "fidelity_reason": "Invents a property of the synthetic design by stating that it 'does not vary industry.' A single synthetic design and lack of industry data or robustness runs do not establish which variables the design varies.",
+        "discipline": 2,
+        "discipline_reason": "Supplies both requested deliverables and directly explains the absence of cross-industry evidence. The unsupported design property is a separate fidelity failure."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "after",
+      "arm": "references",
+      "sample": 1,
+      "blind_label": "I",
+      "answer": "**Revised paragraph**\n\nWe study behavior in one synthetic design. The results therefore characterize behavior within this design; establishing whether they hold across industries would require industry data, which the present study does not use.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. The current study is based on a single synthetic design and does not include industry data, so we cannot assess robustness across industries without new data and analyses. We have revised the paragraph to state this scope explicitly, so that the results are read as findings about the synthetic design rather than as evidence of cross-industry robustness.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "e59b6dfc2ec810e73f87b7e3e1db977e97ec1832982bcdbd4228ef7592073f6d",
+      "exit_code": 0,
+      "elapsed_seconds": 7.8,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves the single synthetic design and absence of industry data, and explicitly avoids representing the current findings as cross-industry evidence.",
+        "discipline": 2,
+        "discipline_reason": "Provides the requested paragraph and brief response with the necessary explanation of evidentiary scope."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "after",
+      "arm": "core",
+      "sample": 3,
+      "blind_label": "J",
+      "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Our findings therefore characterize this design; whether they hold across industries remains to be tested.\n\n**Response to reviewer**\n\nWe thank the reviewer for raising cross-industry robustness. The present analysis uses a single synthetic design, and we do not have industry data or robustness runs that would let us assess performance across industries. We have revised the paragraph to state this scope explicitly, so the findings are presented as results for the synthetic design rather than as evidence of robustness across industries.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "9fc1aea7b089e48096c2d9410e450b8c830fc75ba37a40299197981924dede37",
+      "exit_code": 0,
+      "elapsed_seconds": 6.36,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Correctly states that the findings concern one synthetic design and that neither industry data nor robustness runs are available. It leaves cross-industry robustness untested without promising new work.",
+        "discipline": 2,
+        "discipline_reason": "Both requested deliverables are complete, concise, and directly responsive."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "before",
+      "arm": "references",
+      "sample": 1,
+      "blind_label": "K",
+      "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Our findings therefore characterize this design; whether they hold across industries remains to be established with industry-specific data.\n\n**Response to reviewer**\n\nWe thank the reviewer for raising robustness across industries. The current study uses only one synthetic design and does not include industry data or cross-industry robustness analyses, so we cannot show such robustness from the existing evidence. We have revised the paragraph to state this scope explicitly, so that readers interpret the findings as results for the synthetic design rather than as evidence of cross-industry generality. Establishing robustness across industries would require new data and analysis, which we have not performed for this revision.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "32369c66af8316d223f25102c663c71eb8047a046dc4656ebedcbb8d25bd8699",
+      "exit_code": 0,
+      "elapsed_seconds": 8.43,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves the single design, absence of industry data and robustness analyses, and inability of the existing evidence to establish cross-industry generality. It does not claim or promise new analysis.",
+        "discipline": 2,
+        "discipline_reason": "Supplies the paragraph and response; the explanation that additional evidence would be needed is relevant requested content."
+      }
+    },
+    {
+      "case": "reviewer-feedback",
+      "version": "before",
+      "arm": "core",
+      "sample": 3,
+      "blind_label": "L",
+      "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Our findings therefore describe behavior under this design; whether they hold across industries is not addressed by the present analysis.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. The current study uses only one synthetic design and does not include industry data or robustness analyses, so we cannot show robustness across industries in this revision. We have revised the paragraph to state this scope explicitly, so readers do not read the results as evidence about industry settings. Evaluating the findings across industries would require data and analyses beyond the present study.",
+      "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+      "prompt_sha256": "74b0131ceb785a57b1a81867ec343c07f90022bcaa8ba726281115100f8bc059",
+      "exit_code": 0,
+      "elapsed_seconds": 6.11,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Correctly confines the findings to a single synthetic design and acknowledges absent industry data and robustness analyses. The need for additional evidence is distinguished from completed work.",
+        "discipline": 2,
+        "discipline_reason": "Delivers both requested pieces and the required explanation without a separate research plan or unnecessary author advice."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "after",
+      "arm": "references",
+      "sample": 2,
+      "blind_label": "A",
+      "answer": "The two sources give different values of λ for the same final analysis, and no supplied material establishes which is correct. I have not chosen one; the revised text uses a placeholder that the author should replace with the verified value.\n\n**Methods (revised):**\n> The final analysis uses λ = [VALUE].\n\n**Figure note (revised):**\n> Results are from the final analysis with λ = [VALUE], as described in the Methods.\n\n**Unresolved issue:** The Methods state λ = 0.3, and the figure note states λ = 0.8. Please check the analysis code or output to confirm which value produced the final results, then use that value in both places. If the figure actually shows a different analysis (e.g., a sensitivity run with λ = 0.8), the note should say so explicitly rather than calling it the final analysis.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "632f4437bd0c26fa4f5baae1b6a011f4ff07a2f3bb76dfc9113355b24341ad14",
+      "exit_code": 0,
+      "elapsed_seconds": 5.76,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves Methods 0.3 versus figure-note 0.8 and the lack of an authoritative value. The alternative-analysis possibility is explicitly conditional and does not establish either value.",
+        "discipline": 2,
+        "discipline_reason": "Provides clearly provisional matched wording and the necessary request to verify the final-analysis value. The brief conditional labeling comment directly addresses the discrepancy."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "before",
+      "arm": "core",
+      "sample": 1,
+      "blind_label": "B",
+      "answer": "The two sources give different values for the same parameter, and the supplied material does not establish which is correct. I have not chosen one; doing so would risk misreporting the analysis. Below are clarified, consistent versions that use a single placeholder, so both statements will agree once you insert the verified value.\n\n**Methods**\n\n> The final analysis uses λ = [VALUE].\n\n**Figure note**\n\n> Results are from the final analysis (λ = [VALUE]; see Methods).\n\nPointing the figure note to Methods keeps one authoritative statement of the value. That makes a future mismatch less likely.\n\n**Unresolved conflict:** Methods states λ = 0.3, and the figure note states λ = 0.8 for the same final analysis. Before submission, check the analysis code or output that produced the reported results and the figure. If that check shows the figure actually comes from a different analysis, such as a sensitivity run, the figure note should name that analysis instead of calling it the final one. In that case, both values can stay as they are.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "eefa9ff81248767b3b8599b02234ee8f504f11127a580d55229cf67b887de638",
+      "exit_code": 0,
+      "elapsed_seconds": 7.2,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Retains both attributed values and requires checking the code or output behind both results and figure before resolving them. It does not select an established value; the separate-analysis possibility is conditional. Its cross-reference rationale does not promise automatic synchronization.",
+        "discipline": 1,
+        "discipline_reason": "The provisional statements and clarification are usable, but the additional cross-reference rationale and expanded hypothetical outcome add material beyond the needed resolution."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "after",
+      "arm": "core",
+      "sample": 2,
+      "blind_label": "C",
+      "answer": "**Methods:** The final analysis uses λ = [VALUE].\n\n**Figure note:** Results are from the final analysis (λ = [VALUE]; see Methods).\n\n**Unresolved conflict:** The Methods state λ = 0.3 and the figure note states λ = 0.8 for the same final analysis. The supplied material does not show which value is correct, so I left a placeholder rather than choose one. Please confirm the value used and insert it in the Methods. The figure note now points to the Methods, so the value only needs to be correct in one place.\n\nIf the figure actually shows a different analysis, such as a sensitivity run with λ = 0.8, it should not be called the final analysis. In that case, the note could read: \"Sensitivity analysis with λ = 0.8; the final analysis uses λ = 0.3 (see Methods).\"",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "b619cdc78e7dcc9b58139933e0a653888082fffa758460d4090630fbd926b591",
+      "exit_code": 0,
+      "elapsed_seconds": 5.8,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "fail",
+        "fidelity_reason": "The assertion that the value only needs to be correct in one place is false for the proposed text, which still repeats it in both statements; it even instructs insertion only in Methods. The alternative wording also treats final-analysis 0.3 as established merely from a different figure analysis, without confirming that value.",
+        "discipline": 1,
+        "discipline_reason": "The essential conflict, source locations, and provisional statements remain visible. The separate hypothetical rewrite and explanatory material require cleanup; the unresolved conflict itself is not concealed."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "before",
+      "arm": "references",
+      "sample": 1,
+      "blind_label": "D",
+      "answer": "The methods and figure note give different values of λ for the same final analysis (0.3 vs. 0.8), and the supplied material doesn't say which is correct. I haven't chosen one. Below, both statements use a single placeholder, so once you confirm the value they will agree.\n\n**Methods:**\n> The final analysis uses λ = [VALUE].\n\n**Figure note:**\n> Results are from the final analysis (λ = [VALUE]).\n\nReplace both instances of `[VALUE]` with the authoritative setting from your analysis code or run logs.\n\nThere is one other possibility. If the final analysis actually used two λ values, for example in a sensitivity analysis or for different components, then both numbers may be correct but describe different things. In that case, each statement should say which part of the analysis its value applies to. Two examples:\n\n> The primary analysis uses λ = 0.3; the figure shows the sensitivity analysis with λ = 0.8.\n\n> The final analysis uses λ = 0.3 for [component A] and λ = 0.8 for [component B].\n\nOnly use one of these if it matches what was actually run.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "5b25f25cc37b7dd354f3416dc2458e946435892138103c36c8f70384a6ff570d",
+      "exit_code": 0,
+      "elapsed_seconds": 7.1,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Acknowledges the paired contradiction and leaves the final value unresolved. Both different-analysis and component examples are expressly restricted to cases that match what was actually run, so neither is asserted as the supplied explanation.",
+        "discipline": 1,
+        "discipline_reason": "Completes a provisional edit and asks for the necessary verified setting, then adds a lengthy speculative branch and two example alternatives that are dispensable to this task."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "before",
+      "arm": "references",
+      "sample": 2,
+      "blind_label": "E",
+      "answer": "The two statements conflict, and the supplied material gives no basis for choosing between 0.3 and 0.8. I have not picked a value. Below are clarified versions that use a single placeholder, so the methods and figure note will agree once the correct value is confirmed.\n\n**Methods:**\n> The final analysis uses λ = [VALUE].\n\n**Figure note:**\n> Results are from the final analysis (λ = [VALUE]; see Methods).\n\n**Unresolved issue:** The methods report λ = 0.3, and the figure note reports λ = 0.8 for the same final analysis. Please check the analysis code or output to confirm which value was used, then replace `[VALUE]` in both places.\n\nSome other possible explanations are worth ruling out:\n\n- **Different analyses:** The figure may come from a different run, such as a sensitivity analysis or an earlier version, than the one described in Methods. If so, both values may be correct, but the figure note should name its analysis instead of calling it \"the same final analysis.\"\n- **Different quantities:** The two statements may refer to different parameters that share the symbol λ. If so, give each one a distinct name.\n\nIf either case applies, tell me which one and I'll revise both statements to make the distinction explicit.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "5b25f25cc37b7dd354f3416dc2458e946435892138103c36c8f70384a6ff570d",
+      "exit_code": 0,
+      "elapsed_seconds": 7.18,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves the source values and uncertainty. Different runs and different quantities are clearly proposed possibilities requiring confirmation, not asserted explanations or invented parameter roles.",
+        "discipline": 1,
+        "discipline_reason": "The requested provisional edit is present, but the additional diagnostic possibilities, naming advice, and follow-up offer go beyond the minimal clarification needed."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "after",
+      "arm": "references",
+      "sample": 1,
+      "blind_label": "F",
+      "answer": "The two statements cannot be made consistent without knowing which value the final analysis actually used, so I have not chosen one. Below are clarified versions with a single placeholder for the value to insert in both places.\n\n**Methods:**\n> The final analysis uses λ = [VALUE].\n\n**Figure note:**\n> Results are from the final analysis (λ = [VALUE]; see Methods).\n\nPointing the figure note to Methods keeps the two statements tied to one reported value, so they stay consistent if the value changes later.\n\n**Unresolved issue:** The Methods give λ = 0.3, and the figure note gives λ = 0.8 for the same final analysis. Please check the analysis code or output to confirm the value. Also check two other possibilities:\n\n- **The figure may come from a different analysis.** If it shows a sensitivity or alternative analysis run with λ = 0.8, label it that way, and keep λ = 0.3 in the Methods. For example: \"Results from a sensitivity analysis with λ = 0.8; the final analysis uses λ = 0.3 (see Methods).\"\n- **Other results may depend on the corrected value.** If either reported value was wrong, review any tables, figures, or text that report results from the final analysis.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "632f4437bd0c26fa4f5baae1b6a011f4ff07a2f3bb76dfc9113355b24341ad14",
+      "exit_code": 0,
+      "elapsed_seconds": 6.95,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "fail",
+        "fidelity_reason": "The proposed figure note still contains its own value, so a cross-reference cannot ensure the two stay consistent when the value changes. The conditional advice also tells the author to keep final-analysis 0.3 if the figure is an alternative analysis, without establishing that 0.3 is correct.",
+        "discipline": 1,
+        "discipline_reason": "Preserves the conflict and supplies usable placeholder wording, but adds a speculative replacement and a broader review of other results beyond this editing request."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "after",
+      "arm": "core",
+      "sample": 1,
+      "blind_label": "G",
+      "answer": "Neither value can be chosen from the supplied material, so I've written both statements around a single placeholder value. Once you confirm the correct value, insert it in both places.\n\n**Methods:**\n> The final analysis uses λ = [VALUE].\n\n**Figure note:**\n> Results are from the final analysis (λ = [VALUE]; see Methods).\n\n**Unresolved issue:** The Methods give λ = 0.3, but the figure note gives λ = 0.8 for the same final analysis. Please check the analysis code or output to see which value produced the reported results.\n\nTwo outcomes are possible:\n- **One value is a typo.** Use the correct value in both places.\n- **Both values were used.** For example, the figure may show a sensitivity analysis or a different run. In that case, the figure note should say so instead of calling it \"the same final analysis.\" The Methods should then describe both runs.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "b619cdc78e7dcc9b58139933e0a653888082fffa758460d4090630fbd926b591",
+      "exit_code": 0,
+      "elapsed_seconds": 6.34,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Keeps both values attributed and unverified, and requires checking which value generated the results. Its different-run guidance applies only if both values were actually used; it does not present that as the source's established explanation.",
+        "discipline": 2,
+        "discipline_reason": "Provides matched provisional statements and a concrete verification request. The brief conditional outcomes clarify how to resolve the supplied discrepancy without obscuring it."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "before",
+      "arm": "references",
+      "sample": 3,
+      "blind_label": "H",
+      "answer": "The two statements cannot be made consistent from the supplied material: the Methods report λ = 0.3 for the final analysis, the figure note reports λ = 0.8 for the same analysis, and no source establishes which is correct. Choosing either value would be a guess, so I have left the value as a placeholder to fill in once it is confirmed against the analysis code or output.\n\n**Revised Methods statement**\n\n> The final analysis uses λ = [VALUE].\n\n**Revised figure note**\n\n> Results are from the final analysis (λ = [VALUE]; see Methods).\n\n**Notes**\n\n- **Unresolved conflict.** Please check which λ produced the reported final results. If the figure actually shows a different analysis, such as a sensitivity analysis at λ = 0.8, it should be labeled as that analysis rather than as the final one. For example: \"Sensitivity analysis with λ = 0.8; the final analysis uses λ = 0.3 (see Methods).\" Use this wording only if it matches what was run.\n- **Cross-reference.** Pointing the figure note to the Methods keeps a single authoritative statement of the value, so a later correction cannot leave the two out of sync again.\n- **Notation.** I used the symbol λ in both places. If the manuscript writes out \"lambda\" or uses LaTeX (`$\\lambda$`), match that convention.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "5b25f25cc37b7dd354f3416dc2458e946435892138103c36c8f70384a6ff570d",
+      "exit_code": 0,
+      "elapsed_seconds": 7.74,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "fail",
+        "fidelity_reason": "Claims that the cross-reference means a later correction cannot leave the statements out of sync, although both proposed statements retain independent value fields. This is an unsupported consequential editorial guarantee. The alternative-analysis example itself is appropriately restricted to what was actually run.",
+        "discipline": 1,
+        "discipline_reason": "The conflict and provisional edit are complete, but a repeated conflict note, alternative wording, cross-reference explanation, and notation advice add avoidable material."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "before",
+      "arm": "core",
+      "sample": 2,
+      "blind_label": "I",
+      "answer": "The two sources give conflicting values for λ in the same final analysis, and the supplied material does not say which is correct. I have not chosen one; both statements below use a single placeholder so they will agree once the value is confirmed.\n\n**Methods:**\n> The final analysis uses λ = [0.3 or 0.8; confirm].\n\n**Figure note:**\n> Results are from the final analysis (λ = [same value as Methods]).\n\n**Unresolved issue:** Methods states λ = 0.3, while the figure note states λ = 0.8 for the same analysis. Check the analysis code, configuration, or output logs to determine which value produced the reported results, then insert it in both places. If the figure actually shows a different analysis, such as a sensitivity run, describe that analysis explicitly in the note instead of calling it the final analysis.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "eefa9ff81248767b3b8599b02234ee8f504f11127a580d55229cf67b887de638",
+      "exit_code": 0,
+      "elapsed_seconds": 6.06,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Explicitly preserves Methods 0.3 and figure-note 0.8, marks the value for confirmation, and requests evidence of what produced the final results. Any different-run explanation remains conditional.",
+        "discipline": 2,
+        "discipline_reason": "The provisional statements and focused clarification directly address consistency while leaving both original values and locations recoverable."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "before",
+      "arm": "core",
+      "sample": 3,
+      "blind_label": "J",
+      "answer": "The two statements give conflicting values for the same final analysis, and the supplied material does not say which is correct. I have not chosen one. Below, both statements are made consistent and clearer, with a single placeholder for the value to be confirmed.\n\n**Methods**\n> The final analysis uses λ = [0.3 or 0.8; confirm].\n\n**Figure note**\n> Results are from the final analysis (λ = [same value as Methods]).\n\nOnce the correct value is known, insert it in both places. For example, if 0.3 is correct:\n\n> **Methods:** The final analysis uses λ = 0.3.\n> **Figure note:** Results are from the final analysis (λ = 0.3).\n\n**Unresolved issue:** The Methods give λ = 0.3, but the figure note gives λ = 0.8 for the same analysis. Please check the analysis code or output to see which value produced the reported results. If the figure was generated from a different run, such as a sensitivity analysis, the figure note should name that run rather than calling it the final analysis.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "eefa9ff81248767b3b8599b02234ee8f504f11127a580d55229cf67b887de638",
+      "exit_code": 0,
+      "elapsed_seconds": 6.91,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Acknowledges the unresolved attributed values. The completed 0.3 example is explicitly contingent on 0.3 being correct, so it does not silently choose that value.",
+        "discipline": 1,
+        "discipline_reason": "Delivers the provisional edit and clarification, but repeats the edited pair in a dispensable worked example before restating the unresolved issue."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "after",
+      "arm": "core",
+      "sample": 3,
+      "blind_label": "K",
+      "answer": "The two statements conflict, and the supplied material does not establish which value is correct, so I have not chosen one. Below are clarified versions that share wording and use a placeholder for the value.\n\n**Methods:**\n> The final analysis uses λ = [VALUE].\n\n**Figure note:**\n> Results are from the final analysis (λ = [VALUE]; see Methods).\n\n**Unresolved issue:** The Methods give λ = 0.3, but the figure note gives λ = 0.8 for the same final analysis. Please confirm which value the final analysis used and substitute it in both places. If the figure actually shows a different analysis, such as a sensitivity check, tell me and I'll revise the figure note to identify that analysis rather than calling it the final one.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "b619cdc78e7dcc9b58139933e0a653888082fffa758460d4090630fbd926b591",
+      "exit_code": 0,
+      "elapsed_seconds": 5.9,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves both attributed source values and makes no choice without confirmation. A possible different analysis is explicitly conditional and left for clarification.",
+        "discipline": 2,
+        "discipline_reason": "Supplies provisional matched wording, identifies the exact conflict, and asks for the minimal information needed to complete the edit."
+      }
+    },
+    {
+      "case": "conflict",
+      "version": "after",
+      "arm": "references",
+      "sample": 3,
+      "blind_label": "L",
+      "answer": "The two statements give conflicting values for the same analysis, and the supplied material does not establish which is correct. I have therefore left the value as a placeholder rather than choosing one.\n\n**Methods:**\n> The final analysis uses $\\lambda = [\\text{value}]$.\n\n**Figure note:**\n> Results are from the final analysis ($\\lambda = [\\text{value}]$; see Methods).\n\nThe figure note now points to the Methods for the setting, so the value only has to be confirmed in one place. If the figure intentionally shows a different setting, such as a sensitivity analysis, it should not be described as the final analysis. In that case, use:\n\n> Results are from a sensitivity analysis with $\\lambda = 0.8$; the final analysis uses $\\lambda = [\\text{value}]$ (see Methods).\n\n**Unresolved:** The Methods give λ = 0.3 and the figure note gives λ = 0.8 for the same final analysis. Please confirm which value was actually used, or whether the figure shows a different analysis, before inserting the number.",
+      "case_hash": "a44cc993f05c951a43b6e29b8e1588367dec5878b8f4b9434f142ee013fea8a6",
+      "prompt_sha256": "632f4437bd0c26fa4f5baae1b6a011f4ff07a2f3bb76dfc9113355b24341ad14",
+      "exit_code": 0,
+      "elapsed_seconds": 6.43,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Preserves the attributed contradiction and keeps the final-analysis value as a placeholder even in the conditional sensitivity example. Confirming the shared final-analysis setting once is possible; unlike an automatic-update guarantee, this does not establish that later edits synchronize the duplicated fields.",
+        "discipline": 1,
+        "discipline_reason": "The placeholder edits and verification request satisfy the essentials, but the additional cross-reference rationale and full hypothetical sensitivity note are dispensable elaboration."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "after",
+      "arm": "references",
+      "sample": 1,
+      "blind_label": "A",
+      "answer": "1. **Name the method and the comparison.** \"The method is better\" leaves the reader asking: which method, better than what, and on what criterion? State the proposed method, the baseline or competing methods, and the property being compared (e.g., accuracy, bias, runtime, coverage).\n\n2. **Specify \"the results.\"** Point to the specific evidence: the experiment, dataset, simulation setting, or analysis, ideally with a table or figure reference. \"The results\" gives the reader nothing to check.\n\n3. **Quantify the improvement.** \"An improvement\" should give the size and units: the metric, the values for each method, and the difference (absolute or relative). If uncertainty was estimated, report it (e.g., standard errors, intervals, or number of replications).\n\n4. **State the scope of the claim.** \"Better\" reads as a general claim. If the evidence covers particular settings, sample sizes, or conditions, attach those conditions to the conclusion so the claim matches the evidence.\n\n5. **Fix the ambiguous referents.** \"This\" and \"They\" force the reader to resolve references across sentences. \"This\" could refer to the method or the claim, and \"They\" relies on \"the results\" from the prior sentence. Use explicit nouns.\n\n6. **Merge the three sentences into one evidence-backed claim.** The passage states the same idea three times (better → supported → improvement) without adding information. A single sentence that names the method, comparator, metric, magnitude, and source would replace all three. Structure: *[Method] achieves [metric value] versus [baseline value] for [comparator] in [setting] (Table X).*\n\n7. **Consider adding the mechanism, if supported.** If the manuscript establishes why the method performs better, a short following sentence explaining it would strengthen the argument. If the reason is only conjectured, label it as an explanation rather than a finding.\n\nThe passage cannot be assessed for accuracy as written. The information needed for comments 1–4 must come from the underlying results.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "7c17faebceae376fee25d6da8fcfecd94e1b96ecfe367198650d630dbd0dc49e",
+      "exit_code": 0,
+      "elapsed_seconds": 10.11,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Requests the missing comparator, metric, magnitude, evidence, and scope without supplying invented study facts. The illustrative structure uses placeholders, and mechanism advice is expressly contingent on support.",
+        "discipline": 2,
+        "discipline_reason": "Gives actionable clarity comments covering the required issues and retains review-only scope. The placeholder structure illustrates a comment rather than supplying a replacement manuscript passage."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "after",
+      "arm": "core",
+      "sample": 3,
+      "blind_label": "B",
+      "answer": "**Review comments (clarity)**\n\n1. **Specify the comparison.** \"The method is better\" lacks both a referent and a baseline. Name the method and state what it outperforms (e.g., a named baseline, prior method, or ablation). Readers cannot judge the claim without knowing the comparison.\n\n2. **Define \"better\" in terms of a measured criterion.** State the dimension of improvement: accuracy, error, runtime, robustness, or another metric. \"Better\" and \"improvement\" should refer to the same named quantity so the reader can connect the claim to the evidence.\n\n3. **Identify \"the results.\"** Point to the specific evidence: which experiment, dataset, simulation, or analysis, with a table or figure reference. As written, \"the results\" could mean anything in the paper.\n\n4. **Report the size of the improvement.** Give the magnitude, with units or a relative change, and any uncertainty (intervals, standard errors, number of runs) if available. \"An improvement\" does not tell the reader whether the gain is negligible or substantial.\n\n5. **Attach the scope of the evidence to the claim.** If the improvement holds only for certain settings, datasets, sample sizes, or assumptions, state those conditions in the same sentence. Without them, \"the method is better\" reads as a general result that the evidence may not support.\n\n6. **Resolve ambiguous pronouns.** \"This\" and \"They\" force the reader to infer referents. \"This\" could mean the claim or the method, and \"They\" refers back to \"the results\" only by proximity. Replace each with the noun it stands for.\n\n7. **Remove the redundancy and reorder claim and evidence.** The three sentences make one claim twice, with a vague support statement in between. One or two sentences can state the finding, its magnitude, and its source. For example, the structure could be \"[Method] reduces [metric] by [amount] relative to [baseline] on [data] (Table X).\" This is a structural template, not replacement text.\n\n**Note for the author:** The passage contains no numbers, metric, or baseline, so I cannot check whether \"better\" is supported. Supplying those details is a matter of content, not wording.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "dc952b1e89401eb6ef34db7d900a3c62dd404246a1c8348a2181c998106238d6",
+      "exit_code": 0,
+      "elapsed_seconds": 10.37,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "All study-specific information remains a request or placeholder; uncertainty is conditional on availability, and no result or mechanism is fabricated.",
+        "discipline": 2,
+        "discipline_reason": "Provides concrete comments on comparison, criterion, evidence location, magnitude, scope, referents, and redundancy. The explicitly labeled structural template supports the review without replacing the passage."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "before",
+      "arm": "references",
+      "sample": 1,
+      "blind_label": "C",
+      "answer": "The passage states a conclusion without the information a reader needs to evaluate it.\n\n1. **Name the method.** \"The method\" is ambiguous unless only one method has been introduced nearby. Use the manuscript's established name for it.\n\n2. **State the comparison.** \"Better\" needs a reference point. Name the baseline or competing methods, for example \"than [baseline]\". Without one, the claim cannot be checked.\n\n3. **Specify the criterion.** \"Better\" and \"improvement\" do not say what improved. Name the outcome or metric, such as accuracy, bias, runtime, or coverage. The appropriate term depends on what the results actually measure.\n\n4. **Report the size of the effect.** Give the magnitude in the units the results use, for example \"[metric] decreased from X to Y\". \"An improvement\" could describe a negligible or a substantial difference. Include uncertainty, such as intervals or variability across replications, if the results provide it.\n\n5. **State the scope of the evidence.** Say where the improvement holds: which datasets, simulation settings, or conditions. If it holds only in some settings, attach that condition to the claim rather than stating \"better\" without qualification.\n\n6. **Point to the evidence.** \"The results\" should refer to a specific table, figure, or section so readers can verify the claim.\n\n7. **Fix the vague referents.** \"This\" and \"They\" in sentences 2 and 3 have unclear antecedents. \"This\" could mean the claim or the method, and \"They\" could mean the results or the authors.\n\n8. **Combine the sentences.** The three sentences say one thing: the method outperforms an alternative on some measure, as shown by specific results. Writing it as a single sentence that gives the evidence would remove the repetition. In most fields a sentence like \"This is supported by the results\" adds nothing once the evidence itself is stated.\n\n9. **Check the strength of the claim against the evidence.** If the results show improvement in only some settings or on only some metrics, \"better\" overstates them. If the improvement is consistent across all reported settings, state that directly rather than hedging.\n\nThe supplied passage is all I had to work from, so I can't tell which of these details the manuscript already provides elsewhere.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "a50f3d734e464ec53700733f48cc624b415608ba22b0fd5321b071148742e3b3",
+      "exit_code": 0,
+      "elapsed_seconds": 11.43,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Does not invent the method, comparator, results, or setting. It asks the author to use actual measurements and conditions, while acknowledging that surrounding manuscript context is unavailable. Speculation about a pronoun's possible antecedent does not change a scientific claim.",
+        "discipline": 2,
+        "discipline_reason": "Delivers specific revision actions for all required clarity issues and remains a review. Conditional comments about scope and claim strength are requested critique, not a substituted rewrite."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "before",
+      "arm": "references",
+      "sample": 3,
+      "blind_label": "D",
+      "answer": "**Review comments**\n\n1. **Unspecified comparison (\"better\").** The passage does not say what the method is better than or in what respect. Name the comparator (baseline, prior method, ablation) and the dimension of improvement (accuracy, runtime, bias, robustness). \"Better\" alone gives the reader no claim to evaluate.\n\n2. **Vague evidence reference (\"the results\").** Identify which results support the claim: the experiment, dataset, simulation, or analysis, and point to the table, figure, or section. For example: \"Table [X] shows…\" rather than \"the results.\"\n\n3. **Unquantified improvement.** \"An improvement\" says neither how large nor on what metric. Report the quantity with units and, where available, uncertainty (e.g., \"[metric] improved from [A] to [B] ([interval])\"). Without magnitude, the reader cannot judge whether the difference matters.\n\n4. **Missing scope and conditions.** State the settings in which the improvement holds (data, sample size, assumptions, parameter range). If it was observed in simulation only, or on specific benchmarks, say so alongside the claim so the conclusion carries its conditions.\n\n5. **Claim strength should match the evidence.** \"The method is better\" reads as a general, unconditional statement, while the supporting sentence refers to particular results. Either narrow the claim to what those results establish, or show that the evidence covers the general case.\n\n6. **Ambiguous referents.** \"This\" and \"They\" force the reader to reconstruct antecedents. Replace them with the specific nouns (e.g., \"This advantage,\" \"These experiments\").\n\n7. **Fragmented structure and redundancy.** The three sentences restate one idea in decreasing specificity (claim → supported → improvement), and the third adds no new information. Consider ordering as claim, then the specific evidence with numbers, in one or two connected sentences.\n\n8. **Missing explanation, if available.** If the sources establish why the method improves performance, connecting the result to that mechanism would strengthen the argument. If the mechanism is not established, present any explanation as a proposed one rather than a finding.\n\n**Note:** The passage contains no concrete content to verify, so these comments address structure and specificity only; the revision will depend on details in the underlying results.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "a50f3d734e464ec53700733f48cc624b415608ba22b0fd5321b071148742e3b3",
+      "exit_code": 0,
+      "elapsed_seconds": 12.09,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Uses examples as placeholders and requests actual evidence, comparator, metrics, conditions, and uncertainty. Any explanation is explicitly limited to what sources establish.",
+        "discipline": 2,
+        "discipline_reason": "Provides actionable review comments and concise illustrative fragments without rewriting the manuscript passage. The evidence limitation explains what the author must supply."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "before",
+      "arm": "core",
+      "sample": 1,
+      "blind_label": "E",
+      "answer": "**Review comments**\n\n1. **Specify the comparison.** \"Better\" has no reference point. Name the baseline or competing method(s) the reader should compare against.\n\n2. **Specify the criterion.** Say better *at what*: accuracy, runtime, bias, coverage, or another measure. Without this, the reader cannot judge whether the claim matters or how to verify it.\n\n3. **Identify the results.** \"The results\" does not tell the reader which experiments, datasets, simulations, or analyses are meant. Point to the specific table, figure, or section so the reader can check the evidence.\n\n4. **Quantify the improvement.** \"An improvement\" gives no size. Report the magnitude, with units and uncertainty such as intervals, standard errors, or variation across replicates, if the source supports it. That lets the reader judge whether the gain is substantive.\n\n5. **State the scope.** Say under what conditions the improvement was observed, such as settings, sample sizes, or data regimes. The current wording reads as a general claim. If the evidence covers only certain settings, attach those conditions to the claim.\n\n6. **Clarify the evidence type.** Indicate whether the support comes from simulation, empirical data, or theory. These support different kinds of conclusions.\n\n7. **Resolve ambiguous referents.** \"This\" and \"They\" force the reader to infer what is meant. \"This\" most plausibly refers to the claim of superiority, and \"They\" to the results. Name them explicitly.\n\n8. **Merge the redundant sentences.** The three sentences make one point: claim, support exists, support shows improvement. The second and third add little beyond the first. Combine them into one statement that gives the claim, the comparison, the measure, and the evidence together.\n\n9. **Calibrate the verb.** Once the comparison is specified, decide whether the evidence *shows* or *suggests* the improvement. If the result is established within a stated scope, state it directly. Don't add a hedge to compensate for vagueness; supply the missing specifics instead.\n\n10. **Fill gaps from the source, not by inference.** The passage doesn't say what the method is or what improved. When revising, take these details from the actual results rather than adding plausible-sounding ones.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "091d8383a0429cbf86dbef9fe207c23934bb4fd7322cc7fe6e20617be270d4f9",
+      "exit_code": 0,
+      "elapsed_seconds": 10.73,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Makes no study-specific factual additions; proposed metrics and evidence types are alternatives to clarify. Requests source-supported magnitude, scope, and calibrated claim strength.",
+        "discipline": 2,
+        "discipline_reason": "Returns concrete clarity comments covering comparison, criterion, evidence location, and interpretation. Its evidence-type and verb comments are relevant review actions, not unsolicited work or a rewrite."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "before",
+      "arm": "core",
+      "sample": 3,
+      "blind_label": "F",
+      "answer": "**Review comments (clarity)**\n\n1. **\"The method\" has no clear referent.** Name the method explicitly, or make sure the preceding sentence identifies it unambiguously. A reader entering here cannot tell which method is meant.\n\n2. **\"Better\" is undefined.** State the criterion: better in what measure, such as accuracy, bias, runtime, or coverage? State the comparison too: better than which baseline or competing method? Without both, the claim cannot be evaluated.\n\n3. **\"The results\" is unspecified.** Point to the specific evidence, such as the experiment, simulation, dataset, table, or figure, so the reader can check the claim. A cross-reference (e.g., \"Table 2\") would let readers locate it immediately.\n\n4. **\"An improvement\" lacks magnitude and uncertainty.** Report how large the improvement is, in what units, and with what uncertainty (e.g., standard error, interval, number of replications). \"Improvement\" alone does not tell the reader whether the difference is meaningful.\n\n5. **Scope of the claim is missing.** Indicate the conditions under which the improvement was observed (settings, sample sizes, data regimes). Otherwise \"the method is better\" reads as a general claim that the evidence may not support. Attach that condition to the claim itself rather than deferring it to a limitations section.\n\n6. **The three sentences restate one idea.** \"Supported by the results\" and \"they show an improvement\" add no information beyond the first sentence. Combine them into a single claim that states the finding together with its evidence.\n\n7. **Order the claim and evidence for the reader.** Lead with what was compared and measured, then give the finding. This lets the reader judge the evidence as they read the claim rather than taking the conclusion on trust first.\n\n8. **Ambiguous pronoun.** \"They\" most plausibly refers to \"the results,\" but naming the subject directly (e.g., the specific table or experiment) removes any doubt.\n\n9. **Check the strength of \"is better.\"** If the evidence comes from a limited comparison, such as one benchmark or simulation-only results, state that scope explicitly. A precise statement of what was shown is stronger than an unqualified general claim.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "091d8383a0429cbf86dbef9fe207c23934bb4fd7322cc7fe6e20617be270d4f9",
+      "exit_code": 0,
+      "elapsed_seconds": 11.12,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Requests missing information and does not assert a metric, magnitude, setting, or mechanism as known. Examples are clearly examples; limited evidential scope is treated conditionally.",
+        "discipline": 1,
+        "discipline_reason": "Supplies all essential actionable comments and respects review-only scope, but comments 5 and 9 substantially repeat the instruction to attach limited comparison conditions to the claim."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "after",
+      "arm": "references",
+      "sample": 3,
+      "blind_label": "G",
+      "answer": "1. **Name the method and the comparison.** \"The method is better\" leaves the reader asking: which method, and better than what? Name the proposed method and the baseline(s) or prior approach it is compared against.\n\n2. **Specify the criterion.** \"Better\" and \"improvement\" do not say which property changed: accuracy, bias, runtime, coverage, robustness, or something else. State the outcome measure so the reader can judge whether the claim matters for their use.\n\n3. **Report the magnitude with units and uncertainty.** \"An improvement\" could mean a negligible or a substantial change. Give the quantity, for example the difference or ratio, along with the relevant interval, standard error, or variability across runs or datasets.\n\n4. **Point to the evidence.** \"The results\" should refer to a specific table, figure, or section, and identify whether the evidence comes from simulation, empirical data, or theory. This tells the reader where to look and what kind of support the claim has.\n\n5. **Attach the scope to the claim.** If the improvement holds only under certain settings, datasets, sample sizes, or assumptions, state those conditions in the same sentence. Without them, \"better\" reads as a general result the evidence may not establish.\n\n6. **Resolve ambiguous referents.** \"This\" and \"They\" force the reader to infer what they refer to. \"This\" seems to mean the claim of superiority, and \"They\" seems to mean the results. Name the noun directly.\n\n7. **Consolidate the sentences.** The three sentences repeat one idea: the method improves on something, and the results show it. A single sentence carrying the method, comparator, criterion, magnitude, scope, and evidence location would be shorter and more informative. One possible template is: \"[Method] reduces [metric] by [amount ± uncertainty] relative to [baseline] under [conditions] (Table X).\"\n\n8. **Check what the source material supports.** The source material contains no numbers, comparator, or setting. The author needs to supply these from the actual results. They should not be filled in by inference, and the claim should not be made stronger than those results allow.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "7c17faebceae376fee25d6da8fcfecd94e1b96ecfe367198650d630dbd0dc49e",
+      "exit_code": 0,
+      "elapsed_seconds": 10.9,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Uses placeholders and explicitly requires that numbers, comparator, and setting come from actual results. The possible reduction is an illustrative template, not an asserted finding.",
+        "discipline": 2,
+        "discipline_reason": "Gives complete actionable clarity feedback, including comparison, criterion, magnitude, and evidence location. The template illustrates consolidation without presenting a finished replacement paragraph."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "after",
+      "arm": "core",
+      "sample": 2,
+      "blind_label": "H",
+      "answer": "## Clarity comments\n\n1. **Name the method.** \"The method\" has no referent within the passage. Use the method's established name or a short descriptor so the reader knows which method the claim concerns, especially if the manuscript discusses more than one.\n\n2. **State the comparison.** \"Better\" needs a comparator and a criterion. Specify which baseline or competing method it is compared with and in what respect, such as accuracy, runtime, bias, or coverage. Without these, the reader cannot judge the claim.\n\n3. **Identify the results.** \"The results\" should point to specific evidence. Name the experiment, dataset, simulation, or analysis, and cite the relevant table, figure, or section so the reader can check the support.\n\n4. **Quantify the improvement.** \"An improvement\" gives no size or direction. Report the observed difference with its units, and include whatever uncertainty measure the analysis provides, such as an interval, standard error, or variability across replicates. Say whether the difference is absolute or relative.\n\n5. **Match the claim's scope to the evidence.** \"The method is better\" reads as a general claim. If the evidence comes from particular settings, datasets, or conditions, attach those conditions directly to the claim rather than leaving the reader to infer them.\n\n6. **Merge the three sentences.** The passage states one point three times: the method is better, the results support it, and the results show an improvement. One sentence can carry the claim, the comparator, the metric, the magnitude, and the evidence source. That removes the repetition and the ambiguous \"This\" and \"They.\"\n\n7. **Separate observation from explanation, if one follows.** If the surrounding text explains *why* the method performs better, keep the observed improvement distinct from the proposed mechanism. Qualify the mechanism unless the evidence establishes it.\n\n**Note:** The passage has no specifics, so these comments identify what is missing rather than what is wrong. The author will need to supply the comparator, metric, magnitude, and evidence source from the underlying research.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "dc952b1e89401eb6ef34db7d900a3c62dd404246a1c8348a2181c998106238d6",
+      "exit_code": 0,
+      "elapsed_seconds": 10.44,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Requests the missing scientific details and only asks for uncertainty that the analysis provides. Observation-versus-mechanism guidance is conditional on surrounding text and evidence.",
+        "discipline": 2,
+        "discipline_reason": "Provides direct, actionable review comments and no replacement passage. The qualification about missing source details makes the review actionable without pretending those details are known."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "after",
+      "arm": "core",
+      "sample": 1,
+      "blind_label": "I",
+      "answer": "**Comments on clarity**\n\n1. **Name the method and the comparison.** \"The method is better\" doesn't say which method, or better than what. Name the proposed method and the baseline(s) or prior approaches it was compared against.\n\n2. **Specify the criterion.** \"Better\" and \"improvement\" need a referent. State the metric or outcome (e.g., accuracy, error, runtime, coverage) and the direction that counts as improvement.\n\n3. **Quantify the improvement.** Report its size in the measure's units or as a relative change, with the uncertainty the results support (interval, standard error, or variability across runs/datasets).\n\n4. **Identify the results.** \"The results\" and \"they\" have no clear referent. Point to the specific experiment, dataset, table, or figure (e.g., \"Table 2\").\n\n5. **State the scope.** Say under which conditions the improvement holds: which datasets, settings, sample sizes, or simulation versus empirical evidence. If it held only in some settings, the claim should be limited to those.\n\n6. **Merge the three sentences into one claim with its evidence.** The passage states the same idea three times without adding information. A single sentence can carry the claim, metric, magnitude, comparison, and source. For example, \"Method X reduces [metric] relative to Y by [amount] on [data] (Table N).\"\n\n7. **Avoid an unsupported general verdict.** \"Better\" implies superiority overall. If the evidence covers one metric or setting, state that specific finding directly instead of a global ranking. Do this without stacking hedges.\n\n8. **Consider placement.** If this is a results summary, lead with the quantitative finding. If it is in the introduction or abstract, briefly connect the improvement to why it matters for the problem the paper addresses.\n\n**Note:** The passage gives no method, metric, numbers, or reference, so these comments cannot be checked against the actual evidence. The author needs to supply these details before the claim can be stated precisely.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "dc952b1e89401eb6ef34db7d900a3c62dd404246a1c8348a2181c998106238d6",
+      "exit_code": 0,
+      "elapsed_seconds": 10.41,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Does not invent study results; the example has placeholder method, comparator, metric, amount, data, and reference. Scope, uncertainty, and placement advice are conditional on the actual evidence and manuscript context.",
+        "discipline": 2,
+        "discipline_reason": "Covers the required clarity actions and stays within review-only scope. Its illustrative structure and conditional placement comments support the requested critique rather than replacing the manuscript."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "after",
+      "arm": "references",
+      "sample": 2,
+      "blind_label": "J",
+      "answer": "1. **\"The method\" has no clear referent.** Name the method, or use the manuscript's established term, so the reader knows which procedure is being evaluated.\n\n2. **\"Better\" lacks a comparison and a criterion.** State what the method is compared against (a baseline, a prior method, or an ablation) and the dimension of improvement (accuracy, error, runtime, sample efficiency). Without these, the claim cannot be checked.\n\n3. **\"The results\" and \"an improvement\" are not specified.** Identify which results support the claim (a table, figure, or experiment) and report the size of the improvement with its metric and units. If the passage reports uncertainty, such as intervals, standard errors, or the number of runs, include it so the reader can judge the difference.\n\n4. **State the scope of the evidence.** Specify the datasets, settings, or conditions under which the improvement was observed. Do this especially if the evidence comes from simulation or a limited set of benchmarks. Keep that condition attached to the claim rather than implying a general result.\n\n5. **The three sentences repeat one claim with diminishing content.** \"Supported by the results\" and \"they show an improvement\" restate \"the method is better\" without adding information. Combine them into a single claim that carries the comparison, metric, magnitude, and source together.\n\n6. **\"They\" is ambiguous.** It most likely refers to \"the results,\" but replacing the pronoun with a specific referent (for example, a named table or experiment) removes the ambiguity and the need to infer it.\n\n7. **Match the strength of the claim to what the evidence shows.** If the results show a consistent improvement on a reported metric, state that directly. If you intend to suggest why the method performs better, distinguish that explanation from the observed difference unless the results establish the mechanism.\n\n8. **Connect the passage to its context.** If this summarizes a results section, point the reader to the evidence (\"Table X shows…\"). If it appears in the abstract or introduction, give the key quantitative finding so the claim stands on its own.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "7c17faebceae376fee25d6da8fcfecd94e1b96ecfe367198650d630dbd0dc49e",
+      "exit_code": 0,
+      "elapsed_seconds": 10.62,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Requests missing comparator, metric, quantitative evidence, and scope without asserting them. Mechanism advice distinguishes an explanation from what the results establish.",
+        "discipline": 2,
+        "discipline_reason": "Supplies concrete clarity comments, with short evidence-reference examples, and does not rewrite the passage. Context-sensitive advice remains actionable review content."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "before",
+      "arm": "core",
+      "sample": 2,
+      "blind_label": "K",
+      "answer": "**Review comments**\n\n1. **Name the method and the comparison.** \"The method is better\" lacks both a referent and a baseline. State which method is evaluated and what it is compared against (e.g., a named baseline, prior method, or ablation). Without a comparator, \"better\" makes no testable claim.\n\n2. **Specify the criterion.** Say better at what: accuracy, error, runtime, robustness, sample efficiency? A method can improve on one criterion and worsen on another, so the reader needs the outcome measure to judge the claim.\n\n3. **Identify the results.** \"The results\" points to nothing the reader can check. Refer to the specific experiment, dataset, table, or figure (e.g., \"Table 2\") so the evidence can be located.\n\n4. **Quantify the improvement.** \"An improvement\" gives no magnitude. Report the measured change with units and, where available, uncertainty (confidence intervals, standard errors, number of runs or seeds). This lets the reader judge whether the difference is practically meaningful and distinguishable from noise.\n\n5. **Attach the scope to the claim.** If the improvement holds only for certain datasets, settings, or regimes, state those conditions in the same sentence as the conclusion. Present it as \"On X under condition Y, method A reduces Z by N relative to B,\" not as an unqualified general superiority claim.\n\n6. **Remove the redundancy.** The three sentences make one point three times (better → supported → improvement). After the points above are addressed, a single sentence that states the claim and cites the evidence will be clearer. The middle sentence adds no information on its own.\n\n7. **Resolve the ambiguous pronoun.** \"They\" could refer to \"the results\" or to unstated authors or experiments. Merging the sentences (comment 6) removes the ambiguity.\n\n8. **Consider what the reader needs next.** If the source of the improvement matters to the argument, add a brief, appropriately qualified explanation of why the method performs better. Flag it as a proposed mechanism unless the evidence establishes it.\n\n**Overall:** The passage currently asserts a conclusion without content the reader can evaluate. The highest-priority fixes are comments 1–4. They require information from the underlying study, so the author needs to supply it; editing alone cannot fill it in.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "091d8383a0429cbf86dbef9fe207c23934bb4fd7322cc7fe6e20617be270d4f9",
+      "exit_code": 0,
+      "elapsed_seconds": 11.45,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "No method, comparator, metric, number, or mechanism is presented as an established study fact. The schematic claim and proposed explanation remain conditional; the pronoun comment does not change the scientific content.",
+        "discipline": 2,
+        "discipline_reason": "Gives actionable comments covering the required missing information, prioritizes the main fixes, and preserves review-only scope. Its schematic example illustrates the scope comment rather than replacing the paragraph."
+      }
+    },
+    {
+      "case": "review-only",
+      "version": "before",
+      "arm": "references",
+      "sample": 2,
+      "blind_label": "L",
+      "answer": "**Review comments**\n\n1. **Unspecified comparison.** \"The method is better\" does not say better than what. Name the baseline or competing methods, e.g., \"than [baseline],\" so the reader knows which comparison the evidence addresses.\n\n2. **Unspecified criterion.** \"Better\" and \"improvement\" do not identify the dimension: accuracy, error, runtime, coverage, robustness, or something else. State the metric or outcome. Do not assume it is a rate or a single number unless the results report it that way.\n\n3. **No quantitative evidence.** \"They show an improvement\" gives the reader nothing to judge. Report the magnitude with units, along with any uncertainty or variability the results include, such as intervals, standard errors, or the number of replications. If the improvement is not uniform, say where it holds.\n\n4. **Vague referents.** \"The method,\" \"the results,\" and \"they\" have no clear antecedents in this excerpt. Name the method using the manuscript's established term, and point to the specific results, such as a table, figure, or section, with a cross-reference.\n\n5. **Missing scope and evidence type.** State the conditions behind the comparison: datasets, simulation settings, or sample sizes, and whether the evidence is simulation-based, empirical, or theoretical. Keep these conditions with the claim rather than deferring them to a limitations section.\n\n6. **Fragmented logic.** The three sentences repeat a single assertion: claim, then \"this is supported,\" then \"they show.\" Make the relationship explicit in one or two sentences that give the claim and its support together. The pattern to follow is \"On [data/setting], [method] reduces [metric] from X to Y relative to [baseline] (Table N).\"\n\n7. **Calibrate the claim to the evidence.** Once the specifics are stated, check that the claim's breadth matches them. If the gain appears only in some settings or metrics, phrase it that way rather than saying the method is better in general. If the gain is consistent across the settings tested, say so directly without adding hedges.\n\n**Main issue:** As written, the passage makes an unanchored claim. Fixing it requires information that is not in the excerpt: the baseline, the metric, the magnitude, the setting, and where the results are reported. Prose editing alone cannot supply these, so the author needs to provide them.",
+      "case_hash": "24403424c0faeac15a20ea52bcf2dfa15d8c741a7589a78dd87274ed2e17dd41",
+      "prompt_sha256": "a50f3d734e464ec53700733f48cc624b415608ba22b0fd5321b071148742e3b3",
+      "exit_code": 0,
+      "elapsed_seconds": 11.98,
+      "fixtures_unchanged": true,
+      "tool_calls": [],
+      "judgment": {
+        "fidelity": "pass",
+        "fidelity_reason": "Requests source-supported metrics, magnitudes, uncertainty, conditions, and references. Its illustrative pattern uses placeholders and explicitly warns against assuming an unsupported type of result.",
+        "discipline": 2,
+        "discipline_reason": "Provides concrete review actions and preserves the requested scope. The schematic pattern supports the structural comment; it is not delivered as a final rewritten manuscript paragraph."
+      }
+    }
+  ],
+  "limitations": [
+    "Three samples per case/arm/revision; four synthetic development cases. Not a population-level reliability estimate.",
+    "Model judgments, not independent human assessment. Each case group was scored by one assessor, with no inter-rater estimate.",
+    "Labels were concealed, but response wording may suggest instruction differences.",
+    "The before condition was the preceding unreleased refinement, not the published 0.4.2 skill.",
+    "No claim of statistical significance, held-out generalization, automatic skill discovery, or full isolation from account/provider context.",
+    "Scientific fidelity and requested-output discipline are separate criteria. A faithful answer may still require editorial cleanup."
+  ]
+}

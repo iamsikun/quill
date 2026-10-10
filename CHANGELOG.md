@@ -5,6 +5,16 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
+## 0.5.0 — 2026-10-10
+
+- Add earned-confidence guidance: preserve supported conceptual ambition, state
+  findings directly within their scope, and correct overclaims locally.
+- Align drafting and revision guidance to retain material qualifications while
+  reducing repetitive caveats and unsolicited advisory notes.
+- Add five behavioral cases and separate scientific fidelity from rhetorical
+  effectiveness. Record comparative and repeated-sample evaluations, including
+  remaining delivery and fidelity failures; these are preliminary model judgments.
+
 ## 0.4.2 — 2026-10-09
 
 - Add the project banner to the README. Writing instructions and CLI behavior are

@@ -1,4 +1,146 @@
-# Development evaluation — 2026-10-09
+# Development evaluations
+
+## Quill 0.5.0 release smoke check
+
+The final writing guidance with version metadata 0.5.0 passed one fresh `theorem`
+case using the `references` arm in Claude Code 2.1.296. The response preserved
+B1–B3, each fixed t in (0, 1), convergence in probability, asymptotic scope, and
+the absence of a uniform guarantee. It returned only the requested polished
+passage. The implementing assistant reviewed the answer.
+[The sanitized record](results/0.5.0-smoke.json) includes the answer, configuration,
+model, case hash, and skill hashes. This is a release smoke check, not evidence
+of general writing improvement or automatic discovery rates.
+
+## Delivery follow-up with repeated samples — 2026-10-10
+
+The follow-up aligns drafting and editing references with the core delivery rule:
+add a separate note only for a material issue still unresolved after the requested
+text, and stop once the deliverables are accurate and complete. A limitation
+already explained in a requested reviewer response does not need a third author
+note. Information unnecessary to the current claim does not automatically require
+more analysis or commentary. Genuine evidence conflicts and explicit critique
+requests remain in scope.
+
+We froze the preceding earned-confidence refinement as `before`, and the delivery
+alignment as `after`. These are two unreleased instruction versions, not a
+comparison against the published 0.4.2 skill. Four unchanged cases were run in both
+`core` and `references` arms, with **three fresh samples per case, arm, and version**:
+48 sessions. Versions were interleaved in a fixed shuffled order; all samples were
+retained. The runner, task prompts, sources, 350-word limit, and Claude configuration
+were identical. Claude Code 2.1.296 reported `claude-opus-5-5` in responses. All
+processes completed; no tool calls were observed and review-only fixtures remained
+unchanged.
+
+A fixed rubric was recorded before generation and withheld from the writing model.
+Two independent model assessors scored anonymous answers: one assessed both
+regressions, the other both controls. Revision, arm, and sample labels were revealed
+only after all scores were saved. Scientific fidelity includes factual assertions
+in editorial advice. Requested-output discipline is separate: **2** fits the
+request, **1** is usable with cleanup, and **0** misses the request. Necessary
+clarification and requested critique are appropriate outputs, not unwanted advice.
+
+| Case | Arm | Fidelity before | Fidelity after | Discipline 2 before | Discipline 2 after |
+|---|---|---|---|---|---|
+| Draft from evidence | Core | 3/3 | 3/3 | 1/3 | 3/3 |
+| Draft from evidence | References | 2/3 | 3/3 | 2/3 | 2/3 |
+| Reviewer feedback | Core | 3/3 | 3/3 | 1/3 | 3/3 |
+| Reviewer feedback | References | 3/3 | 2/3 | 3/3 | 3/3 |
+| Conflicting sources | Core | 3/3 | 2/3 | 1/3 | 2/3 |
+| Conflicting sources | References | 2/3 | 2/3 | 0/3 | 1/3 |
+| Review only | Core | 3/3 | 3/3 | 2/3 | 3/3 |
+| Review only | References | 3/3 | 3/3 | 3/3 | 3/3 |
+
+The two regression cases had unsolicited additions in 5/12 before outputs and
+1/12 after outputs. Both fidelity and discipline passed in 6/12 before outputs
+and 10/12 after outputs. The remaining delivery failure was a reference-arm results
+paragraph followed by unnecessary advice about adding Monte Carlo standard errors.
+One revised reference-arm reviewer response invented the claim that the synthetic
+design does not vary industry; brevity did not prevent this fidelity failure.
+
+All conflict answers identified the discrepancy, and all review-only answers
+provided critique without rewriting the passage. The controls therefore did not
+show suppression of legitimate clarification or review. However, conflict outputs
+often added unnecessary hypothetical branches. Three such answers (one before,
+two after) also falsely implied that a cross-reference automatically keeps two
+separately written values consistent; both after answers proposed retaining 0.3
+without sufficient confirmation. The before results case additionally produced
+one answer that turned missing supplied variance estimates into uncomputed ones
+and misdescribed an arithmetic reduction. These failures are retained, not counted
+as successful writing because of fluent or concise presentation.
+
+This is a partial improvement in these sampled tasks, not a clean pass or proof
+of general reliability. Three samples per cell are too few to attribute the
+observed fidelity differences to the instruction change. The assessments are
+model judgments with no independent human or inter-rater validation. No additional
+sampling was used to obtain a passing answer, and no cases or scoring criteria were
+changed after seeing outputs.
+
+[The complete sanitized record](results/2026-10-10-delivery-regressions.json)
+contains the prospective rubric, all 48 outputs and judgments, per-case counts,
+run order, prompts' hashes, case and instruction snapshots, and host configuration.
+Raw account and session metadata are excluded. The earlier 49-session evaluation
+below remains unchanged as historical evidence.
+
+## Earned-confidence revision — 2026-10-10
+
+These runs evaluated a development revision on top of 0.4.2 before the 0.5.0
+version bump. Five new synthetic
+cases cover over-hedging, defensive framing, redundant caveats, ambitious
+positioning with incomplete evidence, and observations with uncertain mechanisms.
+The suite now contains 21 cases; the historical runs below retain their original
+16-case scope.
+
+The initial comparison ran all five additions in `plain`, `core`, and `references`
+arms (15 sessions), plus `theorem`, `association`, `draft-evidence`,
+`reviewer-feedback`, `clear-prose`, and `surgical` in both skill arms (12 sessions).
+After one instruction refinement, all 22 skill-arm sessions were rerun. The five
+plain outputs were reused unchanged, for **49 new sessions** in total.
+
+All sessions completed using Claude Code 2.1.296 with the response model reported
+as `claude-opus-5-5`, the same CLI defaults, and no model override. The runner used
+disposable projects, a 350-word limit, and disabled tools and slash commands; no
+tool calls were observed. All outputs preserved fixture files. Process success
+is separate from the writing judgments below.
+
+A separate model assessor reviewed each round with arm labels concealed. Each
+assessor received only the requests, sources, grading criteria, and anonymous
+answers. Scientific fidelity was judged before rhetorical effectiveness; ties
+were allowed. The implementing assistant then inspected the judgments and
+revealed the labels. These are preliminary model judgments, not human validation.
+
+| Skill outputs | Initial fidelity | Initial rhetoric | After refinement: fidelity | After refinement: rhetoric |
+|---|---|---|---|---|
+| Five new cases, both skill arms | 8/10 | 8 pass; 2 not assessed | 10/10 | 10/10 |
+| Six regression cases, both skill arms | 12/12 | 9/12 | 12/12 | 10/12 |
+
+Both initial skill answers in `ambitious-positioning` omitted the supplied status
+that comparative experiments were planned but unrun. They did not fabricate
+results; they failed the case's required preservation of material evaluation
+status. The source supplied this status, though the request to sharpen positioning
+did not separately demand that every planning detail be restated. The refinement
+clarifies the distinction between implementation and evaluation without requiring
+a catalogue of absent results. Both follow-up answers retained the planned status.
+
+The initial `draft-evidence` answers and core `reviewer-feedback` answer also
+added excessive unsolicited advice. The refinement keeps routine fidelity checks
+in working reasoning and discourages lists of claims that a precisely scoped
+finding never makes. A delivery weakness remains: the final `references` answers
+for `draft-evidence` and `reviewer-feedback` still appended unnecessary commentary.
+They passed fidelity but failed rhetorical restraint; the record retains both.
+
+The plain baseline passed fidelity and rhetoric on all five new cases. In the
+final comparison, the assessor preferred both skill arms on conceptual framing,
+caveat consolidation, and positioning, and retained three-way ties on over-hedging
+and observation versus mechanism. This does not establish superiority: there was
+one sample per case and arm, refinements used the observed failures, and assessors
+differed between rounds. No released-Quill control, held-out manuscript, human
+comprehension study, or new discovery test was run.
+
+[The sanitized record](results/2026-10-10-earned-confidence.json) preserves all
+49 answers, initial failures, separate fidelity/rhetoric judgments, blinded
+preferences, commands, source and prompt hashes, fixture snapshots, and the two
+instruction versions. Raw host metadata and account/session identifiers are
+excluded. Unchanged baseline answers are identified as reused in the follow-up.
 
 ## Quill 0.4.2 release smoke check
 

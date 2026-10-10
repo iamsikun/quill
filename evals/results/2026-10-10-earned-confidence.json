@@ -1,0 +1,1998 @@
+{
+  "date": "2026-10-10",
+  "status": "unreleased development revision",
+  "base_version": "0.4.2",
+  "base_commit": "26ba01fc50129609b6f5c42658406d443f7cc96e",
+  "host": "claude",
+  "host_version": "2.1.296 (Claude Code)",
+  "response_model": "claude-opus-5-5",
+  "configuration": {
+    "command": [
+      "claude",
+      "-p",
+      "--no-session-persistence",
+      "--output-format",
+      "stream-json",
+      "--verbose",
+      "--strict-mcp-config",
+      "--mcp-config",
+      "{\"mcpServers\":{}}",
+      "--safe-mode",
+      "--disable-slash-commands",
+      "--tools",
+      ""
+    ],
+    "model_override": null,
+    "runner_timeout_seconds": 120,
+    "output_word_limit": 350,
+    "max_concurrent_sessions": 3,
+    "runner_sha256": "2eaa364541c947409461f62c945cd9d5ab3e316db3e996caa000ece3524d9385"
+  },
+  "session_count": 49,
+  "cases": [
+    {
+      "expect_activation": true,
+      "id": "ambitious-positioning",
+      "prompt": "Rewrite this introduction paragraph to sharpen its positioning using the project notes. Return only the revised paragraph.",
+      "source": "Project notes: The research asks whether decision-making can be organized around learning and sampling a distribution of profitable decisions. The motivation is to move some computation from repeated optimization into training a generator. A prototype has been implemented for one synthetic assortment setting. Comparative experiments are planned and have not been run; there are no performance results or theoretical guarantees. The broader research direction includes other decision problems, which have not been studied in this project.\nDraft: Our approach replaces optimization with generation across decision problems. By learning profitable decisions, it eliminates the need to solve difficult optimization problems and outperforms existing solvers.",
+      "references": [
+        "drafting.md",
+        "editing.md"
+      ],
+      "must_preserve": [
+        "research question about learning and sampling a distribution of profitable decisions",
+        "motivation to move some computation from repeated optimization to generator training",
+        "current work is an implemented prototype in one synthetic assortment setting",
+        "comparative experiments are planned, not completed"
+      ],
+      "must_not": [
+        "claim demonstrated superiority, elimination of optimization, or replacement across decision problems",
+        "invent performance results or theoretical guarantees",
+        "present the broader research direction as already demonstrated"
+      ],
+      "rhetorical_checks": [
+        "presents the substantive question and proposed approach clearly despite incomplete evidence",
+        "corrects the unsupported performance and generality claims without reducing the whole motivation to a minor technical exercise",
+        "distinguishes the research direction from the present prototype without making apologies the paragraph's main message"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "association",
+      "prompt": "Polish this results sentence.",
+      "source": "In an observational sample of 920 customers, use of the dashboard was associated with higher renewal, although unobserved differences between users and nonusers may explain the association.",
+      "references": [
+        "technical-writing.md"
+      ],
+      "must_preserve": [
+        "920",
+        "observational association",
+        "possible unobserved differences"
+      ],
+      "must_not": [
+        "claim the dashboard caused higher renewal"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "clear-prose",
+      "prompt": "Polish this methods sentence. Return only the sentence.",
+      "source": "We randomly assigned 750 participants to one of five groups.",
+      "references": [
+        "editing.md"
+      ],
+      "must_preserve": [
+        "750",
+        "five groups",
+        "random assignment"
+      ],
+      "must_not": [
+        "unnecessary elaboration",
+        "change an already clear sentence without a concrete benefit"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "defensive-framing",
+      "prompt": "Substantively revise this introduction paragraph using the supplied research notes. Return only the revised paragraph.",
+      "source": "Research notes: The project's central question is whether profitable decisions can be learned as a distribution and generated directly. In the existing workflow, each new demand forecast requires solving an assortment optimization problem. The proposed approach trains a generator on profitable assortments, then generates an assortment for a new forecast. In 40 synthetic test instances, its average revenue was 98% of the solver's average revenue. Mean online generation time was 0.1 seconds, compared with 2 seconds for the solver; these times exclude one-time model training.\nDraft: We offer a small technical variation on assortment heuristics. The generator is another way to produce assortments. On 40 synthetic instances it achieved 98% of the solver's average revenue, with mean online times of 0.1 versus 2 seconds, excluding model training.",
+      "references": [
+        "drafting.md",
+        "editing.md"
+      ],
+      "must_preserve": [
+        "research question about learning a distribution of profitable decisions and generating them directly",
+        "assortment prototype and 40 synthetic test instances",
+        "average revenue at 98% of the solver's average revenue",
+        "mean online generation time of 0.1 seconds versus solver time of 2 seconds, excluding model training"
+      ],
+      "must_not": [
+        "invent a priority claim or universal replacement for optimization",
+        "claim higher revenue than the solver or a measured end-to-end speed advantage including training",
+        "generalize the demonstrated results beyond the tested assortment setting"
+      ],
+      "rhetorical_checks": [
+        "organizes the paragraph around the supplied conceptual question and approach",
+        "explains the contribution beyond describing it as a small technical variation",
+        "keeps the intellectual motivation distinct from the scope of the prototype evidence"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "draft-evidence",
+      "prompt": "Draft a short results paragraph from these notes.",
+      "source": "Simulation, n=500, 200 replications. Method A mean bias 0.04, baseline mean bias 0.09. No variance estimates, intervals, or empirical-application results supplied. The comparison is for this design only.",
+      "references": [
+        "drafting.md",
+        "technical-writing.md"
+      ],
+      "must_preserve": [
+        "simulation",
+        "n=500",
+        "200 replications",
+        "0.04 vs 0.09",
+        "design-limited comparison"
+      ],
+      "must_not": [
+        "statistical significance",
+        "invent uncertainty",
+        "claim general or real-world superiority"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "observation-mechanism",
+      "prompt": "Revise this results paragraph using the study notes. Return only the revised paragraph.",
+      "source": "Study notes: In a randomized study, 240 participants were assigned to a scheduling interface with a suggested default or to the same interface without a default. Mean completion time was 9 minutes with the default and 12 minutes without it. Choice overload was not measured. The researchers propose reduced choice overload as one possible explanation; the study does not establish that mechanism.\nDraft: The results may possibly indicate that participants using the default could have completed the task more quickly, with mean times of 9 versus 12 minutes. This might perhaps suggest that the default reduced choice overload.",
+      "references": [
+        "editing.md",
+        "technical-writing.md"
+      ],
+      "must_preserve": [
+        "mean completion times of 9 minutes with the default and 12 minutes without it",
+        "observed time comparison comes from the randomized study",
+        "reduced choice overload is a possible explanation, not an established mechanism"
+      ],
+      "must_not": [
+        "state that choice overload was measured or that its reduction was established",
+        "invent statistical significance or an uncertainty interval",
+        "generalize the time comparison to unstudied populations or tasks"
+      ],
+      "rhetorical_checks": [
+        "reports the observed time comparison directly",
+        "uses uncertainty for the proposed explanation without transferring that uncertainty to the observed means",
+        "avoids stacked hedges while retaining the mechanism's uncertain status"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "over-hedging",
+      "prompt": "Line-edit this results paragraph using the supplied notes. Return only the revised paragraph.",
+      "source": "Notes: Across 200 simulated datasets, each with n=500 from design D, method A had mean absolute error 0.08 and the baseline had mean absolute error 0.12. No uncertainty estimates or other designs are supplied.\nDraft: In these simulations, our results may potentially suggest that method A could possibly have lower mean absolute error than the baseline, with values of 0.08 and 0.12, respectively.",
+      "references": [
+        "editing.md",
+        "technical-writing.md"
+      ],
+      "must_preserve": [
+        "observed mean absolute error of 0.08 for method A versus 0.12 for the baseline",
+        "comparison restricted to the supplied simulation design"
+      ],
+      "must_not": [
+        "claim statistical significance or invent uncertainty estimates",
+        "claim improvement across untested designs or in real applications"
+      ],
+      "rhetorical_checks": [
+        "states the observed error comparison directly within its simulation scope",
+        "removes stacked hedges that obscure the reported comparison"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "redundant-caveats",
+      "prompt": "Revise this abstract for clarity and concision. Return only the revised abstract.",
+      "source": "We study a correction for bias in a selected policy's value estimate. In 200 replications of one synthetic design with n=500, the correction reduced mean bias from 0.09 to 0.04. However, the evaluation uses only one synthetic design. The correction requires known selection probabilities. These results should be interpreted cautiously because they come from a single synthetic design. The evaluation does not extend beyond that same design. The findings may therefore be limited to the design studied.",
+      "references": [
+        "drafting.md",
+        "editing.md"
+      ],
+      "must_preserve": [
+        "correction concerns bias in a selected policy's value estimate",
+        "200 replications of one synthetic design with n=500",
+        "mean bias reduced from 0.09 to 0.04",
+        "known selection probabilities are required"
+      ],
+      "must_not": [
+        "remove the simulation setting or generalize beyond the evaluated design",
+        "omit the selection-probability requirement",
+        "invent a variance, accuracy, or statistical significance result"
+      ],
+      "rhetorical_checks": [
+        "removes repeated statements of the same single-design restriction",
+        "integrates material scope and the input requirement without obscuring the supported finding"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "reviewer-feedback",
+      "prompt": "Revise the paragraph in response to the reviewer and add a brief response note. Do not perform new analysis.",
+      "source": "Paragraph: We study behavior in one synthetic design.\nReviewer: Please show robustness across industries.\nAvailable evidence: only the existing synthetic design; no industry data or robustness runs.",
+      "references": [
+        "editing.md"
+      ],
+      "must_preserve": [
+        "single synthetic design",
+        "new evidence unavailable"
+      ],
+      "must_not": [
+        "claim robustness tested",
+        "promise completed experiments",
+        "reframe simulation as industry evidence"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "surgical",
+      "prompt": "Line-edit ONLY the second paragraph for clarity. Return all three paragraphs; keep the first and third exactly unchanged.",
+      "source": "We define the target population before estimation.\n\nThe procedure produces estimates of effects and these estimates are then used by the decision rule in the making of its choices.\n\nThe next section reports uncertainty.",
+      "references": [
+        "editing.md"
+      ],
+      "must_preserve": [
+        "first and third paragraphs byte-for-byte",
+        "estimates precede decision-rule choices"
+      ],
+      "must_not": [
+        "restructure unaffected paragraphs",
+        "claim the choices are optimal"
+      ]
+    },
+    {
+      "expect_activation": true,
+      "id": "theorem",
+      "prompt": "Make this theorem explanation easier to read without changing its meaning.",
+      "source": "Under Assumptions B1–B3, for every fixed t in (0, 1), the estimator converges in probability to V(t) as n tends to infinity. The result does not establish uniform convergence over t.",
+      "references": [
+        "technical-writing.md"
+      ],
+      "must_preserve": [
+        "B1–B3",
+        "every fixed t in (0,1)",
+        "in probability",
+        "asymptotic scope",
+        "absence of uniform guarantee"
+      ],
+      "must_not": [
+        "finite-sample guarantee",
+        "uniform convergence"
+      ]
+    }
+  ],
+  "instruction_snapshots": {
+    "initial": {
+      "SKILL.md": "---\nname: quill\ndescription: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, or addressing reviewer feedback. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.\nlicense: MIT\nmetadata:\n  author: Sikun Xu\n  version: \"0.4.2\"\n---\n\n# Quill\n\nHelp the intended reader understand the precise claim, follow the reasoning, and\njudge the evidence with as little avoidable effort as possible. Preserve scientific\nmeaning first, improve understanding next, then refine expression and economy.\n\n## Establish the task\n\nUse the user's audience, purpose, format, and editing depth. Otherwise assume a\nresearcher familiar with the field's basic tools but new to this project. Follow\nthe manuscript's established terminology and structure. Ask only for missing\ninformation that materially affects the work; use the supplied passage and\nconversation when they are sufficient.\n\nWork directly with pasted prose or the user's existing files. Resolve bundled\nreferences below relative to this skill's directory, and manuscript paths relative\nto the selected project. Never use the installation directory as the manuscript\nworkspace. Read adjacent material when needed to understand scope or references.\n\nChoose the appropriate depth:\n\n| Request | Action |\n|---|---|\n| Copyedit or unspecified “polish” | Correct mechanics and clear local problems; preserve structure and effective sentences. |\n| Line edit or clarify | Improve sentence and paragraph continuity within the requested scope. |\n| Restructure or revise an argument | Strengthen framing and exposition while preserving scientific scope, assumptions, and genuine uncertainty. |\n| Draft | Write the requested passage, section, or manuscript from the supplied research and evidence. |\n| Review or critique only | Return specific feedback; do not edit files. |\n\nFor substantial edits or feedback-driven revision, read\n[Editing](references/editing.md). For drafting, read\n[Drafting](references/drafting.md). A short polish can be completed using this core\nalone. These are working modes, not separate agents or mandatory sequential passes.\n\n## Preserve meaning\n\nPreserve claims, assumptions, quantifiers, comparisons, numbers, units, uncertainty,\nnotation, citations, and the scope of evidence. In ordinary prose edits, leave\nequations, citation commands, and reference labels intact unless their correction\nis explicitly in scope. Keep consequential conditions attached to conclusions.\n\nMaintain distinctions between estimate and estimand, selected and optimal, bias\nand total error, association and causation, simulation and empirical evidence,\nheuristic and guarantee, and asymptotic and finite-sample results. Preserve which\ninformation is available when a procedure is used, including the distinction\nbetween practical inputs and simulation-only or retrospective quantities.\n\nDo not invent results, mechanisms, citations, or novelty to complete a narrative.\nIf the sources conflict or a missing connection requires new evidence, flag the\nissue separately rather than resolving it by guesswork. Write the supported\nportions and identify material gaps. Clearly distinguish any requested hypothetical\nillustration from research findings.\n\nDo not make evidence more specific than the sources permit: an unnamed outcome\nis not necessarily a rate, and two studies allowing dependence need not use the\nsame dependence structure. Missing evidence in the supplied materials does not\nestablish that an analysis was never performed or that a design lacks a feature.\nDo not invent a limitation any more than a finding.\n\n## Write for the reader\n\nIdentify what the passage needs to help the reader understand and arrange the\ninformation accordingly. Connect new concepts to established context. Make the\nrelationship between claims explicit when the sources support it. Explain what\nan equation or technical term contributes when the reader needs that explanation.\n\nPrefer familiar words and verbs that express the relevant action. Retain necessary\ntechnical terms and use the same term for the same concept. Make referents,\ncomparisons, and numerical quantities unambiguous. Choose active or passive voice\naccording to the passage's focus; let sentence length follow the reasoning.\n\nRemove empty importance claims, unnecessary ceremony, and repetitive conclusions.\nPreserve supported research stakes and significance, useful signposting, deliberate\ntechnical repetition, and qualifications that affect meaning.\nDo not force every paragraph into one template, manufacture a personal voice, or\nrewrite an effective sentence merely to show that editing occurred.\n\nRead only the additional guidance needed for this task:\n\n- [Technical writing](references/technical-writing.md): section purpose,\n  mathematical exposition, results, literature synthesis, and captions.\n- [Examples](references/examples.md): difficult editing judgments, especially\n  changes that sound fluent but alter meaning and cases requiring restraint.\n- [Author style](references/author-style.md): only when the user requests this\n  personal profile or project instructions establish it. A supplied style sample\n  takes priority. Do not impose it on other authors by default.\n- [Quill workspaces](references/quill-workspaces.md): only for an existing\n  Quill project or an explicit request for a managed workspace. Neither a CLI\n  nor a `paper/` directory is required to write or edit prose.\n\n## Write with earned confidence\n\nMake the strongest argument the supplied research supports. Distinguish the\nimportance of the question, the conceptual contribution, and the specific findings\nestablished by theory or evidence. Make the question's stakes and the contribution\nclear without inflating novelty or extending the findings beyond their support.\nPreserve the author's supported ambition; a restricted demonstration need not\nreduce a substantive idea to a minor technical improvement. Distinguish the\nproposed research direction from what the present work has demonstrated.\n\nState established findings directly. Prefer explicit scope to habitual or stacked\nhedges: “Under assumptions A–C, we establish X” rather than “Our analysis may\nsuggest that X could hold under certain conditions.” Keep qualifications that\ncommunicate genuine uncertainty, assumptions, or scope. Report observed findings\ndirectly; qualify proposed explanations when the evidence does not establish the\nmechanism. Removing a hedge must not turn an association into a causal claim or\na limited comparison into a general result.\n\nPlace material limitations where they affect interpretation, including alongside\na finding when needed. Remove repeated caveats that add no information; do not\nbury necessary conditions in a separate limitations section. Do not insert\nspeculative objections or apologies to preempt hypothetical reviewers.\n\nWhen a claim exceeds the evidence, correct that claim without weakening the whole\nargument. In writing, build the supported case; in review, identify substantive\nweaknesses; in revision, resolve identified problems while preserving supported\ncontributions. Keep critique and rebuttal commentary outside manuscript prose.\nApply these principles within the authorized editing depth: ordinary polishing\ndoes not authorize reframing the research.\n\n## Complete and check the work\n\nPerform the requested writing in the current host's conversation using available\ntools. Do not stop after an outline, instruction brief, or description of what a\nwriter should do. Use a plan as an intermediate aid only when the task merits it.\n\nFor substantial work, address argument and continuity before expression. Compare\nthe revision with its sources for changed meaning, missing conditions, altered\nnumbers, notation, and citation scope. Check for weakened supported conclusions\nor positioning and newly added caveats as well as overclaims. Check affected\ncross-references and nearby dependencies proportionally to the edit; a paragraph\npolish does not require a full-manuscript audit. Keep unaffected file content\nunchanged for surgical edits.\n\nReturn one best version in the requested format, or identify the files edited.\nAdd brief notes only for unresolved substantive issues or consequential changes,\nunless the user asks for more explanation. Do not narrate routine grammar or\nword-choice edits. Keep editorial commentary outside the\nmanuscript. Report limitations of verification honestly. Do not add revision\nmarkers, logs, scaffolding, or new files to a small writing task unless requested.\n",
+      "agents/openai.yaml": "interface:\n  display_name: \"Quill\"\n  short_description: \"Academic writing with scientific meaning preserved\"\n  default_prompt: \"Use $quill to revise this academic passage for clarity while preserving its scientific meaning.\"\npolicy:\n  allow_implicit_invocation: true\n",
+      "references/author-style.md": "# Optional author style profile\n\nLoad this profile only when requested or established by project instructions. It\ndistills preferences described in the user's supplied GPT 6 Astra Pro guidance.\nThe earlier manuscript and the separate skill mentioned there were not supplied\nas source artifacts here; no manuscript-specific finding is independently verified.\nA current user-provided writing sample takes priority over this profile.\n\nUse concrete research stakes and explicit mechanisms where the evidence supports\nthem. Explain the behavior behind an important technical concept, then use its\nestablished name consistently. Anticipate the reader's likely confusion without\nadding repetitive signposts or explaining every familiar term.\n\nMake transitions identify what previous evidence accomplished and why the next\nquestion follows. Make numerical comparisons interpretable, including their sign,\nunits, baseline, and operational meaning. Keep qualifications and exceptions close\nto the claims they limit. Distinguish practical guidance from retrospective evidence.\n\nFor economics and marketing audiences, explain decision relevance when it belongs\nto the research question. Favor connected prose when that helps the argument, but\nretain useful lists and adapt to another genre when requested. Do not imitate\nparticular paragraph lengths, repeated phrases, or managerial framing mechanically.\n\nThis profile adjusts presentation, not scientific scope. It does not authorize new\nanecdotes, personality, business claims, or embellishment of novelty.\n",
+      "references/drafting.md": "# Drafting from research materials\n\nDetermine the passage's job, audience, and available evidence. Use the supplied\nnotes, results, manuscript, and conversation before asking for additional context.\nDo not require a venue, a fixed number of contributions, or a new workspace merely\nto start writing. If an essential fact is missing, ask a focused question or state\nthe limitation while drafting supported material.\n\nFor a substantial section or paper, identify the central question, conceptual\ncontribution, and most important supported conclusion. Use these to form a compact\nargument outline connecting reasoning, evidence, and limits. Tie substantive\nclaims to the actual provided source. This may remain working context; do not\ncreate an administrative evidence ledger for a small task. Preserve the difference\nbetween established findings, interpretations, proposals, and open questions.\n\nOrganize the narrative around what the work helps readers understand, rather than\na sequence of technical steps or a tour of source files. Explain why the question\nmatters using the supplied research motivation; do not substitute a minor technical\ngap for a supported substantive question. State the contribution concretely without\ninflating or understating it. A broader proposed direction can frame a restricted\ndemonstration if their different evidentiary status is clear. Adapt the organization\nto the work: theoretical, methodological, and empirical papers need different\nexposition, and an existing manuscript may already have a sound structure.\n\nUse supplied, verified references for literature synthesis. Compare sources along\nthe dimensions relevant to the argument instead of summarizing one paper per\nsentence. Do not invent a bibliographic record, claim a paper establishes something\nwithout adequate source support, or turn drafting into an unrequested literature\nsearch. Identify missing citation support separately.\n\nRead the actual result sources before writing quantitative claims. Include the\nmetric, comparison, setting, uncertainty, and qualifications that determine their\nmeaning. Do not fill missing results with plausible values or convert an intended\nexperiment into a completed one. If the user wants an incomplete draft, mark any\nplaceholders explicitly so they cannot be mistaken for findings.\n\nDeliver the requested prose after outlining. For a full manuscript, write the\nsupported sections and explain material omissions. Check terminology and claims\nacross the sections you changed. Preserve the user's file organization and output\nformat; use a managed Quill workspace only when it is already in use or requested.\n",
+      "references/editing.md": "# Editing and revision\n\n## Match the authorized depth\n\nRead the passage before deciding that it needs a rewrite. For a file edit, identify\nthe actual file and requested span; do not infer a filename from the first word of\nthe user's request. Read enough surrounding context to resolve references and\nscientific scope. If several files are plausible, resolve the ambiguity before\nediting. A user's selection is the edit boundary, not the read boundary.\n\nCopyediting corrects mechanics and unambiguous local problems. Line editing can\nrecast sentences and improve paragraph continuity. Structural revision can move\nand reshape the requested argument. Drafting supplies new prose from evidence.\nAn unspecified “polish” authorizes restrained editing, not structural revision.\n\nKeep untouched portions byte-identical for a surgical file edit. Do not normalize\nunrelated whitespace, citation commands, notation, or line endings. Preserve the\nauthor's effective sentences. If a larger problem falls outside the requested\nscope, identify it briefly without performing the larger revision.\n\n## Diagnose before polishing\n\nFor a substantial revision, ask:\n\n1. What is the actual claim, and what supports it?\n2. Does each next step have the context the reader needs?\n3. Can the same reasoning be expressed more directly?\n4. Did the revision lose a condition, change a comparison, or imply unsupported\n   certainty?\n5. Did it weaken a supported conclusion or conceptual contribution, or add caveats\n   that make the argument less direct without improving its accuracy?\n\nThese are priorities, not mandatory passes. Return to the argument if sentence\nediting exposes a missing premise. Supply a connection only when the sources\nsupport it; otherwise flag the gap. Distinguish an exposition problem from an\nunresolved scientific question.\n\nWithin the requested scope, preserve the author's scientifically justified\nconviction and positioning. Replace vague statements of potential usefulness with\nthe supported contribution when the sources establish it. Narrow an unsupported\nclaim locally; do not shrink the research question or weaken unaffected findings.\nRetain qualifications that change interpretation and remove those that merely\nrepeat a restriction already clear to the reader.\n\n## Reviewer feedback\n\nMap the supplied comments to passages and requested actions. For a large revision,\nkeep a compact working map of addressed, unresolved, and unsupported requests.\nUse it to complete the authorized work; do not require a separate approval of the\nmap when the user has already authorized those changes.\n\nDo not treat a reviewer's assertion as established evidence. If a requested change\nrequires new analysis, identify that requirement and revise only what the existing\nevidence supports. Resolve the specific objection while retaining the supported\ncore argument; do not turn the manuscript into a running rebuttal or introduce\nunspecified reviewer concerns. Keep rebuttal prose separate from manuscript prose.\nDescribe completed changes accurately, with locations when available; never claim\nan experiment or revision was performed when it was only proposed.\n\n## Delivery\n\nFor review-only requests, provide actionable observations and short examples\nwithout changing source files. For edits, deliver the revised prose or files and\nonly the notes needed to explain consequential changes or unresolved problems.\nDo not append generic praise, a repeated summary, or `% REVISED`/`% POLISHED`\ncomments unless requested.\n",
+      "references/examples.md": "# Editing judgments\n\nAll examples below are constructed illustrations, not quotations or findings from\nthe user's manuscript. Use their reasoning, not their wording as a template.\n\n| Source or issue | Useful revision or decision | Harmful change |\n|---|---|---|\n| “Selection-induced estimation bias constitutes an impediment to value assessment.” The supplied analysis explains selection on favorable errors. | “We may overestimate the selected treatment's value because treatments with favorable estimation errors are more likely to be selected.” The mechanism is explicit and source-supported. | Add this mechanism when the source does not establish it. |\n| “The chosen action need not be optimal, and its value can still be overestimated.” | Keep selected and optimal distinct, even if “selected” repeats nearby. | Replace “chosen” with “best” for variety. |\n| “Under Assumptions A–C, the estimator is consistent as the sample size grows.” | Preserve the assumptions and asymptotic scope while simplifying surrounding prose. | “The estimator is accurate in any sample.” |\n| “Treatment and retention were positively associated in the observational sample.” | Keep the association, design, and population visible. | “Treatment increased retention.” |\n| “Bias fell, but variance rose enough that mean squared error increased.” | Retain both components and the overall comparison. | “The method improved accuracy.” |\n| “Rates were 3.0% and 2.4%; the first exceeded the second by 0.6 percentage points.” | If useful, explain that the relative increase is 25% using 2.4% as the denominator. | Call the difference a 0.6% relative increase. |\n| “The diagnostic uses observed stability. We evaluate MAE using known simulation truth.” | Keep tuning inputs separate from evaluation quantities. | “Practitioners should choose the parameter minimizing MAE” when truth is unavailable. |\n| “We randomly assigned 600 participants to one of three groups.” | Leave it unchanged if it fits the context. | “A randomized allocation procedure was implemented across a tripartite grouping.” |\n| Methods say 0.4; the caption says 0.7 for the same parameter. | Flag the conflict and request the authoritative value. Preserve both until resolved. | Pick either value because it appears more plausible. |\n| Notes ask whether learning from past proofs can guide theorem search; the prototype ranks candidate lemmas for one proof system. An introduction calls this “a minor ranking adjustment.” | “We investigate whether learning from past proofs can guide theorem search. Our prototype studies this idea by ranking candidate lemmas in one proof system.” The framing restores the supplied question while retaining the demonstration's scope. | Claim the prototype automates mathematical discovery generally, or retain the minor framing solely to avoid possible objections. |\n| In a laboratory task, 180 participants were randomly assigned to layouts A or B. Mean error counts were 2.1 and 3.4, respectively. Reduced distraction is a proposed, unmeasured explanation. | “Participants assigned to layout A made fewer errors on average than those assigned to B (2.1 versus 3.4). Reduced distraction may explain this difference.” Preserve the sample and laboratory context in surrounding prose. | Hedge the observed means as though they were unknown, or claim the study established reduced distraction as the mechanism. |\n\n## Basis and limits\n\nThe design follows the supplied reader-centered writing guidance: make claims,\nreasoning, evidence, and conditions recoverable; distinguish meaning constraints\nfrom stylistic preferences; and demonstrate restraint as well as transformation.\nThese illustrations are guidance, not evidence that the skill outperforms a strong\nplain prompt. Evaluate new inputs separately from development examples.\n",
+      "references/quill-workspaces.md": "# Optional managed workspaces\n\nPasted prose and ordinary manuscript files need no Quill setup. Do not run the\nCLI or create project state merely because this skill was selected.\n\nWhen the project already uses Quill or its predecessor Pepper, read `paper/state.yaml` for the active target,\n`paper/shared/context.md` for the source map, and that target's `target.yaml` for\nmetadata. Read an existing session log, outline, or revision plan only as relevant.\nResolve paths relative to the project, not the installed skill. Missing state must\nnot prevent a self-contained edit. Preserve the user's current file organization.\n\nFor an explicit request to create a managed workspace, first check that the\noptional `quill` CLI is available. `quill init` installs configuration and\ntemplate assets without installing skills or changing host instructions.\n`quill new-paper --help` and `quill import-paper --help` describe required inputs.\nAsk for essential missing metadata rather than inventing contributions or a venue.\nDo not install software as an incidental step in a prose edit.\n\nUseful deterministic helpers, when the task warrants them:\n\n- `quill set-target TARGET` selects an existing target.\n- `quill sync-context` updates managed context from section files.\n- `quill log-decision TEXT` records a requested persistent editorial decision.\n- `quill validate` checks managed project structure and references; it does not\n  certify scientific correctness or readability.\n- `quill assemble` regenerates a managed `main.tex`; use only when regeneration\n  is intended, since it can replace an existing document shell.\n\nWriting is performed by the current host using this skill. There are no CLI writing\nbriefs to execute and no required specialist agents. Assembly, compilation, and\nsubmission packaging are separate operations, not automatic consequences of editing.\n\nExisting `.pepper/` configuration and templates remain supported; new projects use\n`.quill/`. Do not rename existing manuscript configuration as part of a prose edit.\n\nIf legacy Pepper adapters still inject conflicting defaults, explain that\n`quill migrate --dry-run` previews their removal and `quill migrate` removes\nunchanged, manifest-owned adapters. Do not migrate an unrelated project or discard\ncustomized files. Continue a self-contained writing task when migration is unnecessary.\n",
+      "references/technical-writing.md": "# Section purpose and technical exposition\n\nUse these as questions about the reader's needs, not templates or venue rules.\nProject instructions and current submission requirements determine formatting.\n\n## Abstract and introduction\n\nLead with the research question and substantive contribution, making their stakes\nclear from the supplied context. Make the evidence and its scope recoverable without\nletting repeated qualifications dominate the abstract or introduction. Keep a\nmaterial restriction alongside the claim when omitting it would mislead; do not\nrepeat it as an apology in each paragraph. Avoid a long generic preamble or inflated\nsignificance claims. Use contribution lists only when useful and consistent with\nthe manuscript. Do not force business motivation onto a paper whose purpose is\ndifferent.\n\n## Literature synthesis\n\nExplain the relationship between the supplied literature and the present claim:\ndifferent assumptions, estimands, settings, methods, or evidence. Preserve the\nscope of cited findings. A citation should support the proposition to which it is\nattached. There is no minimum number of recent papers or requirement to vary the\nname of a technical concept.\n\n## Methods and mathematical exposition\n\nIntroduce the objects and distinctions a reader needs to interpret the method.\nKeep assumptions and quantifiers attached to conclusions. Explain the purpose or\nimplication of an equation when it is not evident from context; avoid automatically\nadding “Intuitively” or a fixed number of explanatory sentences after every formula.\n\nKeep established notation stable. Do not silently repair a theorem, change a\nquantifier, replace an estimand with its estimate, or turn asymptotic evidence into\na finite-sample guarantee. Flag an apparent mathematical error separately unless\ncorrecting it is part of the task and adequately supported.\n\n## Results and discussion\n\nSpecify which outcome, population, setting, baseline, and uncertainty support a\ncomparison. Keep exceptions with comparative claims. Reduced bias does not imply\nreduced mean squared error; non-significance does not establish equivalence.\nAn observational association does not establish a causal effect.\n\nFor numerical differences and ratios, preserve the operation, direction, units,\nand denominator. Distinguish percentage-point differences from relative percentage\nchanges. Distinguish quantities available in practice from ground truth or errors\nobservable only in simulation. Do not recommend an operational tuning rule that\nrequires unavailable information.\n\nState the observed comparison directly within its setting, and distinguish it from\nany proposed explanation whose mechanism remains uncertain. Interpret what the\nevidence establishes without simply repeating tables. A transition should explain\nthe next analysis's role, such as testing generalization, examining a limitation,\nor extending a setting. Do not add an unsupported mechanism to make an observed\nrelationship sound more satisfying.\n\n## Captions and notes\n\nMake comparisons interpretable independently of the surrounding prose where\npractical. Define abbreviations, the sign of a difference, units, uncertainty\nsummaries, and sample restrictions when they matter. Preserve labels and existing\nLaTeX conventions during prose edits. Do not change float placement, bibliography\nstyle, or notation systems as a side effect of copyediting.\n"
+    },
+    "refinement1": {
+      "SKILL.md": "---\nname: quill\ndescription: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, or addressing reviewer feedback. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.\nlicense: MIT\nmetadata:\n  author: Sikun Xu\n  version: \"0.4.2\"\n---\n\n# Quill\n\nHelp the intended reader understand the precise claim, follow the reasoning, and\njudge the evidence with as little avoidable effort as possible. Preserve scientific\nmeaning first, improve understanding next, then refine expression and economy.\n\n## Establish the task\n\nUse the user's audience, purpose, format, and editing depth. Otherwise assume a\nresearcher familiar with the field's basic tools but new to this project. Follow\nthe manuscript's established terminology and structure. Ask only for missing\ninformation that materially affects the work; use the supplied passage and\nconversation when they are sufficient.\n\nWork directly with pasted prose or the user's existing files. Resolve bundled\nreferences below relative to this skill's directory, and manuscript paths relative\nto the selected project. Never use the installation directory as the manuscript\nworkspace. Read adjacent material when needed to understand scope or references.\n\nChoose the appropriate depth:\n\n| Request | Action |\n|---|---|\n| Copyedit or unspecified “polish” | Correct mechanics and clear local problems; preserve structure and effective sentences. |\n| Line edit or clarify | Improve sentence and paragraph continuity within the requested scope. |\n| Restructure or revise an argument | Strengthen framing and exposition while preserving scientific scope, assumptions, and genuine uncertainty. |\n| Draft | Write the requested passage, section, or manuscript from the supplied research and evidence. |\n| Review or critique only | Return specific feedback; do not edit files. |\n\nFor substantial edits or feedback-driven revision, read\n[Editing](references/editing.md). For drafting, read\n[Drafting](references/drafting.md). A short polish can be completed using this core\nalone. These are working modes, not separate agents or mandatory sequential passes.\n\n## Preserve meaning\n\nPreserve claims, assumptions, quantifiers, comparisons, numbers, units, uncertainty,\nnotation, citations, and the scope of evidence. In ordinary prose edits, leave\nequations, citation commands, and reference labels intact unless their correction\nis explicitly in scope. Keep consequential conditions attached to conclusions.\n\nMaintain distinctions between estimate and estimand, selected and optimal, bias\nand total error, association and causation, simulation and empirical evidence,\nheuristic and guarantee, and asymptotic and finite-sample results. Preserve which\ninformation is available when a procedure is used, including the distinction\nbetween practical inputs and simulation-only or retrospective quantities.\n\nDo not invent results, mechanisms, citations, or novelty to complete a narrative.\nIf the sources conflict or a missing connection requires new evidence, flag the\nissue separately rather than resolving it by guesswork. Write the supported\nportions and identify material gaps. Clearly distinguish any requested hypothetical\nillustration from research findings.\n\nDo not make evidence more specific than the sources permit: an unnamed outcome\nis not necessarily a rate, and two studies allowing dependence need not use the\nsame dependence structure. Missing evidence in the supplied materials does not\nestablish that an analysis was never performed or that a design lacks a feature.\nDo not invent a limitation any more than a finding.\n\n## Write for the reader\n\nIdentify what the passage needs to help the reader understand and arrange the\ninformation accordingly. Connect new concepts to established context. Make the\nrelationship between claims explicit when the sources support it. Explain what\nan equation or technical term contributes when the reader needs that explanation.\n\nPrefer familiar words and verbs that express the relevant action. Retain necessary\ntechnical terms and use the same term for the same concept. Make referents,\ncomparisons, and numerical quantities unambiguous. Choose active or passive voice\naccording to the passage's focus; let sentence length follow the reasoning.\n\nRemove empty importance claims, unnecessary ceremony, and repetitive conclusions.\nPreserve supported research stakes and significance, useful signposting, deliberate\ntechnical repetition, and qualifications that affect meaning.\nDo not force every paragraph into one template, manufacture a personal voice, or\nrewrite an effective sentence merely to show that editing occurred.\n\nRead only the additional guidance needed for this task:\n\n- [Technical writing](references/technical-writing.md): section purpose,\n  mathematical exposition, results, literature synthesis, and captions.\n- [Examples](references/examples.md): difficult editing judgments, especially\n  changes that sound fluent but alter meaning and cases requiring restraint.\n- [Author style](references/author-style.md): only when the user requests this\n  personal profile or project instructions establish it. A supplied style sample\n  takes priority. Do not impose it on other authors by default.\n- [Quill workspaces](references/quill-workspaces.md): only for an existing\n  Quill project or an explicit request for a managed workspace. Neither a CLI\n  nor a `paper/` directory is required to write or edit prose.\n\n## Write with earned confidence\n\nMake the strongest argument the supplied research supports. Distinguish the\nimportance of the question, the conceptual contribution, and the specific findings\nestablished by theory or evidence. Make the question's stakes and the contribution\nclear without inflating novelty or extending the findings beyond their support.\nPreserve the author's supported ambition; a restricted demonstration need not\nreduce a substantive idea to a minor technical improvement. Distinguish the\nproposed research direction from what the present work has demonstrated.\nWhen positioning work in progress, make its material evaluation status clear:\nan implemented method and a tested method are different contributions. Preserve\nwhether a relevant comparison is planned or completed without listing every\nresult the project does not yet have.\n\nState established findings directly. Prefer explicit scope to habitual or stacked\nhedges: “Under assumptions A–C, we establish X” rather than “Our analysis may\nsuggest that X could hold under certain conditions.” Keep qualifications that\ncommunicate genuine uncertainty, assumptions, or scope. Report observed findings\ndirectly; qualify proposed explanations when the evidence does not establish the\nmechanism. Removing a hedge must not turn an association into a causal claim or\na limited comparison into a general result.\n\nPlace material limitations where they affect interpretation, including alongside\na finding when needed. Remove repeated caveats that add no information; do not\nbury necessary conditions in a separate limitations section. Do not insert\nspeculative objections or apologies to preempt hypothetical reviewers.\nA precise positive statement of what the evidence establishes often supplies\nthe boundary; do not follow it with a catalogue of claims the paper never makes.\n\nWhen a claim exceeds the evidence, correct that claim without weakening the whole\nargument. In writing, build the supported case; in review, identify substantive\nweaknesses; in revision, resolve identified problems while preserving supported\ncontributions. Keep critique and rebuttal commentary outside manuscript prose.\nApply these principles within the authorized editing depth: ordinary polishing\ndoes not authorize reframing the research.\n\n## Complete and check the work\n\nPerform the requested writing in the current host's conversation using available\ntools. Do not stop after an outline, instruction brief, or description of what a\nwriter should do. Use a plan as an intermediate aid only when the task merits it.\n\nFor substantial work, address argument and continuity before expression. Compare\nthe revision with its sources for changed meaning, missing conditions, altered\nnumbers, notation, and citation scope. Check for weakened supported conclusions\nor positioning and newly added caveats as well as overclaims. Check affected\ncross-references and nearby dependencies proportionally to the edit; a paragraph\npolish does not require a full-manuscript audit. Keep unaffected file content\nunchanged for surgical edits.\n\nReturn one best version in the requested format, or identify the files edited.\nAdd brief notes only for unresolved issues that block the requested writing or\nmaterially affect its interpretation, or for consequential changes. Keep routine\nfidelity checks in working reasoning; do not append hypothetical problems, requests\nfor additional analyses, or a verification checklist to otherwise complete prose.\nGive more explanation when requested. Do not narrate routine grammar or word-choice\nedits. Keep editorial commentary outside the manuscript. Report limitations of\nverification honestly. Do not add revision\nmarkers, logs, scaffolding, or new files to a small writing task unless requested.\n",
+      "references/drafting.md": "# Drafting from research materials\n\nDetermine the passage's job, audience, and available evidence. Use the supplied\nnotes, results, manuscript, and conversation before asking for additional context.\nDo not require a venue, a fixed number of contributions, or a new workspace merely\nto start writing. If an essential fact is missing, ask a focused question or state\nthe limitation while drafting supported material.\n\nFor a substantial section or paper, identify the central question, conceptual\ncontribution, and most important supported conclusion. Use these to form a compact\nargument outline connecting reasoning, evidence, and limits. Tie substantive\nclaims to the actual provided source. This may remain working context; do not\ncreate an administrative evidence ledger for a small task. Preserve the difference\nbetween established findings, interpretations, proposals, and open questions.\n\nOrganize the narrative around what the work helps readers understand, rather than\na sequence of technical steps or a tour of source files. Explain why the question\nmatters using the supplied research motivation; do not substitute a minor technical\ngap for a supported substantive question. State the contribution concretely without\ninflating or understating it. A broader proposed direction can frame a restricted\ndemonstration if their different evidentiary status is clear. Adapt the organization\nto the work: theoretical, methodological, and empirical papers need different\nexposition, and an existing manuscript may already have a sound structure.\n\nUse supplied, verified references for literature synthesis. Compare sources along\nthe dimensions relevant to the argument instead of summarizing one paper per\nsentence. Do not invent a bibliographic record, claim a paper establishes something\nwithout adequate source support, or turn drafting into an unrequested literature\nsearch. Identify missing citation support separately.\n\nRead the actual result sources before writing quantitative claims. Include the\nmetric, comparison, setting, uncertainty, and qualifications that determine their\nmeaning. Do not fill missing results with plausible values or convert an intended\nexperiment into a completed one. When positioning preliminary work, retain the\nstatus of relevant planned evaluations in a concise statement; describing a\nprototype alone may leave its evaluation status unclear. Missing evidence need\nnot become a list of caveats when the drafted claim is already precisely scoped.\nIf the user wants an incomplete draft, mark any\nplaceholders explicitly so they cannot be mistaken for findings.\n\nDeliver the requested prose after outlining. For a full manuscript, write the\nsupported sections and explain material omissions. Check terminology and claims\nacross the sections you changed. Preserve the user's file organization and output\nformat; use a managed Quill workspace only when it is already in use or requested.\n"
+    }
+  },
+  "snapshot_note": "Apply refinement1 file replacements to the initial snapshot to reconstruct the final skill.",
+  "refinement_reason": "Initial skill outputs omitted material planned-comparison status in both ambitious-positioning answers and added unsolicited advisory material in draft-evidence and reviewer-feedback. Clarified relevant evaluation status, proportional qualifications, and delivery of routine checks.",
+  "rounds": [
+    {
+      "name": "initial",
+      "new_sessions": 27,
+      "skill_hashes": {
+        "SKILL.md": "7008b9a3192f891e227ee241fe2b8698233c81d65b94206bbead7adc3b11d1b1",
+        "agents/openai.yaml": "9ebfd33cbfa11100285837deeb4c5f44a7ab0a3be182e08e4577bab390a4f9ed",
+        "references/author-style.md": "c7d6d30951231ced1af13de8d5132a85d54e7a9a5967d77ed6a959c5f5b6657a",
+        "references/drafting.md": "4ad5d969af48400cdf0e48d76eb63d516567b55fca1a31ecfde52e54bb39184b",
+        "references/editing.md": "0017d22465a51e32124806d8a2308c76945cf6c4d17c364f6eba0e0c61870dec",
+        "references/examples.md": "1bd009d2148bad40dcb6ec2fefc2e9dc03da756595d124ff3d775696fb17a24d",
+        "references/quill-workspaces.md": "4dda4a4cf0fed93227ddb60176989b3a6bdcf6e22d566d571f64962835efd71a",
+        "references/technical-writing.md": "20be76632e36b3891b2c1015c83ca0bd48e96d9bff20f7642934024416f07d74"
+      },
+      "reviewer": "independent model assessor; arm labels concealed",
+      "plain_baselines": "fresh sessions",
+      "blind_label_seed": 20261010,
+      "runs": [
+        {
+          "case": "over-hedging",
+          "arm": "references",
+          "answer": "Across 200 simulated datasets of size n = 500 from design D, method A had lower mean absolute error than the baseline (0.08 versus 0.12).",
+          "case_hash": "63448ee6cc791402c1ded7cfba738f8bdd79dd1155cea1af8653cb9b3599a20e",
+          "prompt_sha256": "8c1dc7f95b9345e2231f73462067ba7fd2af8bfad0d9b93fa6db6134efdc0c53",
+          "elapsed_seconds": 4.05,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the two observed mean absolute errors, 200 datasets, n = 500, and design D; adds no significance, uncertainty estimate, or external generalization.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Directly states the scoped numerical comparison without stacked hedges."
+          }
+        },
+        {
+          "case": "over-hedging",
+          "arm": "plain",
+          "answer": "Across 200 simulated datasets (n = 500 each, design D), method A had a lower mean absolute error than the baseline (0.08 vs. 0.12).",
+          "case_hash": "63448ee6cc791402c1ded7cfba738f8bdd79dd1155cea1af8653cb9b3599a20e",
+          "prompt_sha256": "17eca4b8fb4c7f990858a1df9f2816d5657376c3c743606e7b1a57c2cf50b487",
+          "elapsed_seconds": 4.12,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the observed errors and all supplied simulation descriptors without claiming inferential or external validity.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "States the comparison directly; the compact parenthetical keeps the design clear."
+          }
+        },
+        {
+          "case": "over-hedging",
+          "arm": "core",
+          "answer": "Across 200 simulated datasets of size n = 500 from design D, method A had lower mean absolute error than the baseline (0.08 vs. 0.12).",
+          "case_hash": "63448ee6cc791402c1ded7cfba738f8bdd79dd1155cea1af8653cb9b3599a20e",
+          "prompt_sha256": "05bd399d71afca5ffaba3c7dde9ae97376f18c4cbebae561117d3a6b61a28f70",
+          "elapsed_seconds": 5.14,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "C",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the observed errors and simulation scope, with no invented inference.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Direct, appropriately scoped, and free of stacked hedges."
+          }
+        },
+        {
+          "case": "defensive-framing",
+          "arm": "core",
+          "answer": "In the existing workflow, each new demand forecast requires solving an assortment optimization problem anew. We ask whether this repeated optimization can be replaced by learning: can profitable decisions be learned as a distribution and then generated directly? To study this question, we train a generator on profitable assortments and use it to produce an assortment for each new forecast. Across 40 synthetic test instances, the generated assortments achieved an average revenue equal to 98% of the solver's average revenue. Mean online generation took 0.1 seconds, compared with 2 seconds for the solver; these times exclude the one-time cost of training the model. These results show that, in this synthetic setting, a learned generator can recover most of the solver's revenue at a fraction of its per-forecast computation time, suggesting that generating decisions directly is a viable alternative to solving each problem from scratch.",
+          "case_hash": "1cf818a6d32b2e99e8e0a0dd1ba986aed76080dc515d5e4ea509095903828dab",
+          "prompt_sha256": "6cc3b19b145ae7d663739ab9192ae6cc7136854f9467f8b1f2bdaa371b1d3bb8",
+          "elapsed_seconds": 6.64,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the conceptual question, generator, 40 synthetic instances, 98% revenue, both online times, and excluded training. The concluding inference is expressly introduced as applying in this synthetic setting, rather than as universal replacement or an end-to-end speed claim.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Organizes the introduction around repeated optimization and the research question, then separates the approach from its limited evidence. The concluding sentence repeats implications already visible in the numbers but is intelligible."
+          }
+        },
+        {
+          "case": "defensive-framing",
+          "arm": "plain",
+          "answer": "In many retail settings, every new demand forecast triggers a fresh assortment optimization problem that must be solved from scratch, so the cost of decision-making recurs with each update. This project asks whether that cycle can be broken: can profitable decisions be learned as a distribution and then generated directly? We propose training a generative model on profitable assortments and, given a new forecast, using it to produce an assortment without invoking the solver. In 40 synthetic test instances, the generated assortments achieved 98% of the solver's average revenue, while mean online generation time was 0.1 seconds compared with 2 seconds for the solver. These timing figures exclude the one-time cost of training the model, which is incurred once rather than per forecast. The results suggest that learning to generate decisions, rather than re-optimizing for each forecast, can preserve most of the revenue while substantially reducing per-decision computation.",
+          "case_hash": "1cf818a6d32b2e99e8e0a0dd1ba986aed76080dc515d5e4ea509095903828dab",
+          "prompt_sha256": "7ad902081ef1b95ff4345ee67ee1a47b1e341d81ae50f7b6efc146b59c3590a7",
+          "elapsed_seconds": 5.84,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves all required methodological and numerical content and the training exclusion. The final interpretation can reasonably be read as referring to the immediately preceding synthetic results, not a claim of measured performance elsewhere. 'In many retail settings' is broader background framing than the supplied 'existing workflow'; it is less tightly grounded, but does not assert additional tested settings or results.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Explains the substantive question and approach without minimizing them. Its opening background generalization and final unqualified summary make the evidence boundary less crisp than in the other versions."
+          }
+        },
+        {
+          "case": "defensive-framing",
+          "arm": "references",
+          "answer": "In current assortment-planning workflows, each new demand forecast requires solving an assortment optimization problem from scratch. This project asks whether that per-forecast optimization can be replaced by learning: can profitable decisions be learned as a distribution and then generated directly? We take this approach by training a generator on profitable assortments and using it to produce an assortment for a new forecast without invoking the solver. Across 40 synthetic test instances, the generated assortments achieved an average revenue equal to 98% of the solver's average revenue, while mean online generation time was 0.1 seconds, compared with 2 seconds for the solver; these times exclude the one-time cost of training the model.",
+          "case_hash": "1cf818a6d32b2e99e8e0a0dd1ba986aed76080dc515d5e4ea509095903828dab",
+          "prompt_sha256": "4ecd37e30c21d61fd359f31a38e09dac27a0d04f7cccba4a2ed7c55bdd458731",
+          "elapsed_seconds": 6.3,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "C",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the question, implemented assortment approach, synthetic sample, revenue comparison, online times, and training exclusion. The plural 'workflows' broadens the contextual wording slightly, but the actual demonstrated result remains explicitly confined to the 40 synthetic instances.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Gives the motivation, question, approach, and bounded evidence in a compact sequence without adding a second conclusion that could blur scope."
+          }
+        },
+        {
+          "case": "redundant-caveats",
+          "arm": "plain",
+          "answer": "We study a correction for bias in the estimated value of a selected policy. Across 200 replications of a single synthetic design (n = 500), the correction reduced mean bias from 0.09 to 0.04. The correction requires known selection probabilities, and because the evaluation covers only one synthetic design, the findings may not generalize beyond it.",
+          "case_hash": "3d452c38a2605dc38dedccaf24456ab8199eb54fde4101635474ec2dc5dfc52a",
+          "prompt_sha256": "5189b195e6f10ce42113036e710493f5c5d116f116b4afeb9705c9942bcea892",
+          "elapsed_seconds": 4.36,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Retains selected-policy value bias, the known-selection-probability requirement, 200 replications, n = 500, one synthetic design, and the 0.09-to-0.04 reduction.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Removes most repetitive caveats and states the result clearly. The single-design setting and final generalization caution overlap, but serve recognizable setting and interpretation functions."
+          }
+        },
+        {
+          "case": "redundant-caveats",
+          "arm": "core",
+          "answer": "We study a correction for bias in the value estimate of a selected policy. The correction requires known selection probabilities. In 200 replications of a single synthetic design with n=500, it reduced mean bias from 0.09 to 0.04. Because the evaluation covers only this design, these results may not generalize to other settings.",
+          "case_hash": "3d452c38a2605dc38dedccaf24456ab8199eb54fde4101635474ec2dc5dfc52a",
+          "prompt_sha256": "fa9b335d4e281244569e48330315be501cb7e59e99d0370931ce29f6cbe0596e",
+          "elapsed_seconds": 4.48,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves all required quantities, the correction's target and input condition, and the restricted simulation evidence.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Separates the input condition, finding, and limitation cleanly; substantially reduces the original repetition."
+          }
+        },
+        {
+          "case": "redundant-caveats",
+          "arm": "references",
+          "answer": "We study a correction for bias in the value estimate of a selected policy. The correction requires known selection probabilities. In 200 replications of a single synthetic design with n=500, it reduced mean bias from 0.09 to 0.04. Because the evaluation uses only this design, whether the improvement holds in other settings remains untested.",
+          "case_hash": "3d452c38a2605dc38dedccaf24456ab8199eb54fde4101635474ec2dc5dfc52a",
+          "prompt_sha256": "063381ad2f9ddc8f734f2835b478f5898eda8da1cced568b9236dc2ad1d4c657",
+          "elapsed_seconds": 4.43,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "C",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves all required scientific content and correctly describes performance elsewhere as untested.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Makes the finding direct and states the remaining evidential gap precisely, without piling on warnings."
+          }
+        },
+        {
+          "case": "ambitious-positioning",
+          "arm": "plain",
+          "answer": "We ask whether decision-making can be organized around learning and sampling from a distribution of profitable decisions, rather than solving an optimization problem anew for each instance. The motivation is to shift part of the computational burden from repeated optimization to the one-time training of a generator. As a first step, we have implemented a prototype for a synthetic assortment setting. Comparative experiments against existing solvers are planned but have not yet been run, so we make no claims about performance and offer no theoretical guarantees. Extending the approach to other decision problems is a broader direction that lies beyond the scope of this project.",
+          "case_hash": "205140637a832c9681fb99e40207487e81f1f9aecc67e3f64e3ba7ff5f01e73c",
+          "prompt_sha256": "8baa1c403839ba7f4040de1c586596fded9c9ad4263d7f4007715d91c0378fd1",
+          "elapsed_seconds": 5.14,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the research question, intended computational shift, implemented synthetic-assortment prototype, and explicitly planned but unrun comparisons. It neither invents performance nor presents broader applications as demonstrated.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Leads with a substantive question and an affirmative description of the prototype. The explicit disclaimers are somewhat heavy, but the paragraph's main message remains the research direction and present stage of development."
+          }
+        },
+        {
+          "case": "ambitious-positioning",
+          "arm": "references",
+          "answer": "Many decision problems are solved by optimizing anew each time a decision is required. We ask whether decision-making can instead be organized around learning and sampling from a distribution of profitable decisions. This perspective shifts part of the computational burden from repeated optimization to the training of a generator, which can then produce candidate decisions directly. Although we view this as a broad research direction for decision problems, the present work develops it in a single setting: we implement a prototype for a synthetic assortment problem.",
+          "case_hash": "205140637a832c9681fb99e40207487e81f1f9aecc67e3f64e3ba7ff5f01e73c",
+          "prompt_sha256": "41eb2e30017aa04c2754133244262983632a060d3074e8436afefa856953b2f5",
+          "elapsed_seconds": 6.04,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "fail",
+            "fidelity_reason": "Omits the required material status that comparative experiments are planned and have not been run. Naming a prototype alone does not communicate whether it has been comparatively evaluated. This is an omission of required evidence status, not fabrication of completed experiments; the conceptual framing and synthetic scope otherwise remain faithful.",
+            "rhetoric": "not_assessed",
+            "rhetoric_reason": "Not ranked rhetorically because the required evaluation status is missing."
+          }
+        },
+        {
+          "case": "ambitious-positioning",
+          "arm": "core",
+          "answer": "We ask whether decision-making can be organized around learning and sampling from a distribution of profitable decisions, rather than around solving an optimization problem each time a decision is needed. This generative view would shift part of the computational burden from repeated optimization to the one-time training of a generator, whose samples could then supply candidate decisions directly. We develop this idea as a research direction that could extend to a range of decision problems, and we implement a prototype in a synthetic assortment setting to show how the approach can be instantiated.",
+          "case_hash": "205140637a832c9681fb99e40207487e81f1f9aecc67e3f64e3ba7ff5f01e73c",
+          "prompt_sha256": "d235ba3bf8ec27e46285312a5ab9bb7237d77088ac5cead9e3225b6496a70a92",
+          "elapsed_seconds": 5.4,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "C",
+          "judgment": {
+            "fidelity": "fail",
+            "fidelity_reason": "Omits the required planned-but-unrun comparative experiments. Conditional language about the research direction and an implemented prototype does not convey that material evaluation status. It does not invent a performance result or guarantee, and omitting the separate background statement about guarantees would not itself be a failure.",
+            "rhetoric": "not_assessed",
+            "rhetoric_reason": "Not ranked rhetorically because the required evaluation status is missing."
+          }
+        },
+        {
+          "case": "observation-mechanism",
+          "arm": "plain",
+          "answer": "In this randomized study of 240 participants, those assigned to the scheduling interface with a suggested default completed the task faster than those using the same interface without a default (mean completion time: 9 vs. 12 minutes). One possible explanation, proposed by the researchers, is that the default reduced choice overload; however, choice overload was not measured, so the study does not establish this mechanism.",
+          "case_hash": "7ab9326230b0846831209c505f7c93981655092df1d0b78374dcc5fb83c3007e",
+          "prompt_sha256": "89f7ac15cc6ca0728ea55480f72edb9545b477fa746bd89adec6d5a373a65834",
+          "elapsed_seconds": 3.83,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves randomization, 240 participants, both observed means, and the unmeasured, unestablished choice-overload explanation. The parenthetical means make the 'faster' comparison descriptive rather than a claim of significance.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Separates the direct observed comparison from the uncertain explanation without stacked hedges; attribution to the researchers adds a little avoidable length."
+          }
+        },
+        {
+          "case": "observation-mechanism",
+          "arm": "references",
+          "answer": "Among the 240 randomized participants, those assigned to the scheduling interface with a suggested default completed the task in a mean of 9 minutes, compared with 12 minutes for those assigned to the same interface without a default. One possible explanation is that the default reduced choice overload, but because the study did not measure choice overload, it does not establish this mechanism.",
+          "case_hash": "7ab9326230b0846831209c505f7c93981655092df1d0b78374dcc5fb83c3007e",
+          "prompt_sha256": "8bd9c8db76fa350d66f2a351d615d4b0db5fdd95690cd8c5447f216f875ce5b8",
+          "elapsed_seconds": 5.82,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Accurately reports both randomized groups' means and leaves the proposed mechanism explicitly unestablished because it was not measured.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Reports the observed means directly and puts uncertainty only on the explanation, in two clear sentences."
+          }
+        },
+        {
+          "case": "observation-mechanism",
+          "arm": "core",
+          "answer": "Participants randomized to the scheduling interface with a suggested default completed the task faster on average than those using the same interface without a default (mean completion time, 9 vs. 12 minutes; N = 240). One possible explanation is that the default reduced choice overload; because choice overload was not measured, this study does not test that mechanism.",
+          "case_hash": "7ab9326230b0846831209c505f7c93981655092df1d0b78374dcc5fb83c3007e",
+          "prompt_sha256": "58885f1ec15c5ef396ef475bc9103ab0764bfe4749b763d23bcefde663cef081",
+          "elapsed_seconds": 6.0,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "C",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the randomization, sample size, means, and distinction between an observed time difference and an unmeasured possible mechanism. 'Does not test that mechanism' is appropriate for the supplied design description.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "The explicit 'on average' and compact mechanism sentence make the observation/explanation distinction clear."
+          }
+        },
+        {
+          "case": "theorem",
+          "arm": "core",
+          "answer": "Under Assumptions B1–B3, the estimator converges in probability to V(t) as n → ∞ for each fixed t ∈ (0, 1). This convergence is pointwise in t. The result does not establish uniform convergence over t.",
+          "case_hash": "3d43ff999ec3ac12f2e6b0b0d95e50d7b7ee507d091a37d019c41e75c22fc454",
+          "prompt_sha256": "0c7e71f8224e9ee23e339c788c991f0394780c3f4f6f20ec122469e404459cf0",
+          "elapsed_seconds": 4.69,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves B1–B3, each fixed t in (0,1), convergence in probability as n tends to infinity, and the absence of a uniform guarantee. Calling the result pointwise is accurate.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "A short, readable explanation that names the mathematical distinction without unnecessary commentary."
+          }
+        },
+        {
+          "case": "theorem",
+          "arm": "references",
+          "answer": "Under Assumptions B1–B3, the estimator converges in probability to V(t) as n → ∞ for each fixed t ∈ (0, 1). This is a pointwise result: it does not establish uniform convergence over t.\n\nNote: I added \"pointwise\" to name the distinction the original draws between fixed-t and uniform convergence. Remove it if the manuscript avoids that term.",
+          "case_hash": "3d43ff999ec3ac12f2e6b0b0d95e50d7b7ee507d091a37d019c41e75c22fc454",
+          "prompt_sha256": "a3b2c82d68b112320a6413bb1a6ccf8c298037354c0996eadac2bdf8191b2697",
+          "elapsed_seconds": 9.75,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves all conditions, quantification, convergence mode, asymptotic scope, and the absence of a uniform guarantee. The added author note does not change the theorem.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "The explanation is clear. The author note is optional clutter, but the user did not forbid a note, and it does not make the answer unusable."
+          }
+        },
+        {
+          "case": "association",
+          "arm": "references",
+          "answer": "In an observational sample of 920 customers, dashboard use was associated with higher renewal, although unobserved differences between users and nonusers may account for this association.",
+          "case_hash": "9b09559209f69322a1cf13853f4afe7b70b001e4b4555892b477e0fc724ba70a",
+          "prompt_sha256": "ed0744344c4d49b8475bd6dc1921c374e2a721ceff6773d0b1440475892556f7",
+          "elapsed_seconds": 4.55,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Retains 920 customers, observational association, and possible explanation by unobserved group differences; makes no causal claim.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "A restrained polish that keeps the material qualification in the sentence."
+          }
+        },
+        {
+          "case": "association",
+          "arm": "core",
+          "answer": "In an observational sample of 920 customers, dashboard use was associated with higher renewal, although unobserved differences between users and nonusers may account for this association.",
+          "case_hash": "9b09559209f69322a1cf13853f4afe7b70b001e4b4555892b477e0fc724ba70a",
+          "prompt_sha256": "ddea83490970fa877e0e28e952bcecf0e169352179bc58645535b18847480188",
+          "elapsed_seconds": 5.18,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Retains 920 customers, observational association, and possible explanation by unobserved group differences; makes no causal claim.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "A restrained polish that keeps the material qualification in the sentence."
+          }
+        },
+        {
+          "case": "draft-evidence",
+          "arm": "references",
+          "answer": "In the simulation design with $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline's bias. This comparison concerns bias alone. Reduced bias does not by itself imply lower total error, so these results do not establish that Method A has a smaller mean squared error. The comparison also applies only to this simulation design.\n\n---\n\n**Notes**\n\n- **Uncertainty and total error:** The source notes include no Monte Carlo standard errors, intervals, or variance estimates. As a result, the paragraph doesn't describe the difference as precise or significant, and it doesn't claim any advantage in mean squared error. If these quantities are available, adding them would let the paragraph make a stronger and more complete comparison.\n- **Sign of the bias:** \"Mean bias\" could mean signed bias or absolute bias. If either value is a mean absolute bias, or if the two methods' biases have opposite signs, label the quantity explicitly.\n- **Empirical results:** No empirical-application results were supplied, so the paragraph doesn't mention any. That absence doesn't mean such an analysis wasn't performed.",
+          "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+          "prompt_sha256": "fcc29e00281cb33e58a0fcd13bec68a27fa0830abf1ca49ed292b37bf7ef0d9e",
+          "elapsed_seconds": 9.76,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the simulation, sample size, replication count, reported mean biases, and design restriction. 'Less than half' is arithmetically correct. The bias-versus-MSE distinction is valid and does not invent a variance result. The optional sign discussion is speculative author guidance, not an assertion that the supplied positive values have opposite signs.",
+            "rhetoric": "fail",
+            "rhetoric_reason": "The requested short results paragraph is followed by substantial unsolicited notes. Even the paragraph spends three sentences on limitations after the observed comparison. This is a clarity/restraint failure, not a scientific-fidelity failure."
+          }
+        },
+        {
+          "case": "draft-evidence",
+          "arm": "core",
+          "answer": "In a simulation with sample size $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline. Under this design, Method A therefore reduced mean bias by more than half relative to the baseline. This comparison concerns bias alone; it does not establish how the two methods compare in variance or total error, nor how they perform in other designs or in empirical data.\n\n---\n\n**Notes**\n\n- **Missing evidence:** The notes contain no variance, MSE, interval, or Monte Carlo standard error. Without these, the paragraph cannot say whether the difference exceeds simulation noise or whether Method A has lower total error. If you have these quantities, report them here. A Monte Carlo standard error for each mean bias would be especially useful.\n- **Undefined design:** The paragraph says \"this design\" without describing it. Either refer to the section where the design is specified (for example, \"the design in Section X\") or add its key features.\n- **Signed or absolute bias:** I reported \"mean bias\" exactly as the notes give it. If these values are mean absolute bias, or if their signs matter, please clarify.\n- **Hedging:** The final sentence states the scope of the comparison rather than adding a speculative caveat. If the surrounding text already establishes that the evidence is simulation-only and design-specific, you can shorten or remove that sentence.",
+          "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+          "prompt_sha256": "a0b021570376307a1a564fe147ae8fb2d304ef16e294447d6da73bbf5875bac7",
+          "elapsed_seconds": 8.85,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves all supplied numbers and simulation scope. The more-than-half reduction is correct, and it does not claim significance, lower total error, or external superiority. Statements about absent uncertainty information correctly refer to the supplied notes.",
+            "rhetoric": "fail",
+            "rhetoric_reason": "The results paragraph itself is coherent and reasonably short, but the four additional advisory bullets greatly exceed what is useful for a short results-paragraph request. These extras are a rhetorical restraint problem, not invented scientific evidence."
+          }
+        },
+        {
+          "case": "reviewer-feedback",
+          "arm": "core",
+          "answer": "**Revised paragraph**\n\n> We study behavior in a single synthetic design. Our findings therefore describe behavior under this design; whether they extend across industries remains an open question for future work.\n\n**Response to reviewer**\n\n> We thank the reviewer for this suggestion. Assessing robustness across industries would require industry-level data and additional analyses beyond the scope of the present study, which is based on a single synthetic design. We have revised the paragraph to state this scope explicitly and to identify cross-industry robustness as a question for future work.\n\n**Note to author**\n\nThe supplied materials include only the single synthetic design, with no industry data or robustness runs. I therefore did not add or imply any robustness results, and the response does not promise new analyses.\n\n- **If you have cross-industry runs** that were not included here, reporting them would answer the reviewer more directly than narrowing the scope.\n- **If you plan to run them**, the response should be rewritten to describe that work once the results exist.\n- **Optional addition:** you could add a sentence explaining what the synthetic design isolates, so the restricted scope reads as a deliberate design choice. I left this out because the supplied materials do not say what the design isolates.",
+          "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+          "prompt_sha256": "a32f2b80d82344afb899b164fb7d588a4853d1d445231d3f02b483808e5cc365",
+          "elapsed_seconds": 10.97,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the single synthetic design and lack of available cross-industry evidence, makes no claim of completed robustness tests, and promises no new analyses. 'Future work' describes an open question, not an undertaking to complete it. Its stronger wording about needing industry-level data and additional analyses is a proposed route to addressing robustness, rather than fabricated evidence.",
+            "rhetoric": "fail",
+            "rhetoric_reason": "The revised paragraph and reviewer response are usable, but the long author note plus three hypothetical-action bullets are excessive for a request for a paragraph and brief response note."
+          }
+        },
+        {
+          "case": "reviewer-feedback",
+          "arm": "references",
+          "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Our findings therefore describe behavior within this design. This study does not evaluate robustness across industries. That evaluation would require industry-specific data or additional robustness analyses.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. The current study uses only one synthetic design and has no industry data or robustness analyses, so we cannot show robustness across industries without new analysis. We have instead revised the paragraph to state this scope explicitly. Readers should interpret the findings as applying to the synthetic design studied, not as established across industries. We agree that cross-industry robustness is an important question for future work.\n\n*Note:* The revision only clarifies scope. Meeting the reviewer's request in full would require new data and analyses that were not available.",
+          "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+          "prompt_sha256": "833b5d71f8ed1c420756098932d5bb33c65adc64e747794b0440631f7fbcb41a",
+          "elapsed_seconds": 8.17,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Explicitly states the single synthetic design, absent industry data and robustness analyses, and inability to answer the robustness request without new work. It claims no new analysis or industry evidence and makes no promise of completed experiments.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Provides a clear revised paragraph and compact response with an honest explanation of the evidence limit. The final note and repeated scope sentences could be cut, but the requested deliverables remain easy to identify and proportionate."
+          }
+        },
+        {
+          "case": "clear-prose",
+          "arm": "core",
+          "answer": "We randomly assigned 750 participants to one of five groups.",
+          "case_hash": "c0dfd0220efae0594c73e338ee67a6b4d1835c71dc24d6ea7c7562bf500ce393",
+          "prompt_sha256": "d8764b80771eb51bc218e0bbadac23ce8a5d2294c5f5b856d2a46fbee9189741",
+          "elapsed_seconds": 3.92,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the original sentence exactly, including 750 participants, five groups, and random assignment.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Appropriately leaves an already clear sentence unchanged and returns only that sentence."
+          }
+        },
+        {
+          "case": "clear-prose",
+          "arm": "references",
+          "answer": "We randomly assigned 750 participants to one of five groups.",
+          "case_hash": "c0dfd0220efae0594c73e338ee67a6b4d1835c71dc24d6ea7c7562bf500ce393",
+          "prompt_sha256": "c4f09c962f84e99cb4eb6a4f47b5427b6c380ccd573d67b3421f25d70dd3b116",
+          "elapsed_seconds": 4.2,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the original sentence exactly, including 750 participants, five groups, and random assignment.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Appropriately leaves an already clear sentence unchanged and returns only that sentence."
+          }
+        },
+        {
+          "case": "surgical",
+          "arm": "references",
+          "answer": "We define the target population before estimation.\n\nThe procedure estimates effects, and the decision rule uses these estimates to make its choices.\n\nThe next section reports uncertainty.",
+          "case_hash": "a7515811d4f7252d76171520f49e1163dd0512b5f2f2acabe4dc5fbcd9a4a15f",
+          "prompt_sha256": "65f3a2bbb35fccb312b3739df52c7588e7a235751998049e9327027a43f4ac1a",
+          "elapsed_seconds": 3.82,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Keeps the first and third paragraphs exactly unchanged and preserves estimates as inputs to subsequent decision-rule choices. Adds no optimality claim and edits only the authorized paragraph.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Removes redundant nominal phrasing while retaining the sequence and roles of estimation and decision making."
+          }
+        },
+        {
+          "case": "surgical",
+          "arm": "core",
+          "answer": "We define the target population before estimation.\n\nThe procedure estimates effects, and the decision rule uses these estimates to make its choices.\n\nThe next section reports uncertainty.",
+          "case_hash": "a7515811d4f7252d76171520f49e1163dd0512b5f2f2acabe4dc5fbcd9a4a15f",
+          "prompt_sha256": "579d9134467979b9ed24b4e6fae90a72520b6bf564fc6bba93cb8199d1f86fb6",
+          "elapsed_seconds": 3.85,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Keeps the first and third paragraphs exactly unchanged and preserves estimates as inputs to subsequent decision-rule choices. Adds no optimality claim and edits only the authorized paragraph.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Removes redundant nominal phrasing while retaining the sequence and roles of estimation and decision making."
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "case": "over-hedging",
+          "preferred_arms": [
+            "references",
+            "plain",
+            "core"
+          ],
+          "reason": "Substantively equivalent, concise revisions. Parentheses and 'versus' versus 'vs.' do not create a meaningful quality distinction."
+        },
+        {
+          "case": "defensive-framing",
+          "preferred_arms": [
+            "references"
+          ],
+          "reason": "C is the most economical faithful introduction and keeps the broad question distinct from the specific demonstration. This preference concerns organization and restraint; A and B do not make a substantive unsupported performance claim."
+        },
+        {
+          "case": "redundant-caveats",
+          "preferred_arms": [
+            "references"
+          ],
+          "reason": "C's final sentence identifies the actual unknown—performance elsewhere is untested—more precisely than a generic warning that results may not generalize. A and B remain faithful and acceptable."
+        },
+        {
+          "case": "ambitious-positioning",
+          "preferred_arms": [
+            "plain"
+          ],
+          "reason": "A is the only candidate preserving the explicitly required comparative-evaluation status. Its additional disclaimer could be shortened, but that stylistic issue is secondary to the omitted material content in B and C."
+        },
+        {
+          "case": "observation-mechanism",
+          "preferred_arms": [
+            "references",
+            "core"
+          ],
+          "reason": "B and C are comparably clear and economical. A also passes; the preference is a small stylistic advantage, not a scientific correction."
+        },
+        {
+          "case": "theorem",
+          "preferred_arms": [
+            "core"
+          ],
+          "reason": "A provides the requested explanation directly. B's explanation is equally sound, but its extra note has little benefit for this simple edit."
+        },
+        {
+          "case": "association",
+          "preferred_arms": [
+            "references",
+            "core"
+          ],
+          "reason": "The answers are identical."
+        },
+        {
+          "case": "draft-evidence",
+          "preferred_arms": [
+            "core"
+          ],
+          "reason": "Among the faithful candidates, B has the more cohesive manuscript paragraph, integrating scope and the bias-only interpretation in one sentence. Both would improve substantially by returning the paragraph without the extended notes; B is not an unqualified rhetorical success."
+        },
+        {
+          "case": "reviewer-feedback",
+          "preferred_arms": [
+            "references"
+          ],
+          "reason": "B answers the reviewer directly and is substantially more restrained. A's additional hypothetical advice is unnecessary; neither answer falsely claims to have satisfied the request for industry robustness."
+        },
+        {
+          "case": "clear-prose",
+          "preferred_arms": [
+            "core",
+            "references"
+          ],
+          "reason": "The answers are identical and satisfy the request without unnecessary editing."
+        },
+        {
+          "case": "surgical",
+          "preferred_arms": [
+            "references",
+            "core"
+          ],
+          "reason": "The answers are identical and correctly honor the surgical editing boundary."
+        }
+      ],
+      "blind_assessment": {
+        "reviewer": "independent model assessor; arm labels concealed",
+        "cases": [
+          {
+            "id": "over-hedging",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the two observed mean absolute errors, 200 datasets, n = 500, and design D; adds no significance, uncertainty estimate, or external generalization.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Directly states the scoped numerical comparison without stacked hedges."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the observed errors and all supplied simulation descriptors without claiming inferential or external validity.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "States the comparison directly; the compact parenthetical keeps the design clear."
+              },
+              {
+                "label": "C",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the observed errors and simulation scope, with no invented inference.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Direct, appropriately scoped, and free of stacked hedges."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B",
+              "C"
+            ],
+            "preference_reason": "Substantively equivalent, concise revisions. Parentheses and 'versus' versus 'vs.' do not create a meaningful quality distinction."
+          },
+          {
+            "id": "defensive-framing",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the conceptual question, generator, 40 synthetic instances, 98% revenue, both online times, and excluded training. The concluding inference is expressly introduced as applying in this synthetic setting, rather than as universal replacement or an end-to-end speed claim.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Organizes the introduction around repeated optimization and the research question, then separates the approach from its limited evidence. The concluding sentence repeats implications already visible in the numbers but is intelligible."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves all required methodological and numerical content and the training exclusion. The final interpretation can reasonably be read as referring to the immediately preceding synthetic results, not a claim of measured performance elsewhere. 'In many retail settings' is broader background framing than the supplied 'existing workflow'; it is less tightly grounded, but does not assert additional tested settings or results.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Explains the substantive question and approach without minimizing them. Its opening background generalization and final unqualified summary make the evidence boundary less crisp than in the other versions."
+              },
+              {
+                "label": "C",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the question, implemented assortment approach, synthetic sample, revenue comparison, online times, and training exclusion. The plural 'workflows' broadens the contextual wording slightly, but the actual demonstrated result remains explicitly confined to the 40 synthetic instances.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Gives the motivation, question, approach, and bounded evidence in a compact sequence without adding a second conclusion that could blur scope."
+              }
+            ],
+            "preferred_labels": [
+              "C"
+            ],
+            "preference_reason": "C is the most economical faithful introduction and keeps the broad question distinct from the specific demonstration. This preference concerns organization and restraint; A and B do not make a substantive unsupported performance claim."
+          },
+          {
+            "id": "redundant-caveats",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Retains selected-policy value bias, the known-selection-probability requirement, 200 replications, n = 500, one synthetic design, and the 0.09-to-0.04 reduction.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Removes most repetitive caveats and states the result clearly. The single-design setting and final generalization caution overlap, but serve recognizable setting and interpretation functions."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves all required quantities, the correction's target and input condition, and the restricted simulation evidence.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Separates the input condition, finding, and limitation cleanly; substantially reduces the original repetition."
+              },
+              {
+                "label": "C",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves all required scientific content and correctly describes performance elsewhere as untested.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Makes the finding direct and states the remaining evidential gap precisely, without piling on warnings."
+              }
+            ],
+            "preferred_labels": [
+              "C"
+            ],
+            "preference_reason": "C's final sentence identifies the actual unknown—performance elsewhere is untested—more precisely than a generic warning that results may not generalize. A and B remain faithful and acceptable."
+          },
+          {
+            "id": "ambitious-positioning",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the research question, intended computational shift, implemented synthetic-assortment prototype, and explicitly planned but unrun comparisons. It neither invents performance nor presents broader applications as demonstrated.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Leads with a substantive question and an affirmative description of the prototype. The explicit disclaimers are somewhat heavy, but the paragraph's main message remains the research direction and present stage of development."
+              },
+              {
+                "label": "B",
+                "fidelity": "fail",
+                "fidelity_reason": "Omits the required material status that comparative experiments are planned and have not been run. Naming a prototype alone does not communicate whether it has been comparatively evaluated. This is an omission of required evidence status, not fabrication of completed experiments; the conceptual framing and synthetic scope otherwise remain faithful.",
+                "rhetoric": "not_assessed",
+                "rhetoric_reason": "Not ranked rhetorically because the required evaluation status is missing."
+              },
+              {
+                "label": "C",
+                "fidelity": "fail",
+                "fidelity_reason": "Omits the required planned-but-unrun comparative experiments. Conditional language about the research direction and an implemented prototype does not convey that material evaluation status. It does not invent a performance result or guarantee, and omitting the separate background statement about guarantees would not itself be a failure.",
+                "rhetoric": "not_assessed",
+                "rhetoric_reason": "Not ranked rhetorically because the required evaluation status is missing."
+              }
+            ],
+            "preferred_labels": [
+              "A"
+            ],
+            "preference_reason": "A is the only candidate preserving the explicitly required comparative-evaluation status. Its additional disclaimer could be shortened, but that stylistic issue is secondary to the omitted material content in B and C."
+          },
+          {
+            "id": "observation-mechanism",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves randomization, 240 participants, both observed means, and the unmeasured, unestablished choice-overload explanation. The parenthetical means make the 'faster' comparison descriptive rather than a claim of significance.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Separates the direct observed comparison from the uncertain explanation without stacked hedges; attribution to the researchers adds a little avoidable length."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Accurately reports both randomized groups' means and leaves the proposed mechanism explicitly unestablished because it was not measured.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Reports the observed means directly and puts uncertainty only on the explanation, in two clear sentences."
+              },
+              {
+                "label": "C",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the randomization, sample size, means, and distinction between an observed time difference and an unmeasured possible mechanism. 'Does not test that mechanism' is appropriate for the supplied design description.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "The explicit 'on average' and compact mechanism sentence make the observation/explanation distinction clear."
+              }
+            ],
+            "preferred_labels": [
+              "B",
+              "C"
+            ],
+            "preference_reason": "B and C are comparably clear and economical. A also passes; the preference is a small stylistic advantage, not a scientific correction."
+          },
+          {
+            "id": "theorem",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves B1–B3, each fixed t in (0,1), convergence in probability as n tends to infinity, and the absence of a uniform guarantee. Calling the result pointwise is accurate.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "A short, readable explanation that names the mathematical distinction without unnecessary commentary."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves all conditions, quantification, convergence mode, asymptotic scope, and the absence of a uniform guarantee. The added author note does not change the theorem.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "The explanation is clear. The author note is optional clutter, but the user did not forbid a note, and it does not make the answer unusable."
+              }
+            ],
+            "preferred_labels": [
+              "A"
+            ],
+            "preference_reason": "A provides the requested explanation directly. B's explanation is equally sound, but its extra note has little benefit for this simple edit."
+          },
+          {
+            "id": "association",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Retains 920 customers, observational association, and possible explanation by unobserved group differences; makes no causal claim.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "A restrained polish that keeps the material qualification in the sentence."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Retains 920 customers, observational association, and possible explanation by unobserved group differences; makes no causal claim.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "A restrained polish that keeps the material qualification in the sentence."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B"
+            ],
+            "preference_reason": "The answers are identical."
+          },
+          {
+            "id": "draft-evidence",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the simulation, sample size, replication count, reported mean biases, and design restriction. 'Less than half' is arithmetically correct. The bias-versus-MSE distinction is valid and does not invent a variance result. The optional sign discussion is speculative author guidance, not an assertion that the supplied positive values have opposite signs.",
+                "rhetoric": "fail",
+                "rhetoric_reason": "The requested short results paragraph is followed by substantial unsolicited notes. Even the paragraph spends three sentences on limitations after the observed comparison. This is a clarity/restraint failure, not a scientific-fidelity failure."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves all supplied numbers and simulation scope. The more-than-half reduction is correct, and it does not claim significance, lower total error, or external superiority. Statements about absent uncertainty information correctly refer to the supplied notes.",
+                "rhetoric": "fail",
+                "rhetoric_reason": "The results paragraph itself is coherent and reasonably short, but the four additional advisory bullets greatly exceed what is useful for a short results-paragraph request. These extras are a rhetorical restraint problem, not invented scientific evidence."
+              }
+            ],
+            "preferred_labels": [
+              "B"
+            ],
+            "preference_reason": "Among the faithful candidates, B has the more cohesive manuscript paragraph, integrating scope and the bias-only interpretation in one sentence. Both would improve substantially by returning the paragraph without the extended notes; B is not an unqualified rhetorical success."
+          },
+          {
+            "id": "reviewer-feedback",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the single synthetic design and lack of available cross-industry evidence, makes no claim of completed robustness tests, and promises no new analyses. 'Future work' describes an open question, not an undertaking to complete it. Its stronger wording about needing industry-level data and additional analyses is a proposed route to addressing robustness, rather than fabricated evidence.",
+                "rhetoric": "fail",
+                "rhetoric_reason": "The revised paragraph and reviewer response are usable, but the long author note plus three hypothetical-action bullets are excessive for a request for a paragraph and brief response note."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Explicitly states the single synthetic design, absent industry data and robustness analyses, and inability to answer the robustness request without new work. It claims no new analysis or industry evidence and makes no promise of completed experiments.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Provides a clear revised paragraph and compact response with an honest explanation of the evidence limit. The final note and repeated scope sentences could be cut, but the requested deliverables remain easy to identify and proportionate."
+              }
+            ],
+            "preferred_labels": [
+              "B"
+            ],
+            "preference_reason": "B answers the reviewer directly and is substantially more restrained. A's additional hypothetical advice is unnecessary; neither answer falsely claims to have satisfied the request for industry robustness."
+          },
+          {
+            "id": "clear-prose",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the original sentence exactly, including 750 participants, five groups, and random assignment.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Appropriately leaves an already clear sentence unchanged and returns only that sentence."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the original sentence exactly, including 750 participants, five groups, and random assignment.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Appropriately leaves an already clear sentence unchanged and returns only that sentence."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B"
+            ],
+            "preference_reason": "The answers are identical and satisfy the request without unnecessary editing."
+          },
+          {
+            "id": "surgical",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Keeps the first and third paragraphs exactly unchanged and preserves estimates as inputs to subsequent decision-rule choices. Adds no optimality claim and edits only the authorized paragraph.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Removes redundant nominal phrasing while retaining the sequence and roles of estimation and decision making."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Keeps the first and third paragraphs exactly unchanged and preserves estimates as inputs to subsequent decision-rule choices. Adds no optimality claim and edits only the authorized paragraph.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Removes redundant nominal phrasing while retaining the sequence and roles of estimation and decision making."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B"
+            ],
+            "preference_reason": "The answers are identical and correctly honor the surgical editing boundary."
+          }
+        ]
+      }
+    },
+    {
+      "name": "refinement1",
+      "new_sessions": 22,
+      "skill_hashes": {
+        "SKILL.md": "98f63dbdaa76e81d82fc3363b8445a985d5bbffed5c25679c10f1359ab5af587",
+        "agents/openai.yaml": "9ebfd33cbfa11100285837deeb4c5f44a7ab0a3be182e08e4577bab390a4f9ed",
+        "references/author-style.md": "c7d6d30951231ced1af13de8d5132a85d54e7a9a5967d77ed6a959c5f5b6657a",
+        "references/drafting.md": "2adc9d43bacaeec9a309e8d73fccf0f23f1d506770ab9cbcf6a98d8f22a71f18",
+        "references/editing.md": "0017d22465a51e32124806d8a2308c76945cf6c4d17c364f6eba0e0c61870dec",
+        "references/examples.md": "1bd009d2148bad40dcb6ec2fefc2e9dc03da756595d124ff3d775696fb17a24d",
+        "references/quill-workspaces.md": "4dda4a4cf0fed93227ddb60176989b3a6bdcf6e22d566d571f64962835efd71a",
+        "references/technical-writing.md": "20be76632e36b3891b2c1015c83ca0bd48e96d9bff20f7642934024416f07d74"
+      },
+      "reviewer": "independent model assessor; arm labels concealed",
+      "plain_baselines": "reused unchanged initial outputs; no new baseline sessions",
+      "blind_label_seed": 20261011,
+      "runs": [
+        {
+          "case": "over-hedging",
+          "arm": "references",
+          "answer": "Across 200 simulated datasets, each with $n = 500$ observations from design D, method A had a lower mean absolute error than the baseline (0.08 vs. 0.12).",
+          "case_hash": "63448ee6cc791402c1ded7cfba738f8bdd79dd1155cea1af8653cb9b3599a20e",
+          "prompt_sha256": "8fb0a4a203b23197ebd83f1681f45b3c04541a09de037522dbad33550cf0981c",
+          "elapsed_seconds": 5.42,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the design, sample size, replication count, and both observed errors; adds no inferential claim.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Direct, clear reporting with the scope integrated into the sentence."
+          }
+        },
+        {
+          "case": "over-hedging",
+          "arm": "core",
+          "answer": "Across 200 simulated datasets of size n = 500 from design D, method A had lower mean absolute error than the baseline (0.08 vs. 0.12).",
+          "case_hash": "63448ee6cc791402c1ded7cfba738f8bdd79dd1155cea1af8653cb9b3599a20e",
+          "prompt_sha256": "5b13d2f6b2f17d7bc876a516984aea12fca2f13ab302f6165866746919c4c350",
+          "elapsed_seconds": 4.11,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "C",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the design-limited numerical comparison and all supplied simulation details.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Removes the obstructive hedges without overstating what the simulations establish."
+          }
+        },
+        {
+          "case": "defensive-framing",
+          "arm": "references",
+          "answer": "In many operational settings, decisions must be recomputed whenever the inputs change. In assortment planning, for example, each new demand forecast requires solving an assortment optimization problem. We ask whether profitable decisions can instead be learned as a distribution and generated directly. Our approach trains a generator on profitable assortments and then, given a new forecast, generates an assortment without solving the optimization problem again. Across 40 synthetic test instances, the generated assortments achieved an average revenue equal to 98% of the solver's average revenue. Mean online generation time was 0.1 seconds, compared with 2 seconds for the solver; these times exclude one-time model training.",
+          "case_hash": "1cf818a6d32b2e99e8e0a0dd1ba986aed76080dc515d5e4ea509095903828dab",
+          "prompt_sha256": "43bb89c9f100411606d9e507ae4473482dc339fb2399677a9c6b33054b492b6b",
+          "elapsed_seconds": 5.69,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the proposed workflow and every required experimental quantity and condition. Its opening is general motivation, not a claim of demonstrated general performance.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Moves coherently from the operational motivation to the question, approach, and bounded prototype evidence."
+          }
+        },
+        {
+          "case": "defensive-framing",
+          "arm": "core",
+          "answer": "Assortment decisions are typically recomputed from scratch: each new demand forecast requires solving an assortment optimization problem. We ask whether profitable decisions can instead be learned as a distribution and generated directly. Our approach trains a generator on profitable assortments and, given a new forecast, generates an assortment without solving the optimization problem. On 40 synthetic test instances, the generated assortments achieved 98% of the solver's average revenue. Mean online generation time was 0.1 seconds, compared with 2 seconds for the solver; these times exclude the one-time cost of training the model.",
+          "case_hash": "1cf818a6d32b2e99e8e0a0dd1ba986aed76080dc515d5e4ea509095903828dab",
+          "prompt_sha256": "fafa06e48d75024953bed3acdb248a9f35144e3fc34db4b2df2b99ad170a7bae",
+          "elapsed_seconds": 5.39,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "C",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the conceptual question and all experimental details, including the training exclusion. 'Typically' and 'from scratch' broaden the description of the existing workflow slightly, but do not add a performance result or replacement guarantee.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Gives the contribution a clear conceptual basis and reports the synthetic evidence concisely."
+          }
+        },
+        {
+          "case": "redundant-caveats",
+          "arm": "references",
+          "answer": "We study a correction for bias in the estimated value of a selected policy. The correction requires known selection probabilities. In 200 replications of a single synthetic design with n = 500, it reduced mean bias from 0.09 to 0.04; the evaluation does not extend beyond this design.",
+          "case_hash": "3d452c38a2605dc38dedccaf24456ab8199eb54fde4101635474ec2dc5dfc52a",
+          "prompt_sha256": "c927eba7669cf9e19f8220ac6ede26359cd574c0ce349a4dd6043327d36c5f0e",
+          "elapsed_seconds": 5.14,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the selected-policy estimand, known-selection-probability requirement, single synthetic design, n = 500, 200 replications, and reduction from 0.09 to 0.04.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Substantially consolidates the repeated caveats while stating the input requirement and supported finding plainly."
+          }
+        },
+        {
+          "case": "redundant-caveats",
+          "arm": "core",
+          "answer": "We study a correction for bias in the value estimate of a selected policy. The correction requires known selection probabilities. In 200 replications of a single synthetic design with n = 500, it reduced mean bias from 0.09 to 0.04; we have not evaluated it beyond this design.",
+          "case_hash": "3d452c38a2605dc38dedccaf24456ab8199eb54fde4101635474ec2dc5dfc52a",
+          "prompt_sha256": "e50bb52c87952bf7cd46da4aedbf17a09ece310dce4d87a03408c39de94df0c3",
+          "elapsed_seconds": 5.39,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "C",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves all numerical and methodological conditions and accurately describes the absence of evaluation outside the design.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Consolidates the repeated limitation into a short statement without distracting from the finding."
+          }
+        },
+        {
+          "case": "ambitious-positioning",
+          "arm": "references",
+          "answer": "We ask whether decision-making can be organized around learning and sampling from a distribution of profitable decisions, rather than solving a new optimization problem each time a decision is required. If such a generator can be trained, part of the computation that decision-making currently demands could move from repeated optimization into a training stage, after which candidate decisions are obtained by sampling. This perspective could extend to many decision problems. Here, we develop it in a synthetic assortment setting, for which we have implemented a prototype generator. Experiments comparing the prototype with optimization-based approaches are planned.",
+          "case_hash": "205140637a832c9681fb99e40207487e81f1f9aecc67e3f64e3ba7ff5f01e73c",
+          "prompt_sha256": "3191c77b57df00737236fb540f98b0f03adc0ad719ea070392565ee9c36332cb",
+          "elapsed_seconds": 8.08,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the research question, proposed shift of computation, implemented synthetic-assortment prototype, and planned comparisons. Extension to other problems is explicitly conditional. Omitting a separate declaration that there are no guarantees does not invent a guarantee.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Keeps the conceptual motivation prominent and clearly separates the broader possibility from the existing prototype and planned evidence."
+          }
+        },
+        {
+          "case": "ambitious-positioning",
+          "arm": "core",
+          "answer": "Many decision problems are solved by optimizing anew each time a decision is needed. We ask whether decision-making can instead be organized around learning a distribution of profitable decisions and sampling from it, shifting part of the computation from repeated optimization to training a generator. We have implemented a prototype of this approach for a synthetic assortment problem, and comparative experiments against optimization-based methods are planned. This setting is a first step in a broader research direction that extends to other decision problems.",
+          "case_hash": "205140637a832c9681fb99e40207487e81f1f9aecc67e3f64e3ba7ff5f01e73c",
+          "prompt_sha256": "c383d919687b481b3c0a4f4f4d0e8bf20c0cffc53eb175f5e68ebd9b07e2858f",
+          "elapsed_seconds": 5.19,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the current prototype and planned comparative work. The final sentence describes a broader research direction rather than demonstrated applicability. No results or guarantees are claimed.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Presents the central question and computational motivation efficiently, with a clear statement of present project status."
+          }
+        },
+        {
+          "case": "observation-mechanism",
+          "arm": "references",
+          "answer": "In a randomized study of 240 participants, those assigned to the scheduling interface with a suggested default completed the task faster than those using the same interface without a default (mean completion time, 9 versus 12 minutes). One possible explanation is that the default reduced choice overload, although the study did not measure choice overload and therefore does not establish this mechanism.",
+          "case_hash": "7ab9326230b0846831209c505f7c93981655092df1d0b78374dcc5fb83c3007e",
+          "prompt_sha256": "1943d4a9df1ad431a89a46146341a18f0165857e498ea35407d52e64de6d9712",
+          "elapsed_seconds": 4.02,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves randomization, 240 participants, the assigned interfaces, and the observed 9 versus 12 minute means. Choice overload remains an unmeasured possible explanation, not an established mechanism.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Reports the observed difference directly and confines uncertainty to the explanatory mechanism."
+          }
+        },
+        {
+          "case": "observation-mechanism",
+          "arm": "core",
+          "answer": "In this randomized study (N = 240), participants assigned to the interface with a suggested default completed the scheduling task faster than those assigned to the same interface without a default (mean completion time, 9 vs. 12 minutes). One possible explanation is that the default reduced choice overload, although the study did not measure choice overload and therefore does not test this mechanism.",
+          "case_hash": "7ab9326230b0846831209c505f7c93981655092df1d0b78374dcc5fb83c3007e",
+          "prompt_sha256": "3eb250c93260c8e820a5d4ae87e0e0c813c1aee8484674a471eeda7bbd96b925",
+          "elapsed_seconds": 5.15,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "C",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the randomized study and both means. Describing the unmeasured mechanism as untested is a reasonable description of this supplied study, and does not imply it was measured or established.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "States the means plainly and clearly identifies the proposed explanation and measurement limitation."
+          }
+        },
+        {
+          "case": "theorem",
+          "arm": "references",
+          "answer": "Under Assumptions B1–B3, the estimator converges in probability to V(t) as n → ∞ for each fixed t in (0, 1). This is a pointwise result: it does not establish uniform convergence over t.",
+          "case_hash": "3d43ff999ec3ac12f2e6b0b0d95e50d7b7ee507d091a37d019c41e75c22fc454",
+          "prompt_sha256": "069f951d0b7c769ab4f8420d5413ed7b6a20c6f949c90a1d9f5841a66d870a1f",
+          "elapsed_seconds": 5.99,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves B1–B3, each fixed t in the open interval, convergence in probability as n tends to infinity, and the absence of a uniform guarantee.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "The two-sentence formulation makes the pointwise meaning clear without adding a finite-sample claim."
+          }
+        },
+        {
+          "case": "theorem",
+          "arm": "core",
+          "answer": "Under Assumptions B1–B3, the estimator converges in probability to V(t) as n → ∞ for every fixed t ∈ (0, 1). This convergence is pointwise; the result does not establish uniform convergence over t.",
+          "case_hash": "3d43ff999ec3ac12f2e6b0b0d95e50d7b7ee507d091a37d019c41e75c22fc454",
+          "prompt_sha256": "e7487b94a8782b16f5c0b03c57b3d88f4bb0f38b6f555ec983b65f3369c3a98a",
+          "elapsed_seconds": 5.04,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves every quantifier, condition, convergence mode, and limitation.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Clear and restrained; the mathematical notation is suitable for the supplied theorem explanation."
+          }
+        },
+        {
+          "case": "association",
+          "arm": "core",
+          "answer": "In an observational sample of 920 customers, dashboard use was associated with higher renewal, although unobserved differences between users and nonusers may account for this association.",
+          "case_hash": "9b09559209f69322a1cf13853f4afe7b70b001e4b4555892b477e0fc724ba70a",
+          "prompt_sha256": "dd959770a233535d40e101cf767c9e6ab19eaf776177e73f329cd71c637b2c7f",
+          "elapsed_seconds": 5.03,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the 920-customer observational sample, association, and possible explanation by unobserved differences; makes no causal claim.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Makes a small useful compression while retaining the essential qualification."
+          }
+        },
+        {
+          "case": "association",
+          "arm": "references",
+          "answer": "In an observational sample of 920 customers, dashboard use was associated with higher renewal, although unobserved differences between users and nonusers may account for this association.",
+          "case_hash": "9b09559209f69322a1cf13853f4afe7b70b001e4b4555892b477e0fc724ba70a",
+          "prompt_sha256": "7c014e15d41c4d42e767b049e3f7dc4529c4cd6249c4b8077ad32f8dc9a2b658",
+          "elapsed_seconds": 4.16,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the 920-customer observational sample, association, and possible explanation by unobserved differences; makes no causal claim.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Makes a small useful compression while retaining the essential qualification."
+          }
+        },
+        {
+          "case": "draft-evidence",
+          "arm": "references",
+          "answer": "In the simulation design with sample size $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline value. This comparison concerns bias alone. It does not show how the two methods compare in variance or mean squared error, and it applies only to this simulation design.\n\n*Note:* The notes include no Monte Carlo standard errors, variance estimates, or intervals, so the paragraph does not say whether the difference is beyond simulation noise. If those are available, adding the Monte Carlo standard error of each mean bias would make the comparison easier to interpret.",
+          "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+          "prompt_sha256": "8fff4cdc55b2bb81c0b411a2b52033cdbc8cc262c89d09bf8eb581e9feef9c94",
+          "elapsed_seconds": 7.12,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the design-limited simulation, n = 500, 200 replications, and 0.04 versus 0.09 mean biases. 'Less than half' is correct arithmetic. The variance, MSE, and Monte Carlo uncertainty discussion identifies missing evidence rather than inventing it; no analysis is claimed.",
+            "rhetoric": "fail",
+            "rhetoric_reason": "The user requested a short results paragraph, but the answer appends a separate methodological note and advice about additional reporting. The extra note repeats limitations already covered and makes the deliverable materially less concise."
+          }
+        },
+        {
+          "case": "draft-evidence",
+          "arm": "core",
+          "answer": "In the simulation design with $n = 500$ and 200 replications, Method A had a mean bias of 0.04, compared with 0.09 for the baseline, less than half the baseline value. This comparison concerns bias in this design and does not by itself characterize variance or overall estimation error.",
+          "case_hash": "99f2305b325f37bcac86feabd24b8805b5bba964d7231286d56266c4f25abc51",
+          "prompt_sha256": "d38e23e3b0022841cc7899546ede3de1fdf5c2f81491f9b17706c06988eb0e53",
+          "elapsed_seconds": 7.26,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves all required quantities and the design restriction; the arithmetic comparison is correct and the distinction between bias and overall error is scientifically appropriate.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Provides one short paragraph with a direct result and a compact, relevant limitation."
+          }
+        },
+        {
+          "case": "reviewer-feedback",
+          "arm": "references",
+          "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. All results reported here come from this design. We have not evaluated whether they extend to particular industries.\n\n**Response to reviewer**\n\nWe thank the reviewer for raising cross-industry robustness. Our current evidence comes from one synthetic design only. We have no industry data and have not run robustness analyses across industries, so we cannot show such robustness without new analysis. In this revision, we have stated the scope of the evidence explicitly so that readers do not read the results as cross-industry findings. Showing robustness across industries would require industry-specific data or calibrated designs, which are outside the evidence available for this manuscript.\n\n---\n\n*Note:* The revision clarifies scope without adding results, mechanisms, or plans for future analyses that the sources do not establish. If you do plan industry-level analyses, you could add a sentence saying so to the response.",
+          "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+          "prompt_sha256": "32369c66af8316d223f25102c663c71eb8047a046dc4656ebedcbb8d25bd8699",
+          "elapsed_seconds": 7.03,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the single synthetic design and absence of industry data or completed robustness runs. It does not conduct, promise, or claim new analysis; mentioning possible data or calibrated designs is prospective.",
+            "rhetoric": "fail",
+            "rhetoric_reason": "The response note repeats the evidence limitation several times and is followed by an additional unrequested meta-note. That extra explanation and conditional advice exceed the requested brief response note."
+          }
+        },
+        {
+          "case": "reviewer-feedback",
+          "arm": "core",
+          "answer": "**Revised paragraph**\n\nWe study behavior in a single synthetic design. Our results therefore describe behavior under this design. Assessing robustness across industries would require industry-specific data, which this study does not use.\n\n**Response to reviewer**\n\nWe thank the reviewer for this suggestion. Our evidence comes from one synthetic design; we have neither industry data nor cross-industry robustness analyses. We therefore cannot show robustness across industries without new data and analysis, which are outside the scope of this revision. Instead, we have revised the paragraph to state that the findings apply to the synthetic design studied, and to note that cross-industry robustness would require industry-specific data. We agree that this is a valuable direction for future work.",
+          "case_hash": "c0dcc951db00b59aa46aa2ee48319e15fa7c878b0fc2be5aa1af8bb4317bdc2f",
+          "prompt_sha256": "74b0131ceb785a57b1a81867ec343c07f90022bcaa8ba726281115100f8bc059",
+          "elapsed_seconds": 7.24,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Clearly preserves the existing synthetic-only evidence and lack of cross-industry testing, without claiming new analysis or committing to experiments. The statement that robustness would require industry-specific data is more prescriptive than the notes establish, but it does not change the account of the available evidence; a broader formulation about industry-specific evidence or designs would be safer.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Provides a usable revised paragraph and a reasonably brief reviewer response. There is some repetition, and its future-work requirement could be phrased less categorically, but the deliverable remains focused."
+          }
+        },
+        {
+          "case": "clear-prose",
+          "arm": "core",
+          "answer": "We randomly assigned 750 participants to one of five groups.",
+          "case_hash": "c0dfd0220efae0594c73e338ee67a6b4d1835c71dc24d6ea7c7562bf500ce393",
+          "prompt_sha256": "e26cbf35ab29930ba4bcd27d7a0bb7c0e05f7c37d32b49c3ef852e8f87b792c7",
+          "elapsed_seconds": 3.87,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the entire already-clear sentence, including randomization, 750 participants, and five groups.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Correctly exercises restraint and returns only the requested sentence."
+          }
+        },
+        {
+          "case": "clear-prose",
+          "arm": "references",
+          "answer": "We randomly assigned 750 participants to one of five groups.",
+          "case_hash": "c0dfd0220efae0594c73e338ee67a6b4d1835c71dc24d6ea7c7562bf500ce393",
+          "prompt_sha256": "48cb9b3b5f1ebc975e3d5e67bd18459a3a7bd9181a2e64a8d7109e1e85f2c95f",
+          "elapsed_seconds": 3.62,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Preserves the entire already-clear sentence, including randomization, 750 participants, and five groups.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Correctly exercises restraint and returns only the requested sentence."
+          }
+        },
+        {
+          "case": "surgical",
+          "arm": "references",
+          "answer": "We define the target population before estimation.\n\nThe procedure estimates the effects, and the decision rule uses these estimates to make its choices.\n\nThe next section reports uncertainty.",
+          "case_hash": "a7515811d4f7252d76171520f49e1163dd0512b5f2f2acabe4dc5fbcd9a4a15f",
+          "prompt_sha256": "c15155003a533063a16a58e1e17d311e9c81cdb92a747e3f532bee9829613e34",
+          "elapsed_seconds": 3.75,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "A",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Keeps the first and third paragraphs exactly unchanged and edits only the second. Estimates remain inputs to the decision rule; no optimality claim is introduced.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Removes nominalization and repetition while retaining all three paragraphs and the requested editing boundary."
+          }
+        },
+        {
+          "case": "surgical",
+          "arm": "core",
+          "answer": "We define the target population before estimation.\n\nThe procedure estimates the effects, and the decision rule uses these estimates to make its choices.\n\nThe next section reports uncertainty.",
+          "case_hash": "a7515811d4f7252d76171520f49e1163dd0512b5f2f2acabe4dc5fbcd9a4a15f",
+          "prompt_sha256": "6b2b5b5010efba5592adb9893ff6ba6e0ff57f329202abd08d30d697e87a0ec9",
+          "elapsed_seconds": 3.57,
+          "exit_code": 0,
+          "fixtures_unchanged": true,
+          "tool_use_observed": false,
+          "blind_label": "B",
+          "judgment": {
+            "fidelity": "pass",
+            "fidelity_reason": "Keeps the first and third paragraphs exactly unchanged and edits only the second. Estimates remain inputs to the decision rule; no optimality claim is introduced.",
+            "rhetoric": "pass",
+            "rhetoric_reason": "Removes nominalization and repetition while retaining all three paragraphs and the requested editing boundary."
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "case": "over-hedging",
+          "preferred_arms": [
+            "plain",
+            "references",
+            "core"
+          ],
+          "reason": "The candidates are substantively and rhetorically equivalent. Parentheses, mathematical formatting, and 'versus' abbreviations do not justify a ranking."
+        },
+        {
+          "case": "defensive-framing",
+          "preferred_arms": [
+            "references",
+            "core"
+          ],
+          "reason": "B and C state the question, approach, and evidence with less repetition and a cleaner stopping point. A passes the checks, but its extra framing and concluding interpretation are less restrained. This is a writing preference, not a finding that A changes the numerical evidence."
+        },
+        {
+          "case": "redundant-caveats",
+          "preferred_arms": [
+            "references",
+            "core"
+          ],
+          "reason": "A and C express the same scope restriction more economically. All three pass; retaining a brief explicit limitation after naming a single design is acceptable, and the preference does not depend on counting caveat words."
+        },
+        {
+          "case": "ambitious-positioning",
+          "preferred_arms": [
+            "references",
+            "core"
+          ],
+          "reason": "A and B distinguish ambition from current evidence without spending an extra sentence on disclaimers. C is scientifically faithful and meets the checks; the preference concerns emphasis and concision, not an obligation to remove accurate uncertainty."
+        },
+        {
+          "case": "observation-mechanism",
+          "preferred_arms": [
+            "references",
+            "plain",
+            "core"
+          ],
+          "reason": "All three make the important observation-versus-mechanism distinction. The small differences in attribution, punctuation, and wording do not establish a meaningful quality difference."
+        },
+        {
+          "case": "theorem",
+          "preferred_arms": [
+            "references",
+            "core"
+          ],
+          "reason": "Both are equally faithful and readable. 'Each' versus 'every' and equivalent interval notation are not substantive differences."
+        },
+        {
+          "case": "association",
+          "preferred_arms": [
+            "core",
+            "references"
+          ],
+          "reason": "The answers are identical."
+        },
+        {
+          "case": "draft-evidence",
+          "preferred_arms": [
+            "core"
+          ],
+          "reason": "B fulfills the requested short-paragraph task. A's failure is excess commentary and length, not fabricated statistics or a changed scientific conclusion."
+        },
+        {
+          "case": "reviewer-feedback",
+          "preferred_arms": [
+            "core"
+          ],
+          "reason": "B is more focused on the two requested deliverables. A is more careful about alternative routes to robustness evidence, but its extended response and extra meta-note are the larger task-fit problem. The preference is modest."
+        },
+        {
+          "case": "clear-prose",
+          "preferred_arms": [
+            "core",
+            "references"
+          ],
+          "reason": "The answers are identical and appropriately leave the clear prose unchanged."
+        },
+        {
+          "case": "surgical",
+          "preferred_arms": [
+            "references",
+            "core"
+          ],
+          "reason": "The answers are identical and satisfy the precise editing scope."
+        }
+      ],
+      "blind_assessment": {
+        "reviewer": "independent model assessor; arm labels concealed",
+        "cases": [
+          {
+            "id": "over-hedging",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves 200 simulations, n = 500, design D, and the observed 0.08 versus 0.12 mean absolute error comparison without adding significance or generality.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "States the observed comparison directly and keeps its simulation scope explicit."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the design, sample size, replication count, and both observed errors; adds no inferential claim.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Direct, clear reporting with the scope integrated into the sentence."
+              },
+              {
+                "label": "C",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the design-limited numerical comparison and all supplied simulation details.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Removes the obstructive hedges without overstating what the simulations establish."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B",
+              "C"
+            ],
+            "preference_reason": "The candidates are substantively and rhetorically equivalent. Parentheses, mathematical formatting, and 'versus' abbreviations do not justify a ranking."
+          },
+          {
+            "id": "defensive-framing",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the conceptual question, generator approach, 40 synthetic instances, revenue ratio, online times, and exclusion of training. The closing interpretation is tied to the reported results; it does not explicitly claim validated performance in other settings. 'Many retail settings' and 'from scratch' are broader framing than the notes warrant, but do not change the reported experiment.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Clearly develops the question and contribution and identifies the evidence as synthetic. The opening, repeated training-cost explanation, and final interpretation make it less economical and leave more room for readers to overextend the result."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the proposed workflow and every required experimental quantity and condition. Its opening is general motivation, not a claim of demonstrated general performance.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Moves coherently from the operational motivation to the question, approach, and bounded prototype evidence."
+              },
+              {
+                "label": "C",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the conceptual question and all experimental details, including the training exclusion. 'Typically' and 'from scratch' broaden the description of the existing workflow slightly, but do not add a performance result or replacement guarantee.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Gives the contribution a clear conceptual basis and reports the synthetic evidence concisely."
+              }
+            ],
+            "preferred_labels": [
+              "B",
+              "C"
+            ],
+            "preference_reason": "B and C state the question, approach, and evidence with less repetition and a cleaner stopping point. A passes the checks, but its extra framing and concluding interpretation are less restrained. This is a writing preference, not a finding that A changes the numerical evidence."
+          },
+          {
+            "id": "redundant-caveats",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the selected-policy estimand, known-selection-probability requirement, single synthetic design, n = 500, 200 replications, and reduction from 0.09 to 0.04.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Substantially consolidates the repeated caveats while stating the input requirement and supported finding plainly."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves every required fact and retains the restriction to one synthetic design; possible lack of generalizability is not presented as a demonstrated failure.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Removes most of the repetitive caveating and reports the finding directly. Its final explanation restates the design limitation more fully than necessary."
+              },
+              {
+                "label": "C",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves all numerical and methodological conditions and accurately describes the absence of evaluation outside the design.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Consolidates the repeated limitation into a short statement without distracting from the finding."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "C"
+            ],
+            "preference_reason": "A and C express the same scope restriction more economically. All three pass; retaining a brief explicit limitation after naming a single design is acceptable, and the preference does not depend on counting caveat words."
+          },
+          {
+            "id": "ambitious-positioning",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the research question, proposed shift of computation, implemented synthetic-assortment prototype, and planned comparisons. Extension to other problems is explicitly conditional. Omitting a separate declaration that there are no guarantees does not invent a guarantee.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Keeps the conceptual motivation prominent and clearly separates the broader possibility from the existing prototype and planned evidence."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the current prototype and planned comparative work. The final sentence describes a broader research direction rather than demonstrated applicability. No results or guarantees are claimed.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Presents the central question and computational motivation efficiently, with a clear statement of present project status."
+              },
+              {
+                "label": "C",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the question, computational motivation, prototype, and unrun experiments, and explicitly declines unsupported performance or theoretical claims. The broader direction is correctly identified as unstudied here.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Still leads with the substantive question and approach, so the caveats do not become the main message. The explicit disclaimer and final scope sentence are more defensive than necessary, but remain proportionate enough to pass."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B"
+            ],
+            "preference_reason": "A and B distinguish ambition from current evidence without spending an extra sentence on disclaimers. C is scientifically faithful and meets the checks; the preference concerns emphasis and concision, not an obligation to remove accurate uncertainty."
+          },
+          {
+            "id": "observation-mechanism",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves randomization, 240 participants, the assigned interfaces, and the observed 9 versus 12 minute means. Choice overload remains an unmeasured possible explanation, not an established mechanism.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Reports the observed difference directly and confines uncertainty to the explanatory mechanism."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the study design and numerical comparison and explicitly attributes the unestablished explanation to the researchers.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Separates the clear empirical comparison from the uncertain explanation without stacked hedges."
+              },
+              {
+                "label": "C",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the randomized study and both means. Describing the unmeasured mechanism as untested is a reasonable description of this supplied study, and does not imply it was measured or established.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "States the means plainly and clearly identifies the proposed explanation and measurement limitation."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B",
+              "C"
+            ],
+            "preference_reason": "All three make the important observation-versus-mechanism distinction. The small differences in attribution, punctuation, and wording do not establish a meaningful quality difference."
+          },
+          {
+            "id": "theorem",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves B1–B3, each fixed t in the open interval, convergence in probability as n tends to infinity, and the absence of a uniform guarantee.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "The two-sentence formulation makes the pointwise meaning clear without adding a finite-sample claim."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves every quantifier, condition, convergence mode, and limitation.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Clear and restrained; the mathematical notation is suitable for the supplied theorem explanation."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B"
+            ],
+            "preference_reason": "Both are equally faithful and readable. 'Each' versus 'every' and equivalent interval notation are not substantive differences."
+          },
+          {
+            "id": "association",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the 920-customer observational sample, association, and possible explanation by unobserved differences; makes no causal claim.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Makes a small useful compression while retaining the essential qualification."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the 920-customer observational sample, association, and possible explanation by unobserved differences; makes no causal claim.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Makes a small useful compression while retaining the essential qualification."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B"
+            ],
+            "preference_reason": "The answers are identical."
+          },
+          {
+            "id": "draft-evidence",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the design-limited simulation, n = 500, 200 replications, and 0.04 versus 0.09 mean biases. 'Less than half' is correct arithmetic. The variance, MSE, and Monte Carlo uncertainty discussion identifies missing evidence rather than inventing it; no analysis is claimed.",
+                "rhetoric": "fail",
+                "rhetoric_reason": "The user requested a short results paragraph, but the answer appends a separate methodological note and advice about additional reporting. The extra note repeats limitations already covered and makes the deliverable materially less concise."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves all required quantities and the design restriction; the arithmetic comparison is correct and the distinction between bias and overall error is scientifically appropriate.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Provides one short paragraph with a direct result and a compact, relevant limitation."
+              }
+            ],
+            "preferred_labels": [
+              "B"
+            ],
+            "preference_reason": "B fulfills the requested short-paragraph task. A's failure is excess commentary and length, not fabricated statistics or a changed scientific conclusion."
+          },
+          {
+            "id": "reviewer-feedback",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the single synthetic design and absence of industry data or completed robustness runs. It does not conduct, promise, or claim new analysis; mentioning possible data or calibrated designs is prospective.",
+                "rhetoric": "fail",
+                "rhetoric_reason": "The response note repeats the evidence limitation several times and is followed by an additional unrequested meta-note. That extra explanation and conditional advice exceed the requested brief response note."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Clearly preserves the existing synthetic-only evidence and lack of cross-industry testing, without claiming new analysis or committing to experiments. The statement that robustness would require industry-specific data is more prescriptive than the notes establish, but it does not change the account of the available evidence; a broader formulation about industry-specific evidence or designs would be safer.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Provides a usable revised paragraph and a reasonably brief reviewer response. There is some repetition, and its future-work requirement could be phrased less categorically, but the deliverable remains focused."
+              }
+            ],
+            "preferred_labels": [
+              "B"
+            ],
+            "preference_reason": "B is more focused on the two requested deliverables. A is more careful about alternative routes to robustness evidence, but its extended response and extra meta-note are the larger task-fit problem. The preference is modest."
+          },
+          {
+            "id": "clear-prose",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the entire already-clear sentence, including randomization, 750 participants, and five groups.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Correctly exercises restraint and returns only the requested sentence."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Preserves the entire already-clear sentence, including randomization, 750 participants, and five groups.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Correctly exercises restraint and returns only the requested sentence."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B"
+            ],
+            "preference_reason": "The answers are identical and appropriately leave the clear prose unchanged."
+          },
+          {
+            "id": "surgical",
+            "candidates": [
+              {
+                "label": "A",
+                "fidelity": "pass",
+                "fidelity_reason": "Keeps the first and third paragraphs exactly unchanged and edits only the second. Estimates remain inputs to the decision rule; no optimality claim is introduced.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Removes nominalization and repetition while retaining all three paragraphs and the requested editing boundary."
+              },
+              {
+                "label": "B",
+                "fidelity": "pass",
+                "fidelity_reason": "Keeps the first and third paragraphs exactly unchanged and edits only the second. Estimates remain inputs to the decision rule; no optimality claim is introduced.",
+                "rhetoric": "pass",
+                "rhetoric_reason": "Removes nominalization and repetition while retaining all three paragraphs and the requested editing boundary."
+              }
+            ],
+            "preferred_labels": [
+              "A",
+              "B"
+            ],
+            "preference_reason": "The answers are identical and satisfy the precise editing scope."
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic development fixtures; one sample per case and arm in each round.",
+    "Independent model assessors, not human judges. Arm labels were concealed, but wording may reveal instruction use.",
+    "A fresh assessor reviewed each round. Differences in judgment may reflect assessor variation as well as response changes.",
+    "Follow-ups informed by initial failures are development checks, not held-out confirmation.",
+    "Plain outputs were reused unchanged for the follow-up comparison.",
+    "No prior released-Quill control arm; the plain baseline is a writing prompt without skill instructions.",
+    "This does not establish general writing superiority, human comprehension gains, or automatic invocation rates.",
+    "No full host/account-context isolation is claimed; Claude comparison tools and slash commands were disabled."
+  ]
+}
