@@ -1,0 +1,199 @@
+{
+ "date": "2026-10-13",
+ "kind": "development smoke evaluations, assistant-inspected; not author preference measurements",
+ "notes": [
+  "All eleven cases, examples arm, Claude host, after memory was simplified to an editable profile.md and examples.md. One sample per case; none discarded.",
+  "Stated preferences entered the profile at once with their scope and exceptions (explicit-preference, changed-audience, corrected-preference, effective-prose, coauthor-conflict). The corrected preference was split into an introductions lesson and a methods lesson.",
+  "One-off instructions, an unattributed edit, a single declared edit that corrected a number, and a result correction produced no lessons; the edits were logged only. Two exposition edits in independent passages produced a lesson marked (seen 2x).",
+  "Every application output preserved the source findings and followed the applicable lessons; the managerial lesson was not applied to a mathematical methods passage. No session asked a question or required setup.",
+  "The effective-prose output appended \"The passage needed no corrections.\" after the unchanged text, a minor unrequested comment.",
+  "Training returns the profile as JSON to the harness, so the one-line notice of a profile change and the agent-run changes/baseline loop are not exercised."
+ ],
+ "samples": [
+  {
+   "sample": "claude-examples-changed-audience.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "changed-audience",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n\n## Executive summaries\n- For managers, explain the decision consequence before the mathematical details. Does not apply to proofs or technical methods sections. (stated)\n",
+    "examples": "## 2026-10-13 · conversation · executive summaries\nAuthor (stated): In executive summaries for managers, explain the decision consequence before mathematical details. This preference does not apply to proofs or technical methods sections.\nLesson: in executive summaries for managers, explain the decision consequence before the mathematical details; not for proofs or technical methods sections (stated)\n"
+   },
+   "application_text": "For every $n \\geq 2$, assume that the variables are independent and have finite variance. Under these assumptions, the estimator is unbiased.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-coauthor-conflict.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "coauthor-conflict",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: unknown\nauthor_profile:\n---\n# Writing profile\n\n## Results\n- Report the estimate before its interpretation. (stated)\n",
+    "examples": "## 2026-10-13 · conversation · results\nAuthor (Ada, lead author): In results sections, report the estimate before its interpretation.\nLesson: report the estimate before its interpretation (stated)\nNote: Coauthor Bo stated the opposite preference (interpretation first, number afterwards) in the same draft. Ada has not adopted it and no shared style is agreed, so it is a collaborator's input and is not learned into this profile. Because a coauthor also edits the draft, edits set to unknown.\n"
+   },
+   "application_text": "The program increased monthly savings by $38 (standard error 9), about one-fifth of the average monthly balance.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-corrected-preference.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "corrected-preference",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n\n## Introductions\n- Give the intuition before the notation. (stated)\n\n## Methods\n- Define the object first, then explain its interpretation. (stated)\n",
+    "examples": "## 2026-10-13 · conversation · exposition\nAuthor (stated): I generally like intuition before notation.\nAuthor (stated, correction): Restrict that preference to introductions. In methods sections, define the object first, then explain its interpretation.\nLesson: introductions: intuition before notation (stated); methods: define the object first, then explain its interpretation (stated). The corrected scope replaces the earlier general preference.\n"
+   },
+   "application_text": "For each unit $i$, let $w_i$ denote the probability that unit $i$ receives treatment. These probabilities describe the randomization design and are known before any outcomes are measured.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-declared-revision.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "declared-revision",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n",
+    "examples": "## 2026-10-13 · paper.tex · results\nQuill: We now turn to the main result. The treatment raised completion by 4 percentage points.\nAuthor: Completion rose by 6 percentage points under treatment.\nNote: The 4→6 change corrects a figure from an outdated specification (analysis log). This is a substantive correction and is not learned as style.\nLesson: none yet (single edit, logged only). Possible style signals: dropped the transitional signpost before the result, and led with the outcome rather than the treatment as subject.\n"
+   },
+   "application_text": "Retention increased by 3 percentage points in the treatment group, and this estimate is robust to excluding the first cohort.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-effective-prose.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "effective-prose",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n\n## Copyediting\n- In a copyedit, preserve effective sentences; do not rewrite clear prose merely to make it sound different. (stated)\n",
+    "examples": "## 2026-10-13 · conversation · copyediting\nAuthor (stated): When I request a copyedit, preserve effective sentences. Do not rewrite clear prose simply to make it sound different.\nLesson: in a copyedit, preserve effective sentences; do not rewrite clear prose merely to make it sound different (stated)\n"
+   },
+   "application_text": "We randomly assigned 240 participants to two groups. Both groups completed the same task. Only the treatment group received feedback.\n\nThe passage needed no corrections.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-explicit-preference.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "explicit-preference",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n\n## Introduction\n- For economists, open with the substantive decision problem before introducing the method; keep technical details when the reader needs them. (stated)\n",
+    "examples": "## 2026-10-13 · conversation · introduction\nAuthor (stated): In introductions for economists, I prefer starting with the substantive decision problem before introducing our method. Keep technical details when needed.\nLesson: for economists, open introductions with the substantive decision problem before the method; retain needed technical detail (stated)\n"
+   },
+   "application_text": "A hospital must decide how much capacity to reserve before it knows how many patients will need care. Both kinds of error are costly. If the hospital underestimates demand, care is delayed; if it overestimates demand, reserved capacity sits idle. Choosing a reserve level that balances these costs requires knowing how demand is distributed, not only its typical level. We propose an estimator of the demand distribution that uses repeated daily measurements. An evaluation of the estimator is planned but not yet complete.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-local-instruction.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "local-instruction",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n",
+    "examples": "## 2026-10-13 · (pasted paragraph) · exposition\nQuill: The parameter is theta. It captures the common component across repeated measurements.\nAuthor: Repeated measurements share a common component. We denote it by theta.\nLesson: none; one-off instruction for this paragraph only (intuition before the equation); the author said not to treat it as a general preference\n"
+   },
+   "application_text": "Let q denote the probability of treatment. The design fixes q before outcomes are observed.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-repeated-pattern.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "repeated-pattern",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n\n## General\n- Explain the problem or enabling idea that motivates a method before naming the method. (seen 2×)\n",
+    "examples": "## 2026-10-13 · main.tex · introduction · exposition\nQuill: We introduce a shrinkage estimator. It pools information across stores.\nAuthor: Stores with few sales give noisy estimates on their own. Pooling information across stores reduces that noise, so we introduce a shrinkage estimator.\nLesson: explain the problem or enabling idea that motivates a method before naming the method (seen 2×)\n\n## 2026-10-13 · main.tex · methods · exposition\nQuill: We use an instrumental variable. It exploits variation in shipping costs.\nAuthor: Shipping costs shift prices but not tastes. We use this variation as an instrumental variable.\nLesson: explain the problem or enabling idea that motivates a method before naming the method (seen 2×)\n"
+   },
+   "application_text": "Some regions adopted the subsidy in 2019 and others did not, and the two groups followed parallel trends before adoption. We therefore compare changes in outcomes between adopting and non-adopting regions, using the non-adopting regions to represent the path the adopting regions would have followed without the subsidy, in a difference-in-differences design.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-scientific-correction.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "scientific-correction",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n",
+    "examples": ""
+   },
+   "application_text": "In the held-out sample, the estimated effect was 7 percent (95 percent confidence interval: 1 to 13 percent).",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-unavailable-storage.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "unavailable-storage",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": null,
+   "application_text": "In the observed pilot, implementing the policy reduced application processing time.",
+   "stage_exit_codes": [
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-unknown-attribution.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "unknown-attribution",
+   "arm": "examples",
+   "error": null,
+   "learned_memory": {
+    "profile": "---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n",
+    "examples": "## 2026-10-13 · paper-a:opening · exposition\nQuill: We introduce the model. It describes how prices affect demand.\nAuthor: Prices influence demand. We use a model to describe that relationship.\nLesson: state the phenomenon before introducing the model that describes it (seen 1×; editor not confirmed, possibly a coauthor or another tool)\n"
+   },
+   "application_text": "The estimator uses observations collected before the intervention; outcomes measured after the intervention are reserved for evaluation.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  }
+ ],
+ "trace_archive": "personalization-2026-10-13-simplified.traces.json.gz",
+ "trace_archive_sha256": "ee982980936146316336c77be0de6b26ab24be566dfc3e185fe7720cd78d1984"
+}

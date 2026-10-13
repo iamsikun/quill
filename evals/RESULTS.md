@@ -310,3 +310,17 @@ A declared-author revision that corrected a number was classified as scientific 
 taught no preference. That output preserved the finding but appended an unrequested
 note, a remaining instance of over-commenting. Single samples with harness-managed
 persistence do not test the agent-run snapshot/harvest loop or writing quality.
+
+### Simplified memory — 2026-10-13
+
+Memory was then reduced to an editable `profile.md`, an `examples.md` log, and
+baselines for detecting the author's edits. The two records above used the earlier
+JSON store and no longer describe the current workflow. The
+[simplified-memory record](results/personalization-2026-10-13-simplified.json)
+reruns all eleven cases once on Claude. Stated preferences were learned at once with
+their scope and exceptions; one-off instructions, an unattributed edit, and
+corrections of results were logged without becoming lessons; two independent
+exposition edits produced a lesson. Every output preserved the findings, and no
+session asked a question. One copyedit appended an unrequested “no corrections
+needed” line. The harness does not exercise the agent-run `changes`/`baseline`
+loop or the one-line notice of a profile change.

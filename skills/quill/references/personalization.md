@@ -1,112 +1,97 @@
 # Personal writing memory
 
-Help the author avoid repeating editorial corrections. Memory records scoped writing
-preferences with the evidence behind them; it does not retrain a model. The current
-host interprets feedback and writes the prose. The optional `quill style` CLI does
-the deterministic storage and comparison work. Do not install software to use memory.
+Learn how the author likes to write, so they correct the same things less often.
+Learning happens during ordinary writing: never pause the task to ask about memory,
+and never require setup, approval, or labels from the author. Memory is a readable
+profile the author can edit, not a retrained model.
 
-## Modes and scope
+## Files
 
-Memory is `off` until the author enables it. “Learn my writing preferences for this
-project” selects `learn`, which applies preferences and records evidence. “Use my
-saved preferences” selects `apply`, which only applies them. Save the mode once and
-follow it in later sessions. An instruction such as “don't learn from this passage”
-suspends recording for that task without changing the saved mode. A direct request
-to remember, correct, or forget a preference is memory management: carry it out
-in any mode (`record --author-request`).
+Project memory lives in `.quill/style/` and is ignored by Git:
 
-Project memory lives in `.quill/style/` at the project root and is ignored by Git.
-An author store (`~/.config/quill/authors/<author-id>/` by default) is used only
-when the author links it; linking does not copy anything. Use a short store-local
-alias for the author, not a login or commit name. Record lessons in the narrowest
-scope that fits. Move a project preference into the author store only when asked
-(`promote`). Keep coauthors' preferences separate; a shared profile is an author
-store the coauthors explicitly agree to use.
+- `profile.md`: the lessons Quill applies. It is the source of truth; the author may
+  edit it directly, and those edits are authoritative.
+- `examples.md`: a log of the edits and feedback lessons came from.
+- `baselines/`: Quill's last version of each file it wrote, kept by `quill style`.
 
-Scientific fidelity and the requested editing depth come first. Then current
-instructions and venue requirements, then explicit project preferences (including
-`.quill/preferences.md`), then the project memory, then the author memory. A new
-explicit correction supersedes an older preference.
+```markdown
+---
+mode: learn       # learn: apply and learn; apply: apply only; off: ignore
+edits: mine       # mine: edits to Quill's text are the author's; unknown: learn from conversation only
+author_profile:   # optional path to a profile shared across the author's projects
+---
+# Writing profile
+
+## General
+- Explain the enabling idea before naming the method, unless the method is
+  already familiar to the reader. (stated)
+
+## Results
+- Report the estimate before interpreting it. (seen 2×)
+```
+
+“Learn my writing style” creates this profile with `mode: learn`. Set `edits:
+unknown` if the author mentions that coauthors or other tools also edit the files.
+Change the mode when the author asks to pause learning or stop using the profile.
+A writing request alone never creates memory. For memory shared across projects,
+keep a profile and log in `~/.config/quill/authors/<name>/` and link it with
+`author_profile`.
 
 ## During a writing task
 
-1. Load applicable memory: `quill style context --section S --audience A --decision D`.
-   Supply the scopes you know. If `scope_options` lists a stored tag that means the
-   same thing (for example `economists` for `economics`), query again with it.
-   Examples show writing decisions; they are never evidence for the current paper.
-2. In `learn` mode, before overwriting a file you wrote earlier, run
-   `quill style harvest FILE`. It compares the file with your last snapshot and
-   returns one candidate per edited paragraph (splits and merges stay together).
-3. Do the writing.
-4. In `learn` mode, after finishing a file or passage, run
-   `quill style snapshot FILE --expected-revision N` so later edits can be compared.
-   Snapshot finished work, not alternate drafts.
+None of these steps delays the requested writing.
 
-Do not append learning reports or ask the author to approve lessons after each edit.
-Explain memory when asked.
+1. Read `profile.md`, and the linked author profile if any. Apply lessons that
+   fit the passage's section, audience, and genre. Fidelity to the research and
+   the requested editing depth come first; then current instructions; then the
+   project profile; then the author profile.
+2. With `mode: learn` and `edits: mine`, before editing a file you wrote earlier,
+   run `quill style changes FILE` to see the author's edits since your last version.
+   It lists changed paragraphs and flags changed numbers, citations, references,
+   mathematics, and moved paragraphs. Skip this step if the CLI is unavailable.
+3. Do the requested writing.
+4. With `mode: learn`, learn from those edits and from this conversation's
+   feedback (below). With `edits: mine` and the CLI available, then run
+   `quill style baseline FILE` for each file you wrote.
+5. If the profile changed, end the reply with one short line, such as “Added to your
+   writing profile: report the estimate before interpreting it.” Ask nothing.
 
-## Interpreting revisions
+## Learning
 
-The person who edited a file is unknown unless the author has said so. When harvest
-reports `attribution_needed`, ask once: “Are the edits to these files between my
-writes yours?” If yes, run `configure --revision-author ID`; if no, run
-`configure --no-revision-author`. Either answer is saved, so do not ask again in
-that project. Declared candidates arrive as human revisions by that author. Treat
-edits the author attributes to a coauthor or a tool as such. Text Quill generated,
-including an alternative the author chose, is not independent human writing.
+Learn writing decisions, not wording. “Explain the enabling idea before naming the
+method” is a lesson; a favorite phrase is not. Place each lesson under the heading
+for where it applies, and include the exceptions the author has shown.
 
-Classify each candidate's `purpose` before recording it: `style`, `exposition`,
-`scientific`, `evidence`, `venue`, `collaborator`, or `unknown`. Only style and
-exposition evidence can support a preference. `touches` lists the numbers,
-citations, references, or mathematics that changed; such edits are usually
-scientific corrections. Split a mixed edit into separate records where you can.
-A `moved` paragraph usually reflects an ordering decision. Leave an edit as
-`unknown` when its purpose is unclear; it then stays in the store as an example.
+- A general preference the author states (“in methods sections I prefer intuition
+  before notation”) enters the profile at once, marked `(stated)`.
+- A local instruction (“here”, “in this paragraph”) or a single edit is logged
+  only. When the same decision appears in two independent passages, add the
+  lesson, marked `(seen 2×)`, and update the count as more evidence appears.
+- Corrections of substance teach nothing about style: changed results, numbers,
+  citations, notation, new evidence, venue requirements, and a collaborator's
+  input. Correcting a claim's strength is not a preference for stronger or weaker
+  claims. When an edit mixes substance and style, learn only from the style part.
+- Unchanged text is weak evidence of approval. Text Quill wrote, including an
+  alternative the author chose, is not the author's writing.
+- A newer stated preference replaces an older one; an occasional contrary edit
+  becomes an exception or is left in the log.
 
-Record the writing decision, not the wording. “Explain the enabling idea before
-naming the method” is a lesson; a reused phrase is not. Correcting a result never
-teaches a preference for stronger or weaker claims. Unchanged text is weak approval.
+Keep the profile short: when it grows past about 40 lessons, merge overlapping
+lessons and remove ones the author no longer follows. Log each change briefly:
 
-Preference status:
+```markdown
+## 2026-10-13 · intro.tex · exposition
+Quill: We introduce the estimator next. It uses repeated measurements.
+Author: Repeated measurements separate signal from noise; we use them to build the estimator.
+Lesson: explain the enabling idea before naming the method (seen 2×)
+```
 
-- `explicit`: the author stated it as a general preference (“In methods sections I
-  prefer intuition before notation”).
-- `observed`: at least two human decisions in independent passages show it.
-- `tentative`: a single local edit or one-off instruction (“move the intuition first
-  here”). Not applied routinely.
-- `retired` or `needs-review`: not applied.
+## Author control
 
-Put exceptions in the preference text and link counterexamples. A single recent edit
-does not override a stated preference. Changing an explicit preference requires new
-explicit feedback from the author.
+When asked, explain where a lesson came from using the log; change, move, or remove
+lessons; or delete log entries the author wants forgotten, together with any lesson
+that rests only on them. Copy lessons to the author profile only on request. Keep
+each author's profile separate; use a shared profile only when coauthors ask for one.
 
-## Maintaining memory
-
-`record --input update.json --expected-revision N` saves evidence and preferences
-in the [record format](personalization-format.md). Every write needs the current
-revision from `show` or `context`. After a stale-revision error, reread the memory
-and retry; never force the write.
-
-`profile.md` is generated. If the author edits it, treat the edits as explicit
-guidance and do not apply the stale generated rules. Reconcile the edits into
-records, then pass `--profile-hash` with the edited file's SHA-256.
-
-Retire a preference with `record` to keep its history. `forget ID` removes the record
-and its original text from the store, its history, and any snapshot that contains
-the text. Rules that lose their support move to `needs-review`. Forgetting cannot
-be undone by `restore`, and it does not reach exported copies, backups, or the
-manuscript. `restore VERSION` returns the preferences to an earlier revision and
-keeps the evidence, mode, and author link.
-
-When `context` warns that a store has many active preferences, propose merging
-overlapping rules or retiring outdated ones. A short profile is applied more reliably.
-
-## Without the CLI or durable storage
-
-Without the CLI, follow the [record format](personalization-format.md) with
-ordinary file tools: read `state.json` and `profile.md`, and write records with
-the same rules. Only maintain the store if your tools can compute SHA-256 hashes
-and replace files atomically. If you cannot write durably, use the preferences
-supplied in the conversation. On request, return a short Markdown summary of
-them with scopes and examples for reuse in another session. Say that this summary
-is not saved memory, and never claim that memory persists when it does not.
+If you cannot write files, apply the feedback within this conversation. On request,
+give the author the profile text to save, and do not claim that it was saved.

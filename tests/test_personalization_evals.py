@@ -38,31 +38,34 @@ def test_result_extraction_uses_final_agent_text():
 def test_learning_persists_between_separate_model_calls(monkeypatch):
     case = json.loads((ROOT / 'evals/personalization.json').read_text())[0]
     monkeypatch.setattr(runner.subprocess, 'run', lambda *a, **kw: SimpleNamespace(stdout='test-host'))
+    profile = runner.EMPTY_PROFILE + '\n## Introductions\n- Start with the decision problem. (stated)\n'
+    example = '## 2026-10-13 · feedback · exposition\nAuthor: Start with the decision problem.\n'
     calls = []
     def invoke(host, prompt, project, timeout):
         calls.append(prompt)
-        if len(calls) == 1:
-            assert not (project / '.quill/style/state.json').exists()
-            text = json.dumps({'evidence': [{'id': 'e1', 'kind': 'feedback', 'origin': 'human',
-                                            'author': 'Ada', 'purpose': 'exposition', 'feedback': 'Use decision stakes.'}],
-                               'preferences': [{'id': 'p1', 'text': 'Start with the decision problem.',
-                                                'status': 'explicit', 'scope': {'section': ['introduction']},
-                                                'support': ['e1']}]})
+        if len(calls) % 2 == 1 and 'Writing session' in prompt:
+            assert not (project / '.quill').exists()
+            text = json.dumps({'profile': profile, 'examples': example})
         else:
-            assert (project / '.quill/style/state.json').is_file()
-            assert 'Start with the decision problem.' in prompt
-            assert 'hospital' in prompt
+            assert (project / '.quill/style/profile.md').read_text() == profile
+            assert 'Start with the decision problem.' in prompt and 'hospital' in prompt
             text = 'A hospital must reserve capacity before demand is known.'
         return {'exit_code': 0, 'text': text, 'prompt': prompt}
     monkeypatch.setattr(runner, 'invoke', invoke)
     record = runner.run_case(case, 'codex', 'examples', 1)
     assert 'error' not in record and len(calls) == 2
-    assert record['memory']['revision'] == 1
-    assert len(record['context']['examples']) == 1
+    assert record['memory'] == {'profile': profile, 'examples': example}
+    assert example in calls[1]
     reused = runner.run_case(case, 'codex', 'learned', 1, training_record=record)
     assert reused['training_reused'] and len(calls) == 3
-    assert not reused['context']['examples']
-    assert reused['memory']['data']['preferences'] == record['memory']['data']['preferences']
+    assert example not in calls[2] and reused['memory'] == record['memory']
+
+
+def test_invalid_learning_update_is_reported(monkeypatch):
+    case = json.loads((ROOT / 'evals/personalization.json').read_text())[0]
+    monkeypatch.setattr(runner.subprocess, 'run', lambda *a, **kw: SimpleNamespace(stdout='test-host'))
+    monkeypatch.setattr(runner, 'invoke', lambda *a: {'exit_code': 0, 'text': 'not json'})
+    assert 'Invalid learning update' in runner.run_case(case, 'codex', 'learned', 1)['error']
 
 
 def test_no_storage_case_does_not_try_to_train_or_create_store(monkeypatch):

@@ -104,9 +104,10 @@ The separate `personalization.py` runner compares four arms:
 
 - `none`: ordinary Quill.
 - `static`: Quill plus a fixed profile (`fixtures/static-profile.md`) supplied as user context.
-- `learned`: a model interprets training feedback, the harness persists its validated
-  update, and a fresh session receives applicable learned preferences.
-- `examples`: the same learning protocol, with up to three retrieved examples.
+- `learned`: a model learns from the training session and returns the updated
+  `profile.md` and `examples.md`; the harness saves them, and a fresh session
+  receives the profile.
+- `examples`: the same protocol; the fresh session also receives `examples.md`.
 
 ```bash
 uv run python evals/personalization.py --host codex --arm examples --case explicit-preference --output /tmp/quill-personalization
@@ -114,8 +115,8 @@ uv run python evals/personalization.py --host claude --arm none --case explicit-
 ```
 
 All host sessions remain read-only and ephemeral. The runner owns a disposable
-store and reopens it between training and application. It saves exact prompts,
-responses, source hashes, host versions, learned records, context, and failures.
+memory folder and reopens it between training and application. It saves exact
+prompts, responses, skill hashes, host versions, learned memory, and failures.
 Harness-managed persistence does **not** establish automatic skill discovery or
 successful autonomous file-tool use. The existing comparison/discovery arms and
 their restrictions are unchanged. Never run these cases against personal memory.
@@ -129,6 +130,6 @@ empty learned profiles. The latter can be correct for a one-off or factual edit.
 
 Grade fidelity first, then appropriateness of scope and attribution, application of
 explicit corrections, unnecessary questions, false persistence claims, and author
-revision effort. A successful CLI exit establishes only pipeline execution. Model
+revision effort. Model
 judgments and synthetic author cases do not establish improved writing quality.
 Use held-out manuscripts and blind author comparisons before claiming that benefit.

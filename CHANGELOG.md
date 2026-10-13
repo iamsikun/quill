@@ -7,26 +7,16 @@ Quill uses semantic versioning:
 
 ## Unreleased
 
-- Add optional portable writing memory with project and explicitly linked author
-  scopes, three operating modes, and a workflow driven by normal editorial feedback.
-- Add deterministic `quill style` helpers for exact capture, comparison, evidence
-  recording, bounded context, inspection, restoration, forgetting, and export.
-- Protect explicit author corrections, edited profiles, concurrent updates, and
-  personal data across skill updates; preserve unknown attribution and scientific scope.
-- Add isolated personalization evaluations and regression coverage. No hooks,
-  background services, new runtime dependencies, or release changes are required.
-- Learn from file revisions: `harvest` aligns changed paragraphs, keeps their context,
-  and flags changed numbers, citations, references, and mathematics. An author can
-  declare that edits between Quill's writes are theirs (`configure --revision-author`);
-  Quill asks once per project.
-- Keep memory fast and recoverable: profile history moves to an append-only
-  `history.jsonl`, `restore` accepts any past revision and restores preferences only,
-  stale locks from crashed writers are recovered, and sources are project-relative.
-- Make `forget` precise: short shared text no longer removes unrelated records, and
-  forgetting a preference keeps evidence other preferences use.
-- Count distinct passages in one manuscript file as independent evidence.
-- Add `promote` and a warning when a profile grows past 40 active preferences.
+- Add optional personal writing memory. Quill learns from the author's feedback and
+  from their edits to text it wrote, keeps lessons in a plain, editable
+  `.quill/style/profile.md` with an `examples.md` log, and applies them in later
+  sessions without interrupting the writing.
+- Add `quill style baseline` and `quill style changes`, which record Quill's last
+  version of a file and report the author's paragraph-level edits, flagging changed
+  numbers, citations, references, and mathematics.
 - Move the bundled personal style profile out of the skill into an evaluation fixture.
+- Add personalization evaluation cases and a runner comparing no memory, a static
+  profile, and learned memory.
 
 ## 0.5.0 — 2026-10-10
 

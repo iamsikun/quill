@@ -1,6 +1,6 @@
-"""Isolated, fresh-session inference/apply comparison for portable writing memory.
+"""Isolated, fresh-session learning/application comparison for personal writing memory.
 
-The runner persists model-proposed updates between sessions; it does not test host
+The runner saves the model's updated profile between sessions; it does not test host
 skill discovery or automatic file-tool use. Every model session remains read-only.
 """
 from __future__ import annotations
@@ -14,35 +14,31 @@ import subprocess
 import tempfile
 import time
 
-from quill.style import StyleStore, export_context, writing_context
-
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / 'skills/quill'
 ARMS = ('none', 'static', 'learned', 'examples')
+EMPTY_PROFILE = '---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n'
 
 
 def training_prompt(case: dict) -> str:
-    references = '\n\n'.join((SKILL / 'references' / name).read_text() for name in
-                              ('personalization.md', 'personalization-format.md'))
     return '\n\n'.join([
         'This is an isolated simulated-author evaluation. No external tools, files, or services. '
-        'Return only a JSON object with evidence and preferences lists in the record input format. '
-        'The harness will persist it to an empty learn-mode store. Infer only useful, justified lessons. '
-        'Keep the response under 2000 words. Do not include commentary or Markdown fences.',
-        (SKILL / 'SKILL.md').read_text(), references,
-        'Shared fixture-project scope vocabulary: section=introduction, methods, results, '
-        'executive-summary, proof; audience=economics (economists), managers, mathematical; '
-        'decision=framing, definition, copyediting. Reuse these tags when appropriate; '
-        'other scopes may use descriptive tags. This vocabulary is the same in every case.',
-        'Author feedback and source context:\n' + case['training'],
+        'The project has personal writing memory enabled. Learn from the session below as the skill '
+        'describes. Return only a JSON object {"profile": <the complete updated profile.md>, '
+        '"examples": <the entries to append to examples.md, or "">}. No commentary or Markdown fences.',
+        (SKILL / 'SKILL.md').read_text(), (SKILL / 'references/personalization.md').read_text(),
+        'Current .quill/style/profile.md:\n' + EMPTY_PROFILE,
+        'Writing session (author feedback and edits):\n' + case['training'],
     ])
 
 
-def application_prompt(case: dict, memory: str = '') -> str:
+def application_prompt(case: dict, memory: str = '', saved: bool = False) -> str:
     parts = ['Complete the writing task in at most 350 words. Do not use tools or access external services. '
              'All permitted context is included below.', (SKILL / 'SKILL.md').read_text()]
+    if saved:
+        parts.append((SKILL / 'references/personalization.md').read_text())
     if memory:
-        parts.append('Applicable writing memory (examples do not establish research findings):\n' + memory)
+        parts.append('Writing memory (examples do not establish research findings):\n' + memory)
     parts += [case['request'], 'Source material:\n' + case['source']]
     return '\n\n'.join(parts)
 
@@ -122,22 +118,25 @@ def run_case(case: dict, host: str, arm: str, timeout: int, training_record: dic
                 return record
             try:
                 raw = re.sub(r'^```(?:json)?\s*|\s*```$', '', training['text']).strip()
-                proposal = json.loads(raw)
-                store = StyleStore(project / '.quill/style')
-                store.init('learn')
-                store.record(0, proposal)
-                record['memory'] = store.show()
-                # Reopen the saved store for the independent application session.
-                context = writing_context(StyleStore(store.path), case['scope'],
-                                          examples=3 if arm == 'examples' else 0)
-                memory = export_context(context)
-                record['context'] = context
-            except (ValueError, KeyError, TypeError, OSError) as exc:
+                update = json.loads(raw)
+                if not isinstance(update.get('profile'), str) or not isinstance(update.get('examples', ''), str):
+                    raise ValueError('profile and examples must be text')
+            except (ValueError, AttributeError) as exc:
                 record['error'] = 'Invalid learning update: ' + str(exc)
                 return record
+            # Persist like the skill would, then reopen the files for the independent session.
+            memory_dir = project / '.quill/style'
+            memory_dir.mkdir(parents=True)
+            (memory_dir / 'profile.md').write_text(update['profile'])
+            (memory_dir / 'examples.md').write_text(update.get('examples', ''))
+            record['memory'] = {'profile': (memory_dir / 'profile.md').read_text(),
+                                'examples': (memory_dir / 'examples.md').read_text()}
+            memory = 'profile.md:\n' + record['memory']['profile']
+            if arm == 'examples' and record['memory']['examples'].strip():
+                memory += '\n\nexamples.md:\n' + record['memory']['examples']
         if not case.get('storage_available', True):
             memory = 'Current-conversation feedback only; not saved:\n' + case['training']
-        application = invoke(host, application_prompt(case, memory), project, timeout)
+        application = invoke(host, application_prompt(case, memory, saved='memory' in record), project, timeout)
         record['stages'].append(application)
         if application.get('exit_code') != 0 or not application.get('text'):
             record['error'] = 'Application host failed, timed out, or returned no text'

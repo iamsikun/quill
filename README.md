@@ -157,63 +157,36 @@ the skill's scope. It does not verify research by merely restating its sources.
 
 ## Personal writing memory
 
-Personalization is optional and works through ordinary agent tools. Ask “Learn my
-writing preferences for this project,” then continue drafting and revising normally.
-Quill remembers appropriately scoped editorial feedback, applies relevant lessons
-in later sessions, and can explain, correct, retire, or forget them on request.
-There are no hooks, background watchers, or agent-specific memory dependencies.
+Say “Learn my writing style for this project,” then keep writing as usual. Quill
+learns from two things you already do: the feedback you give it, and the edits you
+make to text it wrote. It applies what it learned in later sessions, never stops to
+ask about memory, and tells you in one line when it adds a lesson.
 
-Memory is **off** until enabled. **Apply** uses existing preferences without collecting
-new examples; **learn** applies preferences and records useful feedback and baselines.
-A current-task instruction can suspend learning without changing the saved mode.
-Edits to files between Quill's writes are not attributed to you unless you say so:
-the first time it finds such edits, Quill asks once whether they are yours and saves
-the answer. Missing storage or an uncertain edit never requires stopping the writing.
+Memory is three plain files in `.quill/style/`, which Git ignores:
 
-Project memory lives in `.quill/style/`, excluded from Git by a store-local ignore
-file. Explicitly selected author memory lives in
-`~/.config/quill/authors/<author-id>/` (or under `XDG_CONFIG_HOME`), or a custom
-location. Projects link author stores instead of copying them; `promote` copies a
-chosen project preference into the linked author store. The store contains JSON
-records, exact original text, a `history.jsonl` of profile versions, and a readable
-`profile.md`. Install, sync, and uninstall do not manage this data. Existing explicit
-project preferences remain supported. Quill no longer bundles a personal style
-profile; supply your own profile or sample, or let memory learn one.
+- `profile.md`: the lessons, grouped by where they apply. Edit it freely; your edits win.
+- `examples.md`: the edits and feedback each lesson came from.
+- `baselines/`: Quill's last version of each file it wrote.
 
-The skill can use ordinary file tools without the CLI. Optional deterministic helpers
-make comparison, deduplication, revision checks, and recovery easier for agents:
+A preference you state is learned at once. A pattern in your edits is learned once
+it appears in two separate passages. Corrections of results, numbers, citations, or
+notation never become style lessons. Ask Quill to explain, change, or forget a
+lesson, or to pause learning. If coauthors also edit the files, say so, and Quill
+will learn only from your feedback in conversation. A profile shared across your
+projects can live in `~/.config/quill/authors/<name>/`.
+
+Two optional commands help Quill see your edits:
 
 ```bash
-quill style init --mode learn
-quill style context --section introduction --audience economics
-quill style harvest sections/intro.tex
-quill style configure --revision-author sikun --expected-revision 3
-quill style show
+quill style changes                     # paragraphs you changed since Quill last wrote each file
+quill style baseline sections/intro.tex # record Quill's new version after it writes
 ```
 
-`harvest` aligns the changed paragraphs against Quill's last snapshot and flags
-edits to numbers, citations, references, or mathematics. The agent uses `record` to
-save an interpreted JSON update and `snapshot` after writing a passage. Mutations
-require the current `--expected-revision` from `show` or `context`. `configure`
-changes mode, author links, or the declared revision author; `history`, `restore`,
-`forget`, `promote`, and `export` provide inspection, recovery, removal, reuse
-across projects, and portable Markdown. A crashed writer's lock is recovered
-automatically.
-Commands return JSON by default except `export`, which writes Markdown to stdout.
-Use `quill style COMMAND --help` for arguments. The CLI never calls a model or
-decides what a human revision means.
-
-Manually edited profiles are preserved until the agent reconciles the changes.
-Forgetting purges associated text from managed history and snapshots and reconsiders
-dependent rules; it cannot delete exported copies, backups, or source manuscripts.
-Without persistent writable storage, Quill can use supplied preferences and return
-a portable Markdown memory document when requested. It does not claim that another
-session or agent has access to unsaved memory.
-
-See the self-contained [personalization workflow](skills/quill/references/personalization.md)
-and [record format](skills/quill/references/personalization-format.md). The separate
-[behavioral evaluation protocol](evals/README.md#personalization) distinguishes
-storage integrity, learning behavior, and author-assessed writing quality.
+`changes` flags edits that touch numbers, citations, references, or mathematics,
+since those are usually corrections rather than style. Without the CLI, Quill still
+learns from feedback in conversation. Memory adapts the instructions Quill follows;
+it does not retrain a model. See the [personalization workflow](skills/quill/references/personalization.md)
+and the [evaluation protocol](evals/README.md#personalization).
 
 ## Optional managed manuscript utilities
 

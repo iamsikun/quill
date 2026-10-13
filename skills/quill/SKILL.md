@@ -21,13 +21,10 @@ the manuscript's established terminology and structure. Ask only for missing
 information that materially affects the work; use the supplied passage and
 conversation when they are sufficient.
 
-When working in a persistent project, check for `.quill/style/state.json` at the
-selected project root or its nearest ancestor. Read
-[Personalization](references/personalization.md) when that memory exists, the user
-supplies a style profile or sample, or asks to learn, inspect, correct, or forget
-writing preferences. Memory is off until the author enables it; a writing request
-alone does not enable it. A supplied profile or sample applies only to its author.
-Missing memory must not delay the writing.
+If the project has `.quill/style/profile.md`, or the author asks Quill to learn,
+use, or change their writing preferences, read
+[Personalization](references/personalization.md). A writing request alone does
+not start learning, and missing memory never delays the writing.
 
 Work directly with pasted prose or the user's existing files. Resolve bundled
 references below relative to this skill's directory, and manuscript paths relative

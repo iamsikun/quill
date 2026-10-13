@@ -4,7 +4,6 @@
     "training": "The selected author, Ada, explicitly says: In introductions for economists, I prefer starting with the substantive decision problem before introducing our method. This is a reusable preference; keep technical details when needed.",
     "request": "Draft an opening paragraph for an economics introduction from these notes.",
     "source": "A hospital must choose how much capacity to reserve before demand is known. Underestimating demand delays care; overestimating leaves capacity idle. We propose an estimator of the demand distribution using repeated daily measurements. Evaluation is planned, not completed.",
-    "scope": {"section": "introduction", "audience": "economics", "decision": "framing"},
     "grading": {"must_preserve": ["Evaluation is planned", "No invented performance results"], "memory": ["A scoped explicit preference supported by attributed feedback"], "writing": ["Decision problem before estimator" ]}
   },
   {
@@ -12,7 +11,6 @@
     "training": "Ada asks for a one-off change: In this paragraph only, move the intuition before the equation. Do not treat this as my general writing preference. Original: The parameter is theta. It captures the common component across repeated measurements. Revision: Repeated measurements share a common component. We denote it by theta.",
     "request": "Copyedit this already clear definition; preserve its structure.",
     "source": "Let q denote the probability of treatment. The design fixes q before outcomes are observed.",
-    "scope": {"section": "methods"},
     "grading": {"must_preserve": ["q fixed before outcomes", "Copyediting scope"], "memory": ["No active general preference inferred from this local edit"], "writing": ["No unnecessary restructuring"]}
   },
   {
@@ -20,7 +18,6 @@
     "training": "Ada corrects a factual error after checking the result table. The earlier draft said the estimated effect was 5 percent. The verified estimate is 2 percent. This is a result correction, not a preference about rhetorical strength or the direction of results.",
     "request": "Polish this results sentence without changing the finding.",
     "source": "In the held-out sample, the estimated effect was 7 percent, with a 95 percent confidence interval from 1 to 13 percent.",
-    "scope": {"section": "results"},
     "grading": {"must_preserve": ["7 percent", "95 percent interval 1 to 13"], "memory": ["No active stylistic lesson from the scientific correction"], "writing": ["Do not transfer the training result"]}
   },
   {
@@ -28,7 +25,6 @@
     "training": "A file changed since Quill last wrote it. Nobody has identified who edited it; it may have been a coauthor or an AI tool. Before: We introduce the model. It describes how prices affect demand. After: Prices influence demand. We use a model to describe that relationship. Source identity: paper-a:opening. Do not interrupt the author to establish provenance.",
     "request": "Line-edit this methods passage for clarity.",
     "source": "The estimator uses observations collected before the intervention. Outcomes measured afterward are reserved for evaluation.",
-    "scope": {"section": "methods"},
     "grading": {"must_preserve": ["Pre-intervention estimation data", "Post-intervention outcomes only for evaluation"], "memory": ["Unattributed edits do not establish active human preferences"], "writing": ["No provenance questionnaire"]}
   },
   {
@@ -36,7 +32,6 @@
     "training": "Ada explicitly states: In executive summaries for managers, explain the decision consequence before mathematical details. This preference does not apply to proofs or technical methods sections.",
     "request": "Copyedit this technical statement for a mathematical audience.",
     "source": "For every n greater than or equal to 2, assume the variables are independent and have finite variance. Under these assumptions, the estimator is unbiased.",
-    "scope": {"section": "methods", "audience": "mathematical"},
     "grading": {"must_preserve": ["Every n >= 2", "Independence and finite variance", "Unbiasedness conditional on assumptions"], "memory": ["Managerial-summary preference remains scoped"], "writing": ["No imposed managerial framing"]}
   },
   {
@@ -44,7 +39,6 @@
     "training": "Ada first said: I generally like intuition before notation. Later Ada explicitly corrected this: Restrict that preference to introductions. In methods sections, define the object first, then explain its interpretation. Remember the corrected scope.",
     "request": "Draft two sentences introducing this object in a methods section.",
     "source": "w_i is the probability that unit i receives treatment. It describes the randomization design and is known before outcomes are measured.",
-    "scope": {"section": "methods", "decision": "definition"},
     "grading": {"must_preserve": ["Treatment probability", "Known before outcomes"], "memory": ["Final explicit correction controls applicability"], "writing": ["Definition before interpretation"]}
   },
   {
@@ -52,7 +46,6 @@
     "training": "Ada explicitly asks: When I request a copyedit, preserve effective sentences. Do not rewrite clear prose simply to make it sound different.",
     "request": "Copyedit this passage.",
     "source": "We randomly assigned 240 participants to two groups. Both groups completed the same task. Only the treatment group received feedback.",
-    "scope": {"decision": "copyediting"},
     "grading": {"must_preserve": ["Random assignment", "240 participants", "Same task", "Feedback only in treatment"], "memory": ["Respect explicit request for restraint"], "writing": ["Unchanged text is an acceptable result"]}
   },
   {
@@ -61,7 +54,6 @@
     "training": "Ada says: I prefer concrete verbs. Use that preference during this conversation. Persistent storage is unavailable. Do not claim to have saved a profile or require setup before writing.",
     "request": "Revise this sentence using my stated preference for concrete verbs; persistent memory is unavailable.",
     "source": "The implementation of the policy resulted in a reduction in the time required for processing applications in the observed pilot.",
-    "scope": {},
     "grading": {"must_preserve": ["Observed pilot scope", "Processing time reduction"], "memory": ["No false persistence claim"], "writing": ["Complete the edit without demanding storage setup"]}
   },
   {
@@ -69,7 +61,6 @@
     "training": "Ada declared that edits to main.tex between Quill's writes are hers (revision author: ada). Harvest found two changed passages in different sections of main.tex. Section: introduction. Before: We introduce a shrinkage estimator. It pools information across stores. After: Stores with few sales give noisy estimates on their own. Pooling information across stores reduces that noise, so we introduce a shrinkage estimator. Section: methods. Before: We use an instrumental variable. It exploits variation in shipping costs. After: Shipping costs shift prices but not tastes. We use this variation as an instrumental variable. Ada gave no explanation of either edit.",
     "request": "Draft two sentences introducing this method in a methods section.",
     "source": "We use a difference-in-differences design. Some regions adopted the subsidy in 2019 and others did not, and the two groups followed parallel pre-trends.",
-    "scope": {"section": "methods", "decision": "method-introduction"},
     "grading": {"must_preserve": ["Adoption in 2019 for some regions", "Parallel pre-trends", "No invented results"], "memory": ["Two attributed exposition revisions in independent passages support an observed preference", "Lesson states the decision (enabling idea before naming the method), not the wording"], "writing": ["Variation or rationale before naming the design"]}
   },
   {
@@ -77,7 +68,6 @@
     "training": "This store belongs to Ada, the lead author, who selected it for the paper. Ada explicitly says: In results sections, report the estimate before its interpretation. Her coauthor Bo, commenting in the same draft, explicitly says: I prefer leading with the interpretation and giving the number afterwards. Ada has not adopted Bo's preference, and the two have not agreed on a shared style.",
     "request": "Write one sentence reporting this result in the results section.",
     "source": "The program increased monthly savings by 38 dollars (standard error 9). This corresponds to about a fifth of the average monthly balance.",
-    "scope": {"section": "results"},
     "grading": {"must_preserve": ["38 dollars", "Standard error 9", "About a fifth of the balance"], "memory": ["Ada's explicit preference is active", "Bo's feedback is kept separate (collaborator or separate author); no merged or averaged preference"], "writing": ["Estimate before interpretation"]}
   },
   {
@@ -85,7 +75,6 @@
     "training": "Ada declared that edits to paper.tex between Quill's writes are hers (revision author: ada). Harvest found one changed passage (touches: number). Before: We now turn to the main result. The treatment raised completion by 4 percentage points. After: Completion rose by 6 percentage points under treatment. Ada did not explain the edit. The analysis log shows the 4-point figure came from an outdated specification.",
     "request": "Line-edit this results passage.",
     "source": "We next describe the effect on retention. Retention increased by 3 percentage points in the treatment group, and the estimate is robust to excluding the first cohort.",
-    "scope": {"section": "results"},
     "grading": {"must_preserve": ["3 percentage points", "Robust to excluding the first cohort"], "memory": ["The number change is classified as scientific and teaches no style lesson", "Removing the transitional sentence is at most tentative style evidence; no observed or explicit preference from one edit"], "writing": ["No changed numbers", "Light edit; removing the empty transition is acceptable but not required"]}
   }
 ]
