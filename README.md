@@ -166,16 +166,19 @@ There are no hooks, background watchers, or agent-specific memory dependencies.
 Memory is **off** until enabled. **Apply** uses existing preferences without collecting
 new examples; **learn** applies preferences and records useful feedback and baselines.
 A current-task instruction can suspend learning without changing the saved mode.
-Unexplained file changes remain observations; they are not automatically attributed
-to you. Missing storage or an uncertain edit never requires stopping the writing.
+Edits to files between Quill's writes are not attributed to you unless you say so:
+the first time it finds such edits, Quill asks once whether they are yours and saves
+the answer. Missing storage or an uncertain edit never requires stopping the writing.
 
 Project memory lives in `.quill/style/`, excluded from Git by a store-local ignore
 file. Explicitly selected author memory lives in
 `~/.config/quill/authors/<author-id>/` (or under `XDG_CONFIG_HOME`), or a custom
-location. Projects link author stores instead of copying them. The store contains
-versioned JSON records, exact original text, history, and a readable `profile.md`.
-Install, sync, and uninstall do not manage this data. Existing explicit project
-preferences and the optional bundled static author profile remain supported.
+location. Projects link author stores instead of copying them; `promote` copies a
+chosen project preference into the linked author store. The store contains JSON
+records, exact original text, a `history.jsonl` of profile versions, and a readable
+`profile.md`. Install, sync, and uninstall do not manage this data. Existing explicit
+project preferences remain supported. Quill no longer bundles a personal style
+profile; supply your own profile or sample, or let memory learn one.
 
 The skill can use ordinary file tools without the CLI. Optional deterministic helpers
 make comparison, deduplication, revision checks, and recovery easier for agents:
@@ -183,14 +186,19 @@ make comparison, deduplication, revision checks, and recovery easier for agents:
 ```bash
 quill style init --mode learn
 quill style context --section introduction --audience economics
-quill style harvest intro.tex
+quill style harvest sections/intro.tex
+quill style configure --revision-author sikun --expected-revision 3
 quill style show
 ```
 
-The agent uses `record` to save an interpreted JSON update and `snapshot` after
-writing a passage. Mutations require the current `--expected-revision` from `show`
-or `context`. `configure` changes mode or author links; `history`, `restore`,
-`forget`, and `export` provide inspection, recovery, removal, and portable Markdown.
+`harvest` aligns the changed paragraphs against Quill's last snapshot and flags
+edits to numbers, citations, references, or mathematics. The agent uses `record` to
+save an interpreted JSON update and `snapshot` after writing a passage. Mutations
+require the current `--expected-revision` from `show` or `context`. `configure`
+changes mode, author links, or the declared revision author; `history`, `restore`,
+`forget`, `promote`, and `export` provide inspection, recovery, removal, reuse
+across projects, and portable Markdown. A crashed writer's lock is recovered
+automatically.
 Commands return JSON by default except `export`, which writes Markdown to stdout.
 Use `quill style COMMAND --help` for arguments. The CLI never calls a model or
 decides what a human revision means.

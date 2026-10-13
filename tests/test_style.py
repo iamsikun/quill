@@ -69,7 +69,7 @@ def test_plain_file_store_interoperates_without_cli_initialization(tmp_path):
               'source': '', 'baseline': None, 'scope': {}, 'lineage': 'native-feedback',
               'blobs': {'feedback': key}, 'content_hash': canonical_hash({'feedback': key})}
     record.update(fingerprint=canonical_hash(record), id='native', time='2026-10-13T12:00:00+00:00')
-    native = {'schema_version': 1, 'revision': 1, 'history': [], 'forgotten_ids': [], 'forgotten_hashes': [],
+    native = {'schema_version': 1, 'revision': 1, 'forgotten_ids': [], 'forgotten_hashes': [],
               'data': {'mode': 'apply', 'author_store': None, 'snapshots': {}, 'evidence': {'native': record},
                        'preferences': {'verbs': {'id': 'verbs', 'text': 'Use concrete verbs.', 'scope': {},
                                                 'status': 'explicit', 'support': ['native'], 'counter': []}}}}
@@ -156,14 +156,17 @@ def test_exact_snapshot_lineage_and_external_revision_before_next_write(store):
     before = all_files(store.path)
     harvested = store.harvest('paper:intro', changed)
     assert all_files(store.path) == before
-    candidate = harvested['candidate']
-    assert candidate['before'].encode() == raw and candidate['after'].encode() == changed
-    assert candidate['origin'] == 'unknown' and 'not inferred' in harvested['alignment']
-    store.record(1, {'evidence': [candidate]})
+    assert harvested['attribution_needed'] and harvested['attribution'] == 'unknown'
+    candidates = [c['record'] for c in harvested['candidates']]
+    assert all(c['origin'] == 'unknown' and c['kind'] == 'observation' for c in candidates)
+    # Exact bytes: the moved paragraph keeps its TeX and CRLF line endings.
+    assert any(c['after'].encode() == b'Intuition revised.\r\n' for c in candidates)
+    assert any(c['before'].encode() == b'Intuition.' for c in candidates)
+    store.record(1, {'evidence': candidates})
     second = store.snapshot(2, 'paper:intro', b'Next agent output.')
     assert second['snapshot']['parent'] == first['snapshot']['id']
-    evidence = next(iter(store.load()['data']['evidence']))
-    assert store.show(evidence)['record']['after'].encode() == changed
+    afters = {store.show(e)['record']['after'] for e in store.load()['data']['evidence']}
+    assert 'Intuition revised.\r\n' in afters
     assert store.harvest('paper:intro', b'Next agent output.')['reason'] == 'unchanged'
     assert store.harvest('other', b'text')['reason'] == 'no matching baseline'
 
@@ -373,9 +376,14 @@ def test_content_hash_integrity_and_symlink_protection(store, tmp_path):
         StyleStore(alias)
     skill = tmp_path / 'skill'
     skill.mkdir()
-    (skill / 'SKILL.md').write_text('instructions')
+    (skill / 'SKILL.md').write_text('---\nname: quill\ndescription: x\n---\ninstructions')
     with pytest.raises(ValueError, match='installed skill'):
         StyleStore(skill / 'memory')
+    # A project that merely contains some other SKILL.md can hold memory.
+    other = tmp_path / 'project-with-skill'
+    other.mkdir()
+    (other / 'SKILL.md').write_text('---\nname: something-else\n---\n')
+    StyleStore(other / '.quill/style')
 
 
 def test_install_sync_and_uninstall_preserve_memory(store):
@@ -407,3 +415,197 @@ def test_cli_end_to_end_without_workspace(tmp_path, monkeypatch, capsys):
     command('forget', 'p1', '--expected-revision', '2')
     command('restore', '1', '--expected-revision', '3')
     assert not json.loads(command('show'))['data']['preferences']
+
+
+def revision(key, before, after, **changes):
+    return {'id': key, 'kind': 'revision', 'origin': 'human', 'author': 'author-a', 'purpose': 'exposition',
+            'source': 'main.tex', 'before': before, 'after': after, **changes}
+
+
+def test_distinct_passages_in_one_file_are_independent(store):
+    store.record(0, {'evidence': [revision('r1', 'We introduce X. It uses Y.', 'Y lets us do Z. We build X.'),
+                                  revision('r2', 'The model is M. It captures P.', 'P matters. We model it with M.')]})
+    store.record(1, {'preferences': [preference(status='observed', support=['r1', 'r2'])]})
+    assert writing_context(store, {'section': 'introduction'})['preferences']
+    lineages = {e['lineage'] for e in store.load()['data']['evidence'].values()}
+    assert len(lineages) == 2 and all(l.startswith('main.tex#') for l in lineages)
+
+
+def test_forget_does_not_cascade_through_short_shared_text(store):
+    store.snapshot(0, 'intro.tex', b'\\section{Introduction}\nLong unrelated draft text.\n')
+    store.record(1, {'evidence': [
+        feedback('f1', 'Avoid the word leverage.', context='Introduction'),
+        feedback('f2', 'Put intuition before notation in Introduction sections.', context='Introduction')],
+        'preferences': [preference('p2', text='Intuition before notation in Introduction sections.',
+                                   support=['f2'])]})
+    result = store.forget(2, 'f1')
+    assert result['forgotten'] == ['f1']
+    data = store.load()['data']
+    assert len(data['snapshots']) == 1 and 'f2' in data['evidence']
+    assert data['preferences']['p2']['status'] == 'explicit'
+    assert data['preferences']['p2']['text'].startswith('Intuition before notation')
+    assert store.show('f2')['record']['context'] == 'Introduction'
+    assert all(b'Avoid the word leverage.' not in raw for raw in all_files(store.path).values())
+
+
+def test_forgetting_a_preference_keeps_evidence_other_rules_use(store):
+    store.record(0, {'evidence': [feedback('g', 'Short sentences; no lists in introductions.')],
+                     'preferences': [preference('short', text='Prefer short sentences.', support=['g']),
+                                     preference('lists', text='No lists in introductions.', support=['g'])]})
+    store.forget(1, 'short')
+    data = store.load()['data']
+    assert 'g' in data['evidence'] and data['preferences']['lists']['status'] == 'explicit'
+    assert 'short' not in data['preferences']
+
+
+def test_history_is_external_and_linear(store):
+    store.record(0, {'evidence': [feedback(f'x{i}', f'Feedback {i}') for i in range(30)]})
+    for i in range(200):
+        store.snapshot(store.load()['revision'], f'sec{i % 10}.tex', f'draft {i}'.encode())
+    state = json.loads(store.file('state.json').read_bytes())
+    assert 'history' not in state
+    assert store.file('state.json').stat().st_size < 250_000
+    # Snapshots do not change the profile, so they add no history versions.
+    assert len(store.history()) <= 1
+
+
+def test_restore_accepts_any_past_revision(store):
+    seed(store)                                          # revision 1: p1
+    store.snapshot(1, 'paper', b'draft')                 # revision 2: profile unchanged
+    store.record(2, {'preferences': [preference('p2', status='tentative')]})
+    store.restore(3, 2)
+    assert set(store.load()['data']['preferences']) == {'p1'}
+    with pytest.raises(ValueError, match='not found'):
+        store.restore(4, 99)
+
+
+def test_stale_lock_from_dead_process_is_recovered(store, monkeypatch):
+    lock = store.file('.lock')
+    lock.write_bytes(style.encoded({'pid': 99999999, 'host': style.socket.gethostname(), 'time': style.now()}))
+    def dead(pid, signal):
+        raise ProcessLookupError
+    monkeypatch.setattr(style.os, 'kill', dead)
+    store.configure(0, mode='apply')
+    assert not lock.exists()
+    lock.write_bytes(style.encoded({'pid': 1, 'host': 'another-machine', 'time': style.now()}))
+    with pytest.raises(ValueError, match='busy'):
+        store.configure(1, mode='learn')
+
+
+def test_harvest_aligns_paragraphs_and_flags_substantive_changes(store):
+    baseline = ('Opening paragraph stays the same.\n\n'
+                'We introduce the estimator next. It uses repeated measurements.\n\n'
+                'The effect was 5 percent \\citep{a}.\n\n'
+                '\\begin{equation}\ny = x\n\n\\end{equation}\n\n'
+                'Closing paragraph stays the same.\n')
+    current = ('Opening paragraph stays the same.\n\n'
+               'Repeated measurements separate signal from noise. We use them to build the estimator.\n\n'
+               'The effect was 2 percent \\citep{a,b}.\n\n'
+               '\\begin{equation}\ny = x\n\n\\end{equation}\n\n'
+               'Closing paragraph stays the same.\n')
+    store.snapshot(0, 'paper.tex', baseline.encode())
+    harvested = store.harvest('paper.tex', current.encode())
+    candidates = harvested['candidates']
+    assert len(candidates) == 2
+    record = candidates[0]['record']
+    assert record['before'].startswith('We introduce') and record['after'].startswith('Repeated')
+    assert 'Opening paragraph' in record['context'] and 'Closing' not in record['before']
+    assert candidates[0]['touches'] == []
+    assert set(candidates[1]['touches']) == {'number', 'citation'}
+    assert record['lineage'].startswith('paper.tex#')
+
+
+def test_harvest_detects_moved_paragraphs(store):
+    store.snapshot(0, 'p', b'First idea stated plainly.\n\nSecond idea explained.\n\nThird idea concluded.\n')
+    harvested = store.harvest('p', b'Second idea explained.\n\nFirst idea stated plainly.\n\nThird idea concluded.\n')
+    assert harvested['candidates'] and all(c['moved'] for c in harvested['candidates'])
+
+
+def test_declared_revision_author_attributes_harvested_changes(store):
+    store.snapshot(0, 'p', b'One.\n\nTwo.\n')
+    assert store.harvest('p', b'One.\n\nTwo revised.\n')['attribution_needed']
+    store.configure(1, revision_author='author-a')
+    harvested = store.harvest('p', b'One.\n\nTwo revised.\n')
+    assert not harvested['attribution_needed'] and harvested['attribution'] == 'declared'
+    record = harvested['candidates'][0]['record']
+    assert (record['kind'], record['origin'], record['author']) == ('revision', 'human', 'author-a')
+    store.configure(2, decline_revision_author=True)
+    declined = store.harvest('p', b'One.\n\nTwo revised.\n')
+    assert not declined['attribution_needed'] and declined['candidates'][0]['record']['origin'] == 'unknown'
+
+
+def test_harvested_examples_fit_the_context_budget(store):
+    filler = ''.join(f'Unchanged paragraph number {i} with ordinary words.\n\n' for i in range(300))
+    store.configure(0, revision_author='author-a')
+    store.snapshot(1, 'main.tex', (filler + 'We introduce X. It uses Y.\n').encode())
+    record = store.harvest('main.tex', (filler + 'Y lets us do Z. We build X.\n').encode())['candidates'][0]['record']
+    record['purpose'] = 'exposition'
+    store.record(2, {'evidence': [dict(record, id='h1'), feedback('w2', 'Idea first.')],
+                     'preferences': [preference(support=['h1', 'w2'])]})
+    examples = writing_context(store, {'section': 'introduction'})['examples']
+    assert {e['id'] for e in examples} == {'h1', 'w2'}
+
+
+def test_promote_copies_preference_into_author_store(tmp_path):
+    author = StyleStore(tmp_path / 'author')
+    author.init('apply')
+    project = StyleStore(tmp_path / 'project/.quill/style')
+    project.init('learn', author.path)
+    seed(project)
+    with pytest.raises(ValueError, match='stale'):
+        project.promote(1, 'p1', 5)
+    result = project.promote(1, 'p1', 0)
+    assert result['promoted'] == 'p1' and result['revision'] == 1
+    assert author.show('p1')['record']['text'] == 'Explain the problem before the method.'
+    assert author.show('e1')['record']['feedback'].startswith('In introductions')
+    assert project.load()['revision'] == 1
+    assert project.promote(1, 'p1', 1)['duplicate']
+
+
+def test_promote_requires_link(store):
+    seed(store)
+    with pytest.raises(ValueError, match='link an author'):
+        store.promote(1, 'p1', 0)
+
+
+def test_many_active_preferences_warn_about_consolidation(store):
+    items = [feedback(f'e{i}', f'Preference number {i}.') for i in range(41)]
+    store.record(0, {'evidence': items,
+                     'preferences': [preference(f'p{i}', text=f'Rule {i}.', support=[f'e{i}']) for i in range(41)]})
+    assert any('consolidate' in w for w in writing_context(store, {'section': 'introduction'})['warnings'])
+    assert store.show()['warnings']
+
+
+def test_record_reports_missing_fields_clearly(store):
+    with pytest.raises(ValueError, match='kind'):
+        store.record(0, {'evidence': [{'origin': 'human', 'author': 'a', 'feedback': 'x'}]})
+    with pytest.raises(ValueError, match='text'):
+        store.record(0, {'preferences': [{'id': 'p'}]})
+
+
+def test_cli_sources_are_project_relative(tmp_path, monkeypatch, capsys):
+    project = tmp_path / 'project'
+    (project / 'sections').mkdir(parents=True)
+    monkeypatch.chdir(project)
+    def command(*args):
+        with pytest.raises(SystemExit) as stopped:
+            main(['style', *args])
+        assert stopped.value.code == 0, capsys.readouterr().err
+        return json.loads(capsys.readouterr().out)
+    command('init', '--mode', 'learn')
+    (project / 'sections/intro.tex').write_text('Draft.\n')
+    assert command('snapshot', 'sections/intro.tex', '--expected-revision', '0')['snapshot']['source'] == 'sections/intro.tex'
+    moved = tmp_path / 'moved'
+    project.rename(moved)
+    monkeypatch.chdir(moved)
+    (moved / 'sections/intro.tex').write_text('Revised.\n')
+    assert command('harvest', 'sections/intro.tex')['candidates']
+
+
+def test_harvest_separates_adjacent_edits_but_keeps_splits_together(store):
+    store.snapshot(0, 'p', b'Style paragraph before.\n\nThe effect was 5 percent.\n\nOne long paragraph to split.\n')
+    harvested = store.harvest('p', b'Style paragraph after.\n\nThe effect was 2 percent.\n\nOne long\n\nparagraph, split.\n')
+    pairs = [(c['record']['before'], c['record']['after'], c['touches']) for c in harvested['candidates']]
+    assert pairs[0][:2] == ('Style paragraph before.', 'Style paragraph after.') and pairs[0][2] == []
+    assert pairs[1][2] == ['number']
+    assert pairs[2][0].startswith('One long paragraph') and pairs[2][1] == 'One long\n\nparagraph, split.\n'

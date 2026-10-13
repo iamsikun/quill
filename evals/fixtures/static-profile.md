@@ -1,7 +1,8 @@
-# Optional author style profile
+# Static author profile (evaluation fixture)
 
-Load this profile only when requested or established by project instructions. It
-distills preferences described in the user's supplied GPT 6 Astra Pro guidance.
+Formerly bundled with the skill as `references/author-style.md`. Evaluations supply it
+as user-provided context; Quill no longer ships a personal profile. It distills
+preferences described in the user's supplied GPT 6 Astra Pro guidance.
 The earlier manuscript and the separate skill mentioned there were not supplied
 as source artifacts here; no manuscript-specific finding is independently verified.
 A current user-provided writing sample takes priority over this profile.

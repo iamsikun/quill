@@ -1,8 +1,10 @@
 # Portable memory format, version 1
 
-This format is independent of the CLI and host. `state.json` is authoritative.
-`profile.md` is a readable view; `text/<sha256>.txt` contains exact original UTF-8
-bytes. `.gitignore` contains `*`. Personal stores never belong inside the installed
+Read this only to maintain memory without the `quill style` CLI; the CLI performs
+these steps itself. The format is independent of the CLI and host. `state.json` is
+authoritative. `profile.md` is a readable view; `text/<sha256>.txt` contains exact
+original UTF-8 bytes; `history.jsonl` holds earlier profile versions. `.gitignore`
+contains `*`. Personal stores never belong inside the installed
 skill. A project may contain just this memory without any manuscript workspace.
 
 ## State and transactions
@@ -14,11 +16,12 @@ skill. A project may contain just this memory without any manuscript workspace.
   "data": {
     "mode": "off",
     "author_store": null,
+    "revision_author": null,
+    "revision_author_asked": false,
     "evidence": {},
     "preferences": {},
     "snapshots": {}
   },
-  "history": [],
   "forgotten_ids": [],
   "forgotten_hashes": []
 }
@@ -26,6 +29,9 @@ skill. A project may contain just this memory without any manuscript workspace.
 
 `mode` is `off`, `apply`, or `learn`. `author_store` is an explicitly selected
 absolute path to a different, unlinked store; links are not followed recursively.
+`revision_author` is the author ID the author declared for edits found between
+agent writes, or null; `revision_author_asked` records that the question was
+answered, so it is not asked again.
 Automatic collection requires `learn`. `record --author-request` accepts an explicit
 request to edit memory using attributed human style/exposition feedback while
 preserving an `off` or `apply` mode. It does not authorize collecting manuscript diffs.
@@ -34,20 +40,32 @@ remain available in other modes. The empty state and current profile need no CLI
 
 A writer exclusively creates `.lock`, verifies the expected current revision,
 and validates the complete proposed state before saving. Write immutable content
-files first. Append the prior `{revision, time, data}` to `history`, increment
-`revision`, and atomically replace `state.json` using a same-directory temporary
-file. Release only a lock you created. Do not bypass an active writer's lock.
-The CLI records the writer's process ID and UTC time in the lock for diagnosis.
-After an interrupted process, establish that its writer is no longer active before
-removing a stale lock; memory unavailability must not block ordinary writing.
+files first. When `preferences`, `mode`, or `author_store` change, append one JSON
+line `{revision, time, mode, author_store, preferences}` holding the prior values
+to `history.jsonl`. Increment `revision` and atomically replace `state.json` using
+a same-directory temporary file. Release only a lock you created. The lock records
+`pid`, `host`, `time`, and a random `token`. A lock is stale when its process no
+longer exists on the same host, or when it is malformed and older than ten minutes;
+remove a stale lock once and retry. Memory unavailability must not block writing.
 Retain immutable content referenced by current or historical records. A failed
 write may leave an unreferenced content file; it must never publish partial metadata.
 
 Regenerate the readable profile only if it still equals the previous generated
 view, or its inspected hash has been explicitly acknowledged during reconciliation.
-If it differs, preserve its bytes. Restoring a version restores content while
-preserving the current mode and selected author store. A purge rewrites all
-historical data as well as current data, then removes unreferenced original text.
+If it differs, preserve its bytes. Restoring revision V uses the earliest history
+line with `revision >= V` (or the current preferences when none exists). It
+replaces only `preferences`; evidence, snapshots, mode, and author links stay
+current. Links to forgotten evidence are dropped and unsupported rules become
+`needs-review`. A purge rewrites `history.jsonl` and current data, then removes
+unreferenced original text.
+
+Forgetting a record removes it and every record sharing one of its exact passages
+(`before`, `after`, `feedback`, or snapshot content). A passage of at least 40
+characters is also removed where it is embedded in other passages or snapshots.
+`request` and `context` text is removed only when no remaining record uses it.
+Forgetting a preference also removes evidence that no other current preference
+uses. A remaining rule whose text quotes forgotten material is replaced by a
+needs-review placeholder.
 Tombstones contain only IDs and hashes and prevent restoration/reingestion of exact
 forgotten records. A purge can be retried after an interrupted content-file cleanup.
 
@@ -96,8 +114,10 @@ Evidence fields:
 - `feedback`: required for feedback evidence. `request` and `context` optionally
   preserve the original task and relevant source/paragraph context.
 - `source`: manuscript/passage locator; `baseline`: snapshot ID when available.
-- `lineage`: stable independent passage/decision identity. Repeated snapshots or
-  revisions in the same chain share it. Default is source, or content hash if absent.
+- `lineage`: stable independent passage/decision identity. Repeated records of the
+  same passage share it. Default is `<source>#<first 16 hex digits of the before
+  text's hash>` (falling back to feedback, then after text), or the content hash
+  when there is no source. Distinct passages in one file therefore count separately.
 - `scope`: optional applicability constraints, as below.
 
 Scope keys are `section`, `audience`, `decision`, `genre`, and `project`. Each value
@@ -138,8 +158,19 @@ from `content_hash`, so changing context alone is not independent revision evide
 Snapshot records contain `id`, `source`, `blob`, `origin: "agent"`, `parent` (previous
 snapshot for that source or null), `sequence` (the resulting store revision), and
 `time`. Select the latest baseline by sequence, not dictionary order. Repeating an
-unchanged baseline is a no-op. Harvest emits full before/after passages with unknown
-attribution; its diff does not infer paragraph alignment or editorial intent.
+unchanged baseline is a no-op. `source` is the file path relative to the project root
+when the file is inside the project.
+
+Harvest splits both versions into paragraphs at blank lines, keeping a LaTeX
+environment together, and aligns them. Edited paragraphs are paired one-to-one; a
+split or merged paragraph stays with its source. Each change becomes a candidate
+`{record, touches, moved}`. `record` is ready for `record` input: exact `before` and
+`after` text, neighbouring paragraphs as `context`, the baseline ID, and a lineage
+from the block's text. With a declared `revision_author` it is a human `revision`
+by that author; otherwise an `observation` of unknown origin. `purpose` is always
+`unknown` until the host classifies it. `touches` lists changed `math`,
+`citation`, `reference`, or `number` tokens. `moved` marks a paragraph that
+reappears elsewhere. Harvest never infers editorial intent.
 
 CLI helpers perform these mechanical steps and validate supported status transitions.
 Without them, follow the same schema and preserve IDs, references, and user edits.

@@ -26,6 +26,8 @@ def build_prompt(case: dict, arm: str, host: str) -> str:
         for relative in case['references']:
             parts.append(SKILL.joinpath('references', relative).read_text())
     parts.append(case['prompt'])
+    for relative in case.get('supplied', []):
+        parts.append('Supplied by the user:\n' + (ROOT / 'evals' / relative).read_text())
     parts.append('Source material:\n' + case['source'])
     prompt = '\n\n'.join(parts)
     if arm == 'explicit':

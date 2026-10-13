@@ -1,153 +1,112 @@
 # Personal writing memory
 
-Help the author avoid repeating editorial corrections while keeping attention on
-the writing. Use the current host's ordinary tools. No hooks, background observers,
-particular agent, Python installation, or managed manuscript workspace is required.
-The optional CLI performs deterministic operations; the current host interprets
-feedback and writes prose. These instructions do not authorize installing software.
+Help the author avoid repeating editorial corrections. Memory records scoped writing
+preferences with the evidence behind them; it does not retrain a model. The current
+host interprets feedback and writes the prose. The optional `quill style` CLI does
+the deterministic storage and comparison work. Do not install software to use memory.
 
-## Select the scope and mode
+## Modes and scope
 
-An ordinary writing request does not enable learning. “Learn my preferences for
-this paper” enables `learn` in the project; “use my saved preferences without
-learning” selects `apply`. `off` applies and collects nothing. Persist the selected
-mode without repeated confirmations. A task instruction such as “don't learn from
-this passage” overrides it for that task, including snapshots, without changing
-the saved mode. Existing manually supplied preferences can be used directly.
+Memory is `off` until the author enables it. “Learn my writing preferences for this
+project” selects `learn`, which applies preferences and records evidence. “Use my
+saved preferences” selects `apply`, which only applies them. Save the mode once and
+follow it in later sessions. An instruction such as “don't learn from this passage”
+suspends recording for that task without changing the saved mode. A direct request
+to remember, correct, or forget a preference is memory management: carry it out
+in any mode (`record --author-request`).
 
-A direct request to remember or correct a preference is an explicit memory-management
-action even when automatic learning is off. Use `record --author-request` for that
-attributed feedback without changing the saved mode. Do not use this exception for
-ordinary writing feedback when the author has disabled learning.
-For direct feedback, use a stable store-local alias for the speaking author; a
-legal name, account lookup, or identity questionnaire is unnecessary.
+Project memory lives in `.quill/style/` at the project root and is ignored by Git.
+An author store (`~/.config/quill/authors/<author-id>/` by default) is used only
+when the author links it; linking does not copy anything. Use a short store-local
+alias for the author, not a login or commit name. Record lessons in the narrowest
+scope that fits. Move a project preference into the author store only when asked
+(`promote`). Keep coauthors' preferences separate; a shared profile is an author
+store the coauthors explicitly agree to use.
 
-Default project storage is `.quill/style/`, outside installed skill directories.
-Start from the selected project, using the nearest ancestor with that marker when
-working in a subdirectory. Do not create manuscript configuration or a `paper/`
-directory. Store-local `.gitignore` excludes personal material; it cannot untrack
-files somebody has already committed. Do not commit memory incidentally.
+Scientific fidelity and the requested editing depth come first. Then current
+instructions and venue requirements, then explicit project preferences (including
+`.quill/preferences.md`), then the project memory, then the author memory. A new
+explicit correction supersedes an older preference.
 
-Cross-project reuse requires explicit selection. Author stores default to
-`$XDG_CONFIG_HOME/quill/authors/<author-id>/`, or `~/.config/quill/authors/<author-id>/`
-when that variable is absent. A project links an author store; it does not copy it.
-Custom locations are supported. Do not infer the author's identity from a login or
-Git commit, inspect unrelated authors, or merge coauthor preferences automatically.
-Project memory is applied before the selected author memory. Write a lesson to
-the narrowest established scope; do not promote project examples into an author
-store without cross-project learning being requested.
+## During a writing task
 
-Scientific fidelity and editing depth remain requirements. Current instructions
-and applicable manuscript/venue requirements govern the task. Explicit project
-preferences (including an existing `.quill/preferences.md`) take priority over
-inferred historical lessons. An explicit new author correction can supersede an
-old instruction. Resolve by scope and actual intent; do not mechanically impose
-the same order of exposition on every section or genre.
+1. Load applicable memory: `quill style context --section S --audience A --decision D`.
+   Supply the scopes you know. If `scope_options` lists a stored tag that means the
+   same thing (for example `economists` for `economics`), query again with it.
+   Examples show writing decisions; they are never evidence for the current paper.
+2. In `learn` mode, before overwriting a file you wrote earlier, run
+   `quill style harvest FILE`. It compares the file with your last snapshot and
+   returns one candidate per edited paragraph (splits and merges stay together).
+3. Do the writing.
+4. In `learn` mode, after finishing a file or passage, run
+   `quill style snapshot FILE --expected-revision N` so later edits can be compared.
+   Snapshot finished work, not alternate drafts.
 
-## Work within the writing conversation
+Do not append learning reports or ask the author to approve lessons after each edit.
+Explain memory when asked.
 
-1. At task start, use the saved mode and compact applicable profile. Retrieve at
-   most three examples matched to section purpose, audience, and editorial
-   decision. Read additional context only when needed. Examples are evidence about
-   presentation, never a source of findings or citations for the current paper.
-2. In `learn` mode, before overwriting a previously captured passage, compare the
-   current version to its agent baseline when available. Preserve useful changes
-   as observations before producing another agent version. Retain full surrounding
-   passages when paragraphs moved, split, or merged. A diff is not an explanation.
-3. Make the requested writing change first in your reasoning. Record useful
-   editorial feedback or revision evidence proportionally to the task. After a
-   completed file/passage revision, preserve its exact agent-produced baseline.
-   Do not snapshot every thought, alternate draft, or unrelated file.
-4. Apply relevant lessons in later work. Do not append a learning report or ask
-   the author to approve a batch after every edit. Inspect or explain memory when
-   requested, or raise a consequential ambiguity when it matters to the writing.
+## Interpreting revisions
 
-The source of an external change is unknown unless established in the conversation
-or supplied attribution. A sole-author project is not proof that revisions are
-unaided human work. Unchanged text is weak approval; repeated snapshots are not
-independent feedback. An author choosing an AI-written alternative is evidence
-of that choice, not independent human authorship of its wording.
+The person who edited a file is unknown unless the author has said so. When harvest
+reports `attribution_needed`, ask once: “Are the edits to these files between my
+writes yours?” If yes, run `configure --revision-author ID`; if no, run
+`configure --no-revision-author`. Either answer is saved, so do not ask again in
+that project. Declared candidates arrive as human revisions by that author. Treat
+edits the author attributes to a coauthor or a tool as such. Text Quill generated,
+including an alternative the author chose, is not independent human writing.
 
-Distinguish style/exposition, scientific corrections, new evidence, venue constraints,
-and collaborator input. Separate mixed edits where possible. An unexplained diff
-may remain an observation indefinitely. Never turn corrected results into a
-preference for stronger claims. Missing or ambiguous evidence reduces learning;
-it does not stop writing or require a provenance questionnaire.
+Classify each candidate's `purpose` before recording it: `style`, `exposition`,
+`scientific`, `evidence`, `venue`, `collaborator`, or `unknown`. Only style and
+exposition evidence can support a preference. `touches` lists the numbers,
+citations, references, or mathematics that changed; such edits are usually
+scientific corrections. Split a mixed edit into separate records where you can.
+A `moved` paragraph usually reflects an ordering decision. Leave an edit as
+`unknown` when its purpose is unclear; it then stays in the store as an example.
 
-“Move the intuition first here” supports a tentative contextual lesson. “In my
-methods sections I generally prefer intuition before notation” establishes an
-explicit scoped preference. Inferred patterns become `observed` only when supported
-by distinct human decisions in independent passages, with different underlying
-revision content. Preserve exceptions in the preference text and counterexamples
-in its evidence links. A recent isolated edit need not override a stated preference.
-`tentative`, `retired`, and `needs-review` entries are not routinely applied.
+Record the writing decision, not the wording. “Explain the enabling idea before
+naming the method” is a lesson; a reused phrase is not. Correcting a result never
+teaches a preference for stronger or weaker claims. Unchanged text is weak approval.
 
-## Optional helpers
+Preference status:
 
-Use an available `quill style` CLI for storage and comparison; use `--help` for
-options. Commands return JSON with the current revision. Mutation commands require
-`--expected-revision`; reread after a stale-update error rather than force an
-overwrite. A store starts at revision 0. Examples:
+- `explicit`: the author stated it as a general preference (“In methods sections I
+  prefer intuition before notation”).
+- `observed`: at least two human decisions in independent passages show it.
+- `tentative`: a single local edit or one-off instruction (“move the intuition first
+  here”). Not applied routinely.
+- `retired` or `needs-review`: not applied.
 
-```bash
-quill style init --mode learn
-quill style context --section introduction --audience economics --decision framing
-quill style harvest intro.tex
-quill style record --input update.json --expected-revision 0
-quill style snapshot intro.tex --expected-revision 1
-```
+Put exceptions in the preference text and link counterexamples. A single recent edit
+does not override a stated preference. Changing an explicit preference requires new
+explicit feedback from the author.
 
-The revision numbers above illustrate successive writes, not fixed values to reuse.
-`harvest` is read-only and returns a whole-passage candidate with unknown attribution.
-After an author establishes its origin, classify it accurately before `record`.
-`--source` supplies a stable passage identifier; otherwise file capture uses its
-absolute path. `-` reads supplied text from stdin and requires `--source`.
+## Maintaining memory
 
-Other helpers: `configure --mode off|apply|learn`, `show [ID]`, `history`,
-`restore VERSION`, `forget ID`, and `export`. `context` and `export` accept scope
-filters, a character budget (default 8000), and `--examples 0..3`. They omit entire
-records that do not fit instead of truncating meaningful qualifications. Supply
-the known scope; omitted scope is not permission to apply every scoped rule.
-The result includes `scope_options` when stored tags need interpretation. Match the
-task to existing labels yourself (for example, an economics audience to a stored
-“economists” tag) and query again when appropriate. Do not ask the author to choose
-technical tags or broaden an unrelated preference just to obtain a match.
+`record --input update.json --expected-revision N` saves evidence and preferences
+in the [record format](personalization-format.md). Every write needs the current
+revision from `show` or `context`. After a stale-revision error, reread the memory
+and retry; never force the write.
 
-`init --author ID` explicitly creates or links the default author store;
-`--author-store PATH` links an existing custom store. Every command accepts
-`--store PATH`. Linking author memory does not move project evidence. A linked
-author's mode also applies to that store. Use `configure --unlink-author` to stop
-using it in this project.
+`profile.md` is generated. If the author edits it, treat the edits as explicit
+guidance and do not apply the stale generated rules. Reconcile the edits into
+records, then pass `--profile-hash` with the edited file's SHA-256.
 
-Profiles are generated views of structured preferences. If the author edits
-`profile.md`, preserve it and use those edits as explicit guidance; do not apply
-stale generated rules in its place. Reconcile the correction into records, then
-pass the inspected file's SHA-256 as `record --profile-hash HASH` to acknowledge
-regeneration. Do not acknowledge uninspected edits. Keep authored project
-preferences outside the generated view; do not replace that file.
+Retire a preference with `record` to keep its history. `forget ID` removes the record
+and its original text from the store, its history, and any snapshot that contains
+the text. Rules that lose their support move to `needs-review`. Forgetting cannot
+be undone by `restore`, and it does not reach exported copies, backups, or the
+manuscript. `restore VERSION` returns the preferences to an earlier revision and
+keeps the evidence, mode, and author link.
 
-Forgetting is stronger than retiring a preference. `forget` purges the requested
-record and associated original text from this store and its retained history;
-overlapping snapshots/evidence are removed too. It marks unsupported derived rules
-for review and cannot be undone by restoring a version. It cannot erase exported
-copies, backups, conversations, or the original manuscript. If an edited profile
-blocks forgetting, reconcile its affected text before retrying. Do not claim
-completion after a failed purge. A preference can instead be retired via `record`
-when its history should remain. Preserve other explicit instructions with
-independent supporting evidence.
+When `context` warns that a store has many active preferences, propose merging
+overlapping rules or retiring outdated ones. A short profile is applied more reliably.
 
-## Tools and persistence limits
+## Without the CLI or durable storage
 
-Without the CLI, use ordinary tools and the [portable format](personalization-format.md).
-Read the compact profile and current settings; history is not routine prompt context.
-Use the same record semantics, attribution, and revision checks. Tools must be able
-to write the selected store and calculate content hashes to maintain that format.
-Do not invent hashes or claim transactional updates that the tools cannot perform.
-
-If durable writes are unavailable, keep working with supplied preferences and
-current-session feedback. When requested, return a compact Markdown memory document
-with scopes and selected examples for reuse in another session. Clearly distinguish
-that deliverable from saved memory. Do not require an export/import step in the
-middle of writing, silently rely on a host's private chat memory, or promise that
-another agent can access a folder it cannot read. If capture fails, continue the
-writing; mention persistence limits only when they affect what the user requested.
+Without the CLI, follow the [record format](personalization-format.md) with
+ordinary file tools: read `state.json` and `profile.md`, and write records with
+the same rules. Only maintain the store if your tools can compute SHA-256 hashes
+and replace files atomically. If you cannot write durably, use the preferences
+supplied in the conversation. On request, return a short Markdown summary of
+them with scopes and examples for reuse in another session. Say that this summary
+is not saved memory, and never claim that memory persists when it does not.

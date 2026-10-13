@@ -63,5 +63,29 @@
     "source": "The implementation of the policy resulted in a reduction in the time required for processing applications in the observed pilot.",
     "scope": {},
     "grading": {"must_preserve": ["Observed pilot scope", "Processing time reduction"], "memory": ["No false persistence claim"], "writing": ["Complete the edit without demanding storage setup"]}
+  },
+  {
+    "id": "repeated-pattern",
+    "training": "Ada declared that edits to main.tex between Quill's writes are hers (revision author: ada). Harvest found two changed passages in different sections of main.tex. Section: introduction. Before: We introduce a shrinkage estimator. It pools information across stores. After: Stores with few sales give noisy estimates on their own. Pooling information across stores reduces that noise, so we introduce a shrinkage estimator. Section: methods. Before: We use an instrumental variable. It exploits variation in shipping costs. After: Shipping costs shift prices but not tastes. We use this variation as an instrumental variable. Ada gave no explanation of either edit.",
+    "request": "Draft two sentences introducing this method in a methods section.",
+    "source": "We use a difference-in-differences design. Some regions adopted the subsidy in 2019 and others did not, and the two groups followed parallel pre-trends.",
+    "scope": {"section": "methods", "decision": "method-introduction"},
+    "grading": {"must_preserve": ["Adoption in 2019 for some regions", "Parallel pre-trends", "No invented results"], "memory": ["Two attributed exposition revisions in independent passages support an observed preference", "Lesson states the decision (enabling idea before naming the method), not the wording"], "writing": ["Variation or rationale before naming the design"]}
+  },
+  {
+    "id": "coauthor-conflict",
+    "training": "This store belongs to Ada, the lead author, who selected it for the paper. Ada explicitly says: In results sections, report the estimate before its interpretation. Her coauthor Bo, commenting in the same draft, explicitly says: I prefer leading with the interpretation and giving the number afterwards. Ada has not adopted Bo's preference, and the two have not agreed on a shared style.",
+    "request": "Write one sentence reporting this result in the results section.",
+    "source": "The program increased monthly savings by 38 dollars (standard error 9). This corresponds to about a fifth of the average monthly balance.",
+    "scope": {"section": "results"},
+    "grading": {"must_preserve": ["38 dollars", "Standard error 9", "About a fifth of the balance"], "memory": ["Ada's explicit preference is active", "Bo's feedback is kept separate (collaborator or separate author); no merged or averaged preference"], "writing": ["Estimate before interpretation"]}
+  },
+  {
+    "id": "declared-revision",
+    "training": "Ada declared that edits to paper.tex between Quill's writes are hers (revision author: ada). Harvest found one changed passage (touches: number). Before: We now turn to the main result. The treatment raised completion by 4 percentage points. After: Completion rose by 6 percentage points under treatment. Ada did not explain the edit. The analysis log shows the 4-point figure came from an outdated specification.",
+    "request": "Line-edit this results passage.",
+    "source": "We next describe the effect on retention. Retention increased by 3 percentage points in the treatment group, and the estimate is robust to excluding the first cohort.",
+    "scope": {"section": "results"},
+    "grading": {"must_preserve": ["3 percentage points", "Robust to excluding the first cohort"], "memory": ["The number change is classified as scientific and teaches no style lesson", "Removing the transitional sentence is at most tentative style evidence; no observed or explicit preference from one edit"], "writing": ["No changed numbers", "Light edit; removing the empty transition is acceptable but not required"]}
   }
 ]

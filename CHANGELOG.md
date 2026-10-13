@@ -15,6 +15,18 @@ Quill uses semantic versioning:
   personal data across skill updates; preserve unknown attribution and scientific scope.
 - Add isolated personalization evaluations and regression coverage. No hooks,
   background services, new runtime dependencies, or release changes are required.
+- Learn from file revisions: `harvest` aligns changed paragraphs, keeps their context,
+  and flags changed numbers, citations, references, and mathematics. An author can
+  declare that edits between Quill's writes are theirs (`configure --revision-author`);
+  Quill asks once per project.
+- Keep memory fast and recoverable: profile history moves to an append-only
+  `history.jsonl`, `restore` accepts any past revision and restores preferences only,
+  stale locks from crashed writers are recovered, and sources are project-relative.
+- Make `forget` precise: short shared text no longer removes unrelated records, and
+  forgetting a preference keeps evidence other preferences use.
+- Count distinct passages in one manuscript file as independent evidence.
+- Add `promote` and a warning when a profile grows past 40 active preferences.
+- Move the bundled personal style profile out of the skill into an evaluation fixture.
 
 ## 0.5.0 — 2026-10-10
 

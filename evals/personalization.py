@@ -103,7 +103,7 @@ def run_case(case: dict, host: str, arm: str, timeout: int, training_record: dic
         project = Path(temporary)
         memory = ''
         if arm == 'static':
-            memory = (SKILL / 'references/author-style.md').read_text()
+            memory = (ROOT / 'evals/fixtures/static-profile.md').read_text()
         if arm in ('learned', 'examples') and case.get('storage_available', True):
             if training_record is not None:
                 if any(training_record.get(key) != record[key] for key in ('case_hash', 'skill_hashes', 'host')):

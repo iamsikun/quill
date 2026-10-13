@@ -13,6 +13,17 @@ def _input(path: str) -> bytes:
     return sys.stdin.buffer.read() if path == '-' else Path(path).read_bytes()
 
 
+def _source(store: StyleStore, file: str) -> str:
+    """Project-relative path, so moving or cloning a project keeps its baselines."""
+    path = Path(file).resolve()
+    if store.path.parent.name == '.quill':
+        try:
+            return path.relative_to(store.path.parent.parent).as_posix()
+        except ValueError:
+            pass
+    return str(path)
+
+
 def run(args: argparse.Namespace) -> int:
     store = StyleStore(args.store or default_store())
     action = args.style_action
@@ -29,11 +40,11 @@ def run(args: argparse.Namespace) -> int:
     elif action == 'configure':
         result = store.configure(args.expected_revision, args.mode,
                                  Path(args.author_store).expanduser() if args.author_store else None,
-                                 args.unlink_author)
+                                 args.unlink_author, args.revision_author, args.no_revision_author)
     elif action in ('snapshot', 'harvest'):
         if args.file == '-' and not args.source:
             raise ValueError('--source is required for a passage supplied on stdin')
-        source = args.source or str(Path(args.file).resolve())
+        source = args.source or _source(store, args.file)
         raw = _input(args.file)
         if action == 'snapshot':
             result = store.snapshot(args.expected_revision, source, raw)
@@ -50,13 +61,15 @@ def run(args: argparse.Namespace) -> int:
         result = store.restore(args.expected_revision, args.version)
     elif action == 'forget':
         result = store.forget(args.expected_revision, args.id)
+    elif action == 'promote':
+        result = store.promote(args.expected_revision, args.id, args.author_revision)
     else:
         query = {key: getattr(args, key) for key in SCOPE_KEYS if getattr(args, key)}
         result = writing_context(store, query, args.budget, args.examples)
         if action == 'export':
             print(export_context(result), end='')
             return 0
-    # JSON is also the default: agents can use exact IDs and revisions without parsing prose.
+    # JSON output: agents can use exact IDs and revisions without parsing prose.
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 
@@ -65,12 +78,10 @@ def add_parser(subparsers) -> None:
     parser = subparsers.add_parser('style', help='Inspect and maintain optional personal writing memory')
     actions = parser.add_subparsers(dest='style_action', required=True)
     for name in ('init', 'configure', 'snapshot', 'harvest', 'record', 'context', 'show',
-                 'history', 'restore', 'forget', 'export'):
+                 'history', 'restore', 'forget', 'promote', 'export'):
         action = actions.add_parser(name)
         action.add_argument('--store', type=Path, help='Explicit store; default: nearest project .quill/style')
-        if name != 'export':
-            action.add_argument('--json', action='store_true', help='JSON output (also the default)')
-        if name in ('configure', 'snapshot', 'record', 'restore', 'forget'):
+        if name in ('configure', 'snapshot', 'record', 'restore', 'forget', 'promote'):
             action.add_argument('--expected-revision', type=int, required=True,
                                 help='Revision returned by show/context; stale updates are rejected')
         if name in ('init', 'configure'):
@@ -81,9 +92,14 @@ def add_parser(subparsers) -> None:
                 links.add_argument('--author', help='Create or link an author in the configured author directory')
             else:
                 links.add_argument('--unlink-author', action='store_true')
+                attribution = action.add_mutually_exclusive_group()
+                attribution.add_argument('--revision-author',
+                                         help='Author declared to make the edits found between agent writes')
+                attribution.add_argument('--no-revision-author', action='store_true',
+                                         help='Author declined or withdrew that declaration; do not ask again')
         if name in ('snapshot', 'harvest'):
             action.add_argument('file', help='UTF-8 manuscript/passage file, or - for stdin')
-            action.add_argument('--source', help='Stable manuscript/passage identifier; defaults to absolute file path')
+            action.add_argument('--source', help='Stable passage identifier; default: project-relative path')
         if name == 'harvest':
             action.add_argument('--baseline', help='Compare to a specific snapshot instead of the latest one')
         if name == 'record':
@@ -91,8 +107,11 @@ def add_parser(subparsers) -> None:
             action.add_argument('--profile-hash', help='Acknowledge an inspected and reconciled manually edited profile')
             action.add_argument('--author-request', action='store_true',
                                 help='Explicit request to edit memory using author feedback, even when automatic learning is off')
-        if name in ('show', 'forget'):
+        if name in ('show', 'forget', 'promote'):
             action.add_argument('id', nargs='?' if name == 'show' else None)
+        if name == 'promote':
+            action.add_argument('--author-revision', type=int, required=True,
+                                help='Current revision of the linked author store')
         if name == 'restore':
             action.add_argument('version', type=int)
         if name in ('context', 'export'):

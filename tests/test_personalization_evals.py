@@ -13,7 +13,7 @@ spec.loader.exec_module(runner)
 
 def test_grading_and_held_out_passages_do_not_leak_into_training():
     cases = json.loads((ROOT / 'evals/personalization.json').read_text())
-    assert len(cases) == len({c['id'] for c in cases}) == 8
+    assert len(cases) == len({c['id'] for c in cases}) == 11
     for case in cases:
         case = {**case, 'grading': {'sentinel': 'GRADING_PRIVATE_SENTINEL'},
                 'source': 'HELD_OUT_PRIVATE_SENTINEL'}
@@ -66,7 +66,8 @@ def test_learning_persists_between_separate_model_calls(monkeypatch):
 
 
 def test_no_storage_case_does_not_try_to_train_or_create_store(monkeypatch):
-    case = json.loads((ROOT / 'evals/personalization.json').read_text())[-1]
+    case = next(c for c in json.loads((ROOT / 'evals/personalization.json').read_text())
+                if c['id'] == 'unavailable-storage')
     monkeypatch.setattr(runner.subprocess, 'run', lambda *a, **kw: SimpleNamespace(stdout='test-host'))
     def invoke(host, prompt, project, timeout):
         assert not (project / '.quill').exists()

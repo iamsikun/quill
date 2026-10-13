@@ -21,13 +21,13 @@ the manuscript's established terminology and structure. Ask only for missing
 information that materially affects the work; use the supplied passage and
 conversation when they are sufficient.
 
-When working in a persistent project, check for an existing `.quill/style/state.json`
-at the selected project root (or nearest ancestor containing that marker). Read
-[Personalization](references/personalization.md) when memory exists, the user supplies
-a profile, or asks to learn, inspect, correct, or forget writing preferences. Memory
-is off until enabled; a writing request alone does not enable collection. Follow
-the saved mode in later sessions without asking again. Do not search other projects
-or personal stores unless selected. Missing memory must not delay the writing.
+When working in a persistent project, check for `.quill/style/state.json` at the
+selected project root or its nearest ancestor. Read
+[Personalization](references/personalization.md) when that memory exists, the user
+supplies a style profile or sample, or asks to learn, inspect, correct, or forget
+writing preferences. Memory is off until the author enables it; a writing request
+alone does not enable it. A supplied profile or sample applies only to its author.
+Missing memory must not delay the writing.
 
 Work directly with pasted prose or the user's existing files. Resolve bundled
 references below relative to this skill's directory, and manuscript paths relative
@@ -98,9 +98,6 @@ Read only the additional guidance needed for this task:
   mathematical exposition, results, literature synthesis, and captions.
 - [Examples](references/examples.md): difficult editing judgments, especially
   changes that sound fluent but alter meaning and cases requiring restraint.
-- [Author style](references/author-style.md): only when the user requests this
-  personal profile or project instructions establish it. A supplied style sample
-  takes priority. Do not impose it on other authors by default.
 - [Quill workspaces](references/quill-workspaces.md): only for an existing
   Quill project or an explicit request for a managed workspace. Neither a CLI
   nor a `paper/` directory is required to write or edit prose.

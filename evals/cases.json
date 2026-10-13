@@ -223,11 +223,10 @@
   {
     "expect_activation": true,
     "id": "optional-style",
-    "prompt": "Use Quill's optional author style profile to line-edit this passage. Preserve the scientific distinction.",
+    "prompt": "Use the supplied author style profile to line-edit this passage. Preserve the scientific distinction.",
     "source": "Selection and evaluation are separate questions. A treatment can be selected and still be suboptimal, and its estimated value can exceed its true value. This distinction is relevant when a marketer interprets the value estimate.",
     "references": [
-      "editing.md",
-      "author-style.md"
+      "editing.md"
     ],
     "must_preserve": [
       "selection vs evaluation",
@@ -238,6 +237,9 @@
     "must_not": [
       "selected means best",
       "add managerial findings"
+    ],
+    "supplied": [
+      "fixtures/static-profile.md"
     ]
   },
   {

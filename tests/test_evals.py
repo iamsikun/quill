@@ -23,6 +23,8 @@ def test_cases_and_prompts_keep_grading_separate():
         assert case['must_preserve'] and case['must_not']
         for reference in case['references']:
             assert (runner.SKILL / 'references' / reference).is_file()
+        for supplied in case.get('supplied', []):
+            assert (ROOT / 'evals' / supplied).is_file()
         # Every grading field stays private in every comparison/discovery arm.
         graded = {**case, **{
             field: [f'GRADING_SENTINEL_{field}']

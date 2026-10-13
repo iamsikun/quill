@@ -299,3 +299,14 @@ establish automatic skill invocation, autonomous file-tool behavior, or support
 in every host. Samples were captured during development; the archive preserves
 each sample's instruction hashes and exact prompts rather than treating them as
 a single frozen-version benchmark.
+
+### Review fixes — 2026-10-13
+
+The [follow-up record](results/personalization-2026-10-13-fixes.json) adds one Claude
+sample for each new case. Two attributed revisions in independent passages of one
+file produced an observed preference, which the held-out methods passage followed.
+With conflicting coauthors, only the lead author's explicit preference became active.
+A declared-author revision that corrected a number was classified as scientific and
+taught no preference. That output preserved the finding but appended an unrequested
+note, a remaining instance of over-commenting. Single samples with harness-managed
+persistence do not test the agent-run snapshot/harvest loop or writing quality.

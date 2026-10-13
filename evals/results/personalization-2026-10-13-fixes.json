@@ -1,0 +1,126 @@
+{
+ "date": "2026-10-13",
+ "kind": "development smoke evaluations, assistant-inspected; not author preference measurements",
+ "notes": [
+  "One sample each of the three cases added with the review fixes, examples arm, Claude host. Exact prompts, returned text, skill hashes, and stdout hashes are in the archive. No samples were discarded.",
+  "repeated-pattern: two declared-author exposition revisions in independent passages of one file produced an observed preference (enabling idea before naming the method); the held-out methods passage states the adoption contrast and parallel pre-trends before naming difference-in-differences.",
+  "coauthor-conflict: the lead author's feedback became the only active preference; the coauthor's was stored as collaborator evidence and not merged. The output reports the estimate before its interpretation.",
+  "declared-revision: the number change was classified as scientific and produced no preference. The removed transitional sentence was not recorded as separate style evidence, which the case allows. The output preserves 3 percentage points and the robustness statement, but appends an unrequested note about the comparison group, contrary to the core instruction to add notes only for material unresolved issues.",
+  "These sessions use harness-managed persistence; they do not test automatic invocation, the snapshot/harvest loop run by an agent, or writing quality."
+ ],
+ "samples": [
+  {
+   "sample": "claude-examples-coauthor-conflict.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "coauthor-conflict",
+   "arm": "examples",
+   "error": null,
+   "training_reused": false,
+   "learned_preferences": {
+    "results-estimate-before-interpretation": {
+     "status": "explicit",
+     "scope": {
+      "section": [
+       "results"
+      ]
+     },
+     "text": "In results sections, report the estimate before its interpretation. This is Ada's preference; coauthor Bo prefers interpretation first, but that view has not been adopted or agreed as a shared style."
+    }
+   },
+   "learned_evidence": {
+    "ada-results-estimate-first": {
+     "kind": "feedback",
+     "origin": "human",
+     "purpose": "exposition"
+    },
+    "bo-results-interpretation-first": {
+     "kind": "feedback",
+     "origin": "human",
+     "purpose": "collaborator"
+    }
+   },
+   "applied_preferences": [
+    "results-estimate-before-interpretation"
+   ],
+   "retrieved_examples": [
+    "ada-results-estimate-first"
+   ],
+   "application_text": "The program increased monthly savings by $38 (standard error 9), about one-fifth of the average monthly balance.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-declared-revision.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "declared-revision",
+   "arm": "examples",
+   "error": null,
+   "training_reused": false,
+   "learned_preferences": {},
+   "learned_evidence": {
+    "ada-results-completion-correction-1": {
+     "kind": "revision",
+     "origin": "human",
+     "purpose": "scientific"
+    }
+   },
+   "applied_preferences": [],
+   "retrieved_examples": [],
+   "application_text": "Retention in the treatment group increased by 3 percentage points, and this estimate is robust to excluding the first cohort.\n\n---\n\n**Note:** The passage doesn't state what the 3-point increase is measured against: the control group, or the treatment group's own baseline. If it is the treatment–control difference, consider saying so, e.g., \"Retention was 3 percentage points higher in the treatment group than in the control group.\"",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  },
+  {
+   "sample": "claude-examples-repeated-pattern.json",
+   "host": "claude",
+   "host_version": "2.1.296 (Claude Code)",
+   "case": "repeated-pattern",
+   "arm": "examples",
+   "error": null,
+   "training_reused": false,
+   "learned_preferences": {
+    "motivation-before-method-name": {
+     "status": "observed",
+     "scope": {
+      "section": [
+       "introduction",
+       "methods"
+      ]
+     },
+     "text": "When introducing a method or technique, first state the problem it addresses or the idea that makes it work (for example, why pooling reduces noise, or why a source of variation is a valid instrument), then name the method as the consequence of that reasoning, rather than naming the method first and explaining it afterward."
+    }
+   },
+   "learned_evidence": {
+    "ada-intro-shrinkage-motivation": {
+     "kind": "revision",
+     "origin": "human",
+     "purpose": "exposition"
+    },
+    "ada-methods-iv-motivation": {
+     "kind": "revision",
+     "origin": "human",
+     "purpose": "exposition"
+    }
+   },
+   "applied_preferences": [
+    "motivation-before-method-name"
+   ],
+   "retrieved_examples": [
+    "ada-methods-iv-motivation"
+   ],
+   "application_text": "Some regions adopted the subsidy in 2019 and others did not, and the two groups followed parallel trends before adoption. We exploit this contrast with a difference-in-differences design, comparing changes in outcomes in adopting regions with changes in non-adopting regions.",
+   "stage_exit_codes": [
+    0,
+    0
+   ]
+  }
+ ],
+ "trace_archive": "personalization-2026-10-13-fixes.traces.json.gz",
+ "trace_archive_sha256": "8e14632ba5388888bf8f0903c46a51ca11d040e4d8c61bed4a63e1ae3398a2f7"
+}

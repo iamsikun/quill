@@ -92,16 +92,18 @@ followups, discovery evidence, remaining failures, and untested configurations.
 
 ## Personalization
 
-`personalization.json` contains eight simulated-author cases covering explicit
+`personalization.json` contains eleven simulated-author cases covering explicit
 preferences, local instructions, factual corrections, unknown attribution, changed
-audiences, corrected preferences, effective prose, and unavailable storage. Training
+audiences, corrected preferences, effective prose, unavailable storage, a pattern
+repeated across independent passages, conflicting coauthors, and a declared-author
+revision that mixes style with a corrected number. Training
 feedback and held-out passages are separate. Grading fields never enter prompts.
 These fixtures test the learning workflow; they are not real author judgments.
 
 The separate `personalization.py` runner compares four arms:
 
 - `none`: ordinary Quill.
-- `static`: Quill plus the existing optional static profile.
+- `static`: Quill plus a fixed profile (`fixtures/static-profile.md`) supplied as user context.
 - `learned`: a model interprets training feedback, the harness persists its validated
   update, and a fresh session receives applicable learned preferences.
 - `examples`: the same learning protocol, with up to three retrieved examples.
