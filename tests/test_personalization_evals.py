@@ -44,10 +44,10 @@ def test_learning_persists_between_separate_model_calls(monkeypatch):
     def invoke(host, prompt, project, timeout):
         calls.append(prompt)
         if len(calls) % 2 == 1 and 'Writing session' in prompt:
-            assert not (project / '.quill').exists()
+            assert not (project / 'config').exists()
             text = json.dumps({'profile': profile, 'examples': example})
         else:
-            assert (project / '.quill/style/profile.md').read_text() == profile
+            assert (project / 'config/quill/profile.md').read_text() == profile
             assert 'Start with the decision problem.' in prompt and 'hospital' in prompt
             text = 'A hospital must reserve capacity before demand is known.'
         return {'exit_code': 0, 'text': text, 'prompt': prompt}
@@ -73,7 +73,7 @@ def test_no_storage_case_does_not_try_to_train_or_create_store(monkeypatch):
                 if c['id'] == 'unavailable-storage')
     monkeypatch.setattr(runner.subprocess, 'run', lambda *a, **kw: SimpleNamespace(stdout='test-host'))
     def invoke(host, prompt, project, timeout):
-        assert not (project / '.quill').exists()
+        assert not (project / 'config').exists() and not (project / '.quill').exists()
         assert 'not saved' in prompt
         return {'exit_code': 0, 'text': 'The policy reduced processing time in the observed pilot.'}
     monkeypatch.setattr(runner, 'invoke', invoke)

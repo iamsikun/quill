@@ -17,7 +17,7 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / 'skills/quill'
 ARMS = ('none', 'static', 'learned', 'examples')
-EMPTY_PROFILE = '---\nmode: learn\nedits: mine\nauthor_profile:\n---\n# Writing profile\n'
+EMPTY_PROFILE = '---\nmode: learn\n---\n# Writing profile\n'
 
 
 def training_prompt(case: dict) -> str:
@@ -27,7 +27,7 @@ def training_prompt(case: dict) -> str:
         'describes. Return only a JSON object {"profile": <the complete updated profile.md>, '
         '"examples": <the entries to append to examples.md, or "">}. No commentary or Markdown fences.',
         (SKILL / 'SKILL.md').read_text(), (SKILL / 'references/personalization.md').read_text(),
-        'Current .quill/style/profile.md:\n' + EMPTY_PROFILE,
+        'Current ~/.config/quill/profile.md:\n' + EMPTY_PROFILE,
         'Writing session (author feedback and edits):\n' + case['training'],
     ])
 
@@ -125,7 +125,7 @@ def run_case(case: dict, host: str, arm: str, timeout: int, training_record: dic
                 record['error'] = 'Invalid learning update: ' + str(exc)
                 return record
             # Persist like the skill would, then reopen the files for the independent session.
-            memory_dir = project / '.quill/style'
+            memory_dir = project / 'config/quill'
             memory_dir.mkdir(parents=True)
             (memory_dir / 'profile.md').write_text(update['profile'])
             (memory_dir / 'examples.md').write_text(update.get('examples', ''))

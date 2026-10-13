@@ -9,8 +9,9 @@ Quill uses semantic versioning:
 
 - Add optional personal writing memory. Quill learns from the author's feedback and
   from their edits to text it wrote, keeps lessons in a plain, editable
-  `.quill/style/profile.md` with an `examples.md` log, and applies them in later
-  sessions without interrupting the writing.
+  `~/.config/quill/profile.md` with an `examples.md` log, and applies them in later
+  sessions without interrupting the writing. Every agent with Quill installed shares
+  the profile; a project may add its own lessons in `.quill/style/profile.md`.
 - Add `quill style baseline` and `quill style changes`, which record Quill's last
   version of a file and report the author's paragraph-level edits, flagging changed
   numbers, citations, references, and mathematics.

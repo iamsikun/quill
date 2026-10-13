@@ -4,21 +4,40 @@
 
 # Quill
 
-Quill is a portable academic-writing skill for Codex and Claude Code. It drafts
-and revises research prose while preserving claims, assumptions, evidence,
-uncertainty, numbers, notation, and citations.
+Quill helps AI agents such as Claude Code and Codex draft and revise research papers.
+It improves how a paper reads without changing what the research says: claims,
+assumptions, evidence, uncertainty, numbers, notation, and citations stay intact.
 
-Formerly Pepper. The package, CLI, and skill are now named `quill`, and the
-repository is [iamsikun/quill](https://github.com/iamsikun/quill).
+Ask in plain language: “Polish this methods paragraph,” “Draft an introduction from
+these notes,” or “Revise this section in response to the reviewer.” You can also
+invoke Quill explicitly as `$quill` in Codex or `/quill` in Claude Code.
 
-Ask naturally: “Polish this methods paragraph,” “Draft an introduction from these
-notes,” or “Revise this section in response to the reviewer.” You can also invoke
-Quill explicitly as `$quill` in Codex or `/quill` in Claude Code.
+## What Quill does
+
+- **Edits at the depth you ask for.** A copyedit fixes mechanics and leaves effective
+  sentences alone; a line edit improves the flow of sentences and paragraphs; a
+  structural revision reshapes an argument; a draft is written from the notes and
+  results you supply; a review returns feedback without changing your files.
+- **Keeps the science intact.** Quill maintains distinctions such as association
+  versus causation, estimate versus estimand, and simulation versus empirical
+  evidence. It does not invent results, citations, or limitations. Fluent prose
+  that changes a claim counts as a failed revision.
+- **States supported findings directly.** Quill makes the strongest case the
+  evidence supports: it removes stacked hedges and repeated caveats while keeping
+  the conditions that change a finding's meaning.
+- **Works with your files as they are.** It edits pasted text, Markdown, and LaTeX
+  in your existing structure, and needs no setup for a paragraph edit.
+- **Learns your writing style, if you ask.** Quill can learn from your feedback and
+  from your edits to its text; otherwise it imposes no personal voice. See
+  [Personal writing memory](#personal-writing-memory).
+- **Manages LaTeX manuscripts, if you want.** An optional CLI sets up, imports,
+  validates, and packages manuscripts. See [Manuscript utilities](#manuscript-utilities).
+
+Quill synthesizes literature you supply, but it does not search for literature, run
+research, choose venues, or format submissions. It writes from the research you
+supply; it does not verify that research.
 
 ## Install
-
-Install once and Quill keeps itself current. Releases come from the `stable` branch,
-so work in progress never reaches your agents.
 
 **Any agent (recommended):**
 
@@ -34,32 +53,11 @@ This one command:
   editable install from that clone, so it follows the same updates;
 - schedules a daily background update (launchd on macOS, cron on Linux).
 
-Updates only ever fast-forward to new releases, are skipped quietly when offline, and
-never advance a working tree you have edited. Existing skill symlinks pointing
-elsewhere are preserved. Restart your agent after installing.
+Restart your agent after installing. Releases come from the `stable` branch, so work
+in progress never reaches your agents. If you'd rather read the script before running
+it, clone the repo and run `./install.sh`.
 
-```bash
-~/.local/share/quill/install.sh status      # version, links, CLI, last update
-~/.local/share/quill/install.sh update      # update now
-~/.local/share/quill/install.sh uninstall   # remove owned installation; preserve personal work
-```
-
-Add `--no-auto-update` to the install command (`... | bash -s -- --no-auto-update`) to
-manage updates yourself, or `--no-cli` to skip the CLI. The skill itself needs no
-Python, CLI, or external service for ordinary writing. Without uv, the installer skips
-the CLI and says so. If you already installed a `quill` CLI some other way, the installer
-leaves it alone. When an update changes the package's metadata or dependencies, the
-installer refreshes the CLI.
-Failed refreshes are reported and retried by the next update, even if Git is
-already current. Reinstalling with `--no-auto-update` disables an existing job.
-Uninstall preserves clones with local changes, ignored files, unpublished commits,
-or no recorded installer ownership (including older installations).
-
-If you'd rather read the script before running it, clone the repo and run
-`./install.sh`.
-
-**Claude Code: plugin marketplace.** This is the alternative to the installer for
-Claude Code users; use one or the other, not both.
+**Claude Code plugin (alternative).** Use either the installer or the plugin, not both:
 
 ```bash
 claude plugin marketplace add iamsikun/quill#stable
@@ -70,110 +68,37 @@ Then turn on auto-update: `/plugin` → **Marketplaces** → **quill** → **Ena
 auto-update**. Third-party marketplaces have it off by default. Claude Code then picks up
 each new release on its own.
 
-**Other options:**
-- **`skills` CLI:** `npx skills add iamsikun/quill -g` installs into the agents it
-  detects. Update with the CLI's update command, which `npx skills --help` lists.
-- **Manual:** symlink `skills/quill` from a clone into your agent's skills folder, then
-  `git pull` to update.
-- **Project copy for collaborators:** `quill skill install --scope project` copies the
-  skill into `.agents/skills/quill` and `.claude/skills/quill` so you can commit it with
-  a project. Copies do not update themselves; run `quill skill sync --scope project`
-  after updating, and `quill skill uninstall --scope project` to remove them.
-
-| Agent | User-level path | Project-level path |
-|---|---|---|
-| Claude Code | `~/.claude/skills/quill` | `.claude/skills/quill` |
-| Codex | `~/.agents/skills/quill` | `.agents/skills/quill` |
-| Gemini CLI | `~/.gemini/skills/quill` or `~/.agents/skills/quill` | `.gemini/skills/quill` or `.agents/skills/quill` |
-| Cursor | `~/.cursor/skills/quill` or `~/.agents/skills/quill` | `.cursor/skills/quill` or `.agents/skills/quill` |
-
-Install at only one scope; installing at both may produce duplicate entries. Start a
-fresh agent session if Quill has not appeared. Automatic selection depends on the host
-and request; explicit invocation is available when you want to select it directly.
-
-The copy commands never change host settings or write `AGENTS.md`/`CLAUDE.md`. They
-record ownership in `.quill-install.json` inside the copied skill. Sync updates
-unchanged owned files, removes unchanged obsolete files, and preserves unknown files.
-Uninstall removes only unchanged owned files. A local conflict blocks the operation on
-all selected hosts; resolve it manually and retry. There is no force-overwrite flag.
-
-Preview a copy update before applying it:
-
-```bash
-quill skill sync --scope project --dry-run
-quill skill sync --scope project --diff
-quill skill sync --scope project
-```
-
-`--diff` implies a read-only preview and includes conflicting content for manual
-resolution. Both flags also work with `skill install` and `skill uninstall`.
-A conflict still exits nonzero; no selected host is changed.
-
-Keep personal preferences in a project-owned file such as `.quill/preferences.md`
-(or your existing project documentation), outside the canonical and installed
-skill folders. Attach that file or explicitly ask your agent to read it when using
-Quill; the CLI does not automatically inject it. For example: “Use Quill and read
-`.quill/preferences.md` before editing this section.” Sync and uninstall do not
-manage this file. To resolve a customized skill-copy conflict, save your changes
-separately, restore the affected file to its previously installed contents, inspect
-the preview, and retry. Do not edit the ownership checksums.
-
-Inspect the installation without changing it:
-
-```bash
-quill doctor
-quill doctor --json
-```
-
-Diagnostics show CLI and skill versions, installation methods, resolved skill
-paths, duplicate scopes, modified managed files, installer update state and
-pending refreshes, and available optional tools. Exit status is 1 when an issue
-needs attention. Missing LaTeX tools alone do not prevent ordinary writing.
-
-**Moving from an earlier copy install.** If you earlier ran `quill skill install` at
-user scope, remove those copies with `quill skill uninstall --scope user` before running
-the installer; the installer skips any existing copy rather than overwrite it. Earlier
-versions put the Codex copy in `$CODEX_HOME/skills` (default `~/.codex/skills`), which
-current Codex no longer reads. Uninstall removes that copy too, and `quill skill install`
-refuses to add a second Codex copy until it is gone.
-
-See [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
-
-## Writing behavior
-
-Quill distinguishes restrained copyediting, line editing, structural revision,
-drafting, and review-only requests. It works with pasted text, Markdown, LaTeX, and
-existing manuscript organization. It does not create a workspace for a paragraph
-edit or impose a personal voice by default.
-
-The compact core links to conditional references for editing, drafting, technical
-exposition, examples, an optional author style, and managed workspaces. Scientific
-fidelity is a constraint; sentence length, voice, repetition, and structure require
-judgment. Fluent prose is not a successful revision if it changes the claim.
-
-Literature synthesis from supplied sources is supported. Autonomous literature
-search, research execution, venue selection, and submission formatting are outside
-the skill's scope. It does not verify research by merely restating its sources.
+Other installation methods, project copies for collaborators, update controls, and
+diagnostics are described in [Installation details](#installation-details).
 
 ## Personal writing memory
 
-Say “Learn my writing style for this project,” then keep writing as usual. Quill
-learns from two things you already do: the feedback you give it, and the edits you
-make to text it wrote. It applies what it learned in later sessions, never stops to
-ask about memory, and tells you in one line when it adds a lesson.
+Say “Learn my writing style,” then keep writing as usual. Quill learns from two
+things you already do: the feedback you give it, and the edits you make to text it
+wrote. It applies what it learned in later sessions, never stops to ask about
+memory, and tells you in one line when it adds a lesson.
 
-Memory is three plain files in `.quill/style/`, which Git ignores:
+Your profile belongs to you, not to one project. It lives in `~/.config/quill/`
+(or `$XDG_CONFIG_HOME/quill/`) as two plain Markdown files:
 
 - `profile.md`: the lessons, grouped by where they apply. Edit it freely; your edits win.
 - `examples.md`: the edits and feedback each lesson came from.
-- `baselines/`: Quill's last version of each file it wrote.
+
+Every agent with Quill installed (Claude Code, Codex, Cursor, Gemini CLI, Copilot,
+OpenCode) reads and updates this same profile, in any project. To use it on several
+machines, sync that folder as you would other dotfiles. In an assistant that cannot
+read your files, such as the ChatGPT app, attach or paste `profile.md`.
 
 A preference you state is learned at once. A pattern in your edits is learned once
 it appears in two separate passages. Corrections of results, numbers, citations, or
 notation never become style lessons. Ask Quill to explain, change, or forget a
-lesson, or to pause learning. If coauthors also edit the files, say so, and Quill
-will learn only from your feedback in conversation. A profile shared across your
-projects can live in `~/.config/quill/authors/<name>/`.
+lesson, or to pause learning.
+
+A project's `.quill/style/` folder, which Git ignores, holds only what belongs to that
+project: Quill's last version of each file it wrote, so it can see your edits, and
+an optional `profile.md` for lessons that apply only to that paper. If coauthors also
+edit a project's files, say so; Quill records `edits: others` there and learns in
+that project only from your feedback in conversation.
 
 Two optional commands help Quill see your edits:
 
@@ -184,14 +109,21 @@ quill style baseline sections/intro.tex # record Quill's new version after it wr
 
 `changes` flags edits that touch numbers, citations, references, or mathematics,
 since those are usually corrections rather than style. Without the CLI, Quill still
-learns from feedback in conversation. Memory adapts the instructions Quill follows;
-it does not retrain a model. See the [personalization workflow](skills/quill/references/personalization.md)
-and the [evaluation protocol](evals/README.md#personalization).
+learns from feedback in conversation.
 
-## Optional managed manuscript utilities
+Because the profile is outside your project, an agent may ask permission the first
+time it reads or writes it. To allow it once and for all, add the folder to Claude
+Code's `permissions.additionalDirectories` setting, or to Codex's
+`[sandbox_workspace_write] writable_roots` in `~/.codex/config.toml` (as an absolute
+path). Memory adapts the instructions Quill follows; it does not retrain a model.
+See the [personalization workflow](skills/quill/references/personalization.md) and
+the [evaluation protocol](evals/README.md#personalization).
 
-Writing does not require a `paper/` directory. For a project that benefits from
-managed targets and source context:
+## Manuscript utilities
+
+Writing needs no setup and no `paper/` directory. For a LaTeX project that benefits
+from managed manuscript versions (targets), shared source context, validation, and
+submission packages, use the optional CLI:
 
 ```bash
 quill init
@@ -256,7 +188,96 @@ build leaves the previous package and target stage intact. `--compile` uses
 `latexmk` when available, with a `pdflatex`/BibTeX fallback. The generated
 `VERIFICATION.md` distinguishes static checks from successful compilation.
 
+## Installation details
+
+**Updates.** Installer updates only fast-forward to new releases, are skipped quietly
+when offline, and never advance a working tree you have edited. Existing skill
+symlinks pointing elsewhere are preserved.
+
+```bash
+~/.local/share/quill/install.sh status      # version, links, CLI, last update
+~/.local/share/quill/install.sh update      # update now
+~/.local/share/quill/install.sh uninstall   # remove owned installation; preserve personal work
+```
+
+Add `--no-auto-update` to the install command (`... | bash -s -- --no-auto-update`) to
+manage updates yourself, or `--no-cli` to skip the CLI. The skill itself needs no
+Python, CLI, or external service for ordinary writing. Without uv, the installer skips
+the CLI and says so. If you already installed a `quill` CLI some other way, the installer
+leaves it alone. When an update changes the package's metadata or dependencies, the
+installer refreshes the CLI. Failed refreshes are reported and retried by the next
+update, even if Git is already current. Reinstalling with `--no-auto-update` disables
+an existing job. Uninstall preserves clones with local changes, ignored files,
+unpublished commits, or no recorded installer ownership (including older installations).
+
+**Other installation methods:**
+- **`skills` CLI:** `npx skills add iamsikun/quill -g` installs into the agents it
+  detects. Update with the CLI's update command, which `npx skills --help` lists.
+- **Manual:** symlink `skills/quill` from a clone into your agent's skills folder, then
+  `git pull` to update.
+- **Project copy for collaborators:** `quill skill install --scope project` copies the
+  skill into `.agents/skills/quill` and `.claude/skills/quill` so you can commit it with
+  a project. Copies do not update themselves; run `quill skill sync --scope project`
+  after updating, and `quill skill uninstall --scope project` to remove them.
+
+| Agent | User-level path | Project-level path |
+|---|---|---|
+| Claude Code | `~/.claude/skills/quill` | `.claude/skills/quill` |
+| Codex | `~/.agents/skills/quill` | `.agents/skills/quill` |
+| Gemini CLI | `~/.gemini/skills/quill` or `~/.agents/skills/quill` | `.gemini/skills/quill` or `.agents/skills/quill` |
+| Cursor | `~/.cursor/skills/quill` or `~/.agents/skills/quill` | `.cursor/skills/quill` or `.agents/skills/quill` |
+
+Install at only one scope; installing at both may produce duplicate entries. Start a
+fresh agent session if Quill has not appeared. Whether an agent selects Quill
+automatically depends on the host and the request; invoke it explicitly when you want
+to be sure.
+
+**Project copies.** The copy commands never change host settings or write
+`AGENTS.md`/`CLAUDE.md`. They record ownership in `.quill-install.json` inside the
+copied skill. Sync updates unchanged owned files, removes unchanged obsolete files, and
+preserves unknown files. Uninstall removes only unchanged owned files. A local conflict
+blocks the operation on all selected hosts; resolve it manually and retry. There is no
+force-overwrite flag. Preview a copy update before applying it:
+
+```bash
+quill skill sync --scope project --dry-run
+quill skill sync --scope project --diff
+quill skill sync --scope project
+```
+
+`--diff` implies a read-only preview and includes conflicting content for manual
+resolution. Both flags also work with `skill install` and `skill uninstall`.
+A conflict still exits nonzero; no selected host is changed. To resolve a conflict in
+a customized copy, save your changes separately, restore the affected file to its
+previously installed contents, inspect the preview, and retry. Do not edit the
+ownership checksums. Keep personal preferences outside the skill folders; sync and
+uninstall do not manage them.
+
+**Diagnostics.** Inspect the installation without changing it:
+
+```bash
+quill doctor
+quill doctor --json
+```
+
+Diagnostics show CLI and skill versions, installation methods, resolved skill
+paths, duplicate scopes, modified managed files, installer update state and
+pending refreshes, and available optional tools. Exit status is 1 when an issue
+needs attention. Missing LaTeX tools alone do not prevent ordinary writing.
+
+**Moving from an earlier copy install.** If you earlier ran `quill skill install` at
+user scope, remove those copies with `quill skill uninstall --scope user` before running
+the installer; the installer skips any existing copy rather than overwrite it. Earlier
+versions put the Codex copy in `$CODEX_HOME/skills` (default `~/.codex/skills`), which
+current Codex no longer reads. Uninstall removes that copy too, and `quill skill install`
+refuses to add a second Codex copy until it is gone.
+
+See [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
+
 ## Migrating from Pepper
+
+Quill was formerly named Pepper. The package, CLI, and skill are now named `quill`,
+and the repository is [iamsikun/quill](https://github.com/iamsikun/quill).
 
 Version 0.2 is a breaking restructure. Install the new utility and skill, then run
 these commands **inside each legacy project you intend to migrate**:
@@ -311,12 +332,12 @@ confirms that the version agrees across `SKILL.md`, `.claude-plugin/plugin.json`
 [AGENTS.md](AGENTS.md#releasing).
 
 Tests cover installed content and references, ownership protection, migration, and
-managed utilities. `evals/README.md` describes the 16 synthetic behavioral cases,
-three-arm comparison, and fresh-session discovery checks. Behavioral results are
-recorded separately from mechanical tests; neither a valid manifest nor a fluent
-answer establishes improved human comprehension.
-See [the evaluation results](evals/RESULTS.md) for the actual host checks and their
-limitations.
+managed utilities. `evals/README.md` describes the 21 synthetic behavioral cases,
+the three-arm comparison, fresh-session discovery checks, and the separate
+personalization cases. Behavioral results are recorded separately from mechanical
+tests; neither a valid manifest nor a fluent answer establishes improved human
+comprehension. See [the evaluation results](evals/RESULTS.md) for the actual host
+checks and their limitations.
 
 ## License
 

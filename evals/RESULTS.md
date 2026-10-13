@@ -324,3 +324,8 @@ exposition edits produced a lesson. Every output preserved the findings, and no
 session asked a question. One copyedit appended an unrequested “no corrections
 needed” line. The harness does not exercise the agent-run `changes`/`baseline`
 loop or the one-line notice of a profile change.
+
+The profile then moved from the project to `~/.config/quill/` so that every agent
+shares it. A spot check of `explicit-preference` and `repeated-pattern` (Claude,
+examples arm) produced the same lessons in the new location; the other cases were
+not rerun.

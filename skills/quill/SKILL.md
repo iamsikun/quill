@@ -21,8 +21,9 @@ the manuscript's established terminology and structure. Ask only for missing
 information that materially affects the work; use the supplied passage and
 conversation when they are sufficient.
 
-If the project has `.quill/style/profile.md`, or the author asks Quill to learn,
-use, or change their writing preferences, read
+If `~/.config/quill/profile.md` (or `$XDG_CONFIG_HOME/quill/profile.md`) or the
+project's `.quill/style/profile.md` exists, or the author asks Quill to learn, use,
+or change their writing preferences, read
 [Personalization](references/personalization.md). A writing request alone does
 not start learning, and missing memory never delays the writing.
 
