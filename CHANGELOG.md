@@ -7,6 +7,11 @@ Quill uses semantic versioning:
 
 ## Unreleased
 
+## 0.6.0 — 2026-10-13
+
+- Clarify local ChatGPT Work profile access and attachment snapshots. Exercise
+  real profile tools and the changes/baseline loop in isolated Codex and Claude
+  projects; establish baselines on first writes and explicitly log new lessons.
 - Add optional personal writing memory. Quill learns from the author's feedback and
   from their edits to text it wrote, keeps lessons in a plain, editable
   `~/.config/quill/profile.md` with an `examples.md` log, and applies them in later

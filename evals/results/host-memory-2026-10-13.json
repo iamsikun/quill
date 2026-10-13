@@ -1,0 +1,496 @@
+{
+  "date": "2026-10-13",
+  "branch": "codex/personalized-writing",
+  "archive": "host-memory-2026-10-13.traces.json.gz",
+  "runner_sha256": "b95e3179dd88cd3e205367f7f843e9ea6a9076df4c109d70b667a6dc91a68927",
+  "final_records": {
+    "codex": "codex-explicit-read",
+    "claude": "claude-final"
+  },
+  "final_results": {
+    "codex": {
+      "host_version": "codex-cli 0.153.4",
+      "stages": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated_after_author_edits": true,
+            "number_change_flagged": true,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "stated_preference_applied": true,
+            "profile_unchanged_without_new_feedback": true
+          }
+        }
+      ]
+    },
+    "claude": {
+      "host_version": "2.1.296 (Claude Code)",
+      "stages": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated_after_author_edits": true,
+            "number_change_flagged": true,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "stated_preference_applied": true,
+            "profile_unchanged_without_new_feedback": true
+          }
+        }
+      ]
+    }
+  },
+  "attempts": [
+    {
+      "record": "codex-initial",
+      "host": "codex",
+      "stage_count": 1,
+      "error": "learn: host failed",
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": false,
+            "baseline_matches_final_file": false,
+            "examples_written": false,
+            "profile_updated": false
+          }
+        }
+      ]
+    },
+    {
+      "record": "claude-initial",
+      "host": "claude",
+      "stage_count": 3,
+      "error": null,
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": false,
+            "baseline_matches_final_file": false,
+            "examples_written": true,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": false,
+            "baseline_matches_final_file": false,
+            "examples_written": true,
+            "number_change_flagged": false,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": false,
+            "baseline_matches_final_file": false,
+            "examples_written": true,
+            "stated_preference_applied": true
+          }
+        }
+      ]
+    },
+    {
+      "record": "codex-host-access",
+      "host": "codex",
+      "stage_count": 1,
+      "error": "learn: host failed",
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": false,
+            "baseline_matches_final_file": false,
+            "examples_written": false,
+            "profile_updated": false
+          }
+        }
+      ]
+    },
+    {
+      "record": "claude-permitted",
+      "host": "claude",
+      "stage_count": 3,
+      "error": null,
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "number_change_flagged": true,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "stated_preference_applied": false
+          }
+        }
+      ]
+    },
+    {
+      "record": "codex-default-config",
+      "host": "codex",
+      "stage_count": 3,
+      "error": null,
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "number_change_flagged": true,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "changes_before_edit": false,
+            "baseline_matches_final_file": false,
+            "examples_written": true,
+            "stated_preference_applied": true
+          }
+        }
+      ]
+    },
+    {
+      "record": "codex-baseline-fix",
+      "host": "codex",
+      "stage_count": 3,
+      "error": null,
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_contents_observed_in_tool_output": false,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_contents_observed_in_tool_output": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated_after_author_edits": true,
+            "number_change_flagged": true,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_contents_observed_in_tool_output": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "stated_preference_applied": true,
+            "profile_unchanged_without_new_feedback": true
+          }
+        }
+      ]
+    },
+    {
+      "record": "claude-baseline-fix",
+      "host": "claude",
+      "stage_count": 3,
+      "error": null,
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_contents_observed_in_tool_output": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": false,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_contents_observed_in_tool_output": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated_after_author_edits": true,
+            "number_change_flagged": true,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_contents_observed_in_tool_output": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "stated_preference_applied": true,
+            "profile_unchanged_without_new_feedback": true
+          }
+        }
+      ]
+    },
+    {
+      "record": "codex-final",
+      "host": "codex",
+      "stage_count": 3,
+      "error": null,
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": false,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated_after_author_edits": true,
+            "number_change_flagged": true,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "stated_preference_applied": true,
+            "profile_unchanged_without_new_feedback": true
+          }
+        }
+      ]
+    },
+    {
+      "record": "claude-final",
+      "host": "claude",
+      "stage_count": 3,
+      "error": null,
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated_after_author_edits": true,
+            "number_change_flagged": true,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "stated_preference_applied": true,
+            "profile_unchanged_without_new_feedback": true
+          }
+        }
+      ]
+    },
+    {
+      "record": "codex-explicit-read",
+      "host": "codex",
+      "stage_count": 3,
+      "error": null,
+      "stage_checks": [
+        {
+          "stage": "learn",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated": true
+          }
+        },
+        {
+          "stage": "changes",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "profile_updated_after_author_edits": true,
+            "number_change_flagged": true,
+            "protected_paragraphs_preserved": true
+          }
+        },
+        {
+          "stage": "transfer",
+          "checks": {
+            "profile_marker_preserved": true,
+            "profile_read_from_disk": true,
+            "changes_before_edit": true,
+            "baseline_matches_final_file": true,
+            "examples_written": true,
+            "stated_preference_applied": true,
+            "profile_unchanged_without_new_feedback": true
+          }
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "pytest": "109 passed, 1 skipped",
+    "repository_validator": "passed",
+    "agentskills_validator": "passed",
+    "claude_plugin_validator": "passed; existing CLAUDE.md warning"
+  },
+  "manual_review": [
+    "Both final hosts saved the stated estimation preference and learned condition-before-method from two independent author edits.",
+    "The corrected result (6 percentage points), interval [2, 8], and citation demo2024 stayed intact. The number correction did not become a style lesson.",
+    "Both applied the saved estimation preference in a fresh project and left the profile unchanged without new author feedback."
+  ],
+  "findings": [
+    "Codex originally skipped the fresh-project baseline because the reference tied it to checking a previously written file; first-write baseline instructions were corrected.",
+    "One Claude attempt saved a stated lesson without its source log; saving lessons and logging evidence are now explicit workflow steps.",
+    "An initial Claude shell allowlist denied exploratory reads, so it skipped CLI steps. The subsequent isolated test permits shell tools under the parent sandbox.",
+    "The parent sandbox prevented Codex CLI startup; approved host execution retained the child workspace sandbox.",
+    "The user-configured Codex model identifier was unsupported by this CLI. Subsequent Codex tests ignored user configuration and used CLI defaults; no settings were changed.",
+    "An initial exact-phrase application detector rejected a grammatical equivalent using estimate rather than quantify; the detector was corrected without discarding its original record.",
+    "Earlier Codex initial-stage conditional reads did not expose profile contents. A Python read was visible in one run, but the final pre-explicit-path run only appended the lesson. The final direct-read smoke test names the existing profile path."
+  ],
+  "limitations": [
+    "Synthetic disposable XDG profiles outside the project with explicit local permissions; no personal profiles or installed skills were modified.",
+    "Explicit skill and profile paths; these results do not establish automatic discovery or behavior under denied write access.",
+    "One final sample per stage/host; CLI defaults and model identities were not controlled for a writing-quality comparison.",
+    "All ten attempts (26 stage invocations, including two startup failures) are retained. This is integration evidence, not a writing-quality benchmark."
+  ],
+  "release": "Version remains 0.5.0; no push, tag, release, or stable/main update."
+}

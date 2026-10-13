@@ -133,3 +133,34 @@ explicit corrections, unnecessary questions, false persistence claims, and autho
 revision effort. Model
 judgments and synthetic author cases do not establish improved writing quality.
 Use held-out manuscripts and blind author comparisons before claiming that benefit.
+
+## Profile filesystem smoke test
+
+`host_memory.py` exercises the actual file tools and CLI in three fresh sessions:
+learn a stated preference and save a baseline; inspect two simulated author edits
+and a corrected number, learn the repeated style decision, and refresh the baseline;
+then apply the shared profile in another project and establish its first baseline.
+The prompt identifies the existing profile path, and the hosts read its contents
+from disk; the contents are not supplied in the prompt.
+
+```bash
+uv run python evals/host_memory.py --host codex --output /tmp/quill-codex-files.json
+uv run python evals/host_memory.py --host claude --output /tmp/quill-claude-files.json
+```
+
+The runner copies this checkout's skill into disposable projects and puts a wrapper
+for this checkout's CLI on `PATH`. An isolated `XDG_CONFIG_HOME` lives outside the
+project and is granted local access; the user's installed Quill and personal profile
+are untouched. Codex retains its workspace sandbox and uses CLI defaults without
+loading user configuration. Claude uses restricted mode with file and shell tools
+enabled, no connected MCP servers or hooks, and no interactive permission prompts.
+The parent execution sandbox still applies; a CLI may need approval to initialize
+its own host state before its child sandbox can run.
+
+Records contain prompts, permitted host commands, tool evidence, before/after files,
+and instrumented `changes`/`baseline` calls. Checks inspect actual artifacts and
+command order, rather than accepting an agent's claim that it saved memory. Review
+the learned lessons and scientific fidelity separately. This is an explicitly
+selected skill smoke test with permitted storage, not an implicit discovery test,
+a denied-permission test, or evidence of general writing improvement. Keep every
+attempt, including setup failures and incomplete workflows.

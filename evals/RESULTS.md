@@ -1,5 +1,16 @@
 # Development evaluations
 
+## Quill 0.6.0 release smoke check
+
+The final skill with version metadata 0.6.0 passed one fresh `theorem` case using
+the `references` arm in Claude Code 2.1.296 (`claude-opus-5-5[1m]`). The answer
+preserved B1–B3, each fixed t in (0, 1), convergence in probability to V(t),
+asymptotic scope, and the absence of a uniform guarantee. It returned only the
+requested passage, and no tool calls were observed. The implementing assistant
+reviewed the answer. [The sanitized record](results/0.6.0-smoke.json) retains the
+prompt, answer, configuration, and source hashes. This is a release smoke check,
+not evidence of general writing quality or automatic skill discovery.
+
 ## Quill 0.5.0 release smoke check
 
 The final writing guidance with version metadata 0.5.0 passed one fresh `theorem`
@@ -329,3 +340,44 @@ The profile then moved from the project to `~/.config/quill/` so that every agen
 shares it. A spot check of `explicit-preference` and `repeated-pattern` (Claude,
 examples arm) produced the same lessons in the new location; the other cases were
 not rerun.
+
+### Actual profile files and CLI — 2026-10-13
+
+The [filesystem smoke record](results/host-memory-2026-10-13.json) and its compressed
+tool archive retain all ten attempts, including two host startup failures, for 26
+stage invocations. The final selected runs used Codex CLI 0.153.4 and Claude Code
+2.1.296 with real file tools and this checkout's CLI. Each stage was a fresh session.
+
+| Final check | Codex | Claude Code |
+|---|---|---|
+| Read and update an isolated shared profile; preserve author-owned text | Passed | Passed |
+| Log a stated preference and its supporting feedback | Passed | Passed |
+| Run `changes` before editing; detect two author edits and flag a corrected number | Passed | Passed |
+| Learn the repeated style decision; preserve the corrected result and citation | Passed | Passed |
+| Refresh a baseline matching the final manuscript | Passed | Passed |
+| Apply the saved profile in another project and create its first baseline | Passed | Passed |
+
+The tests exposed two instruction gaps. Codex omitted the first baseline in a new
+project because the reference tied baseline creation to checking a previously
+written file. One Claude sample saved a lesson without its source log. The reference
+now requires baselines after every manuscript write with file learning enabled,
+including the first write, and explicitly saves lessons with their evidence log.
+The final profiles retained the stated estimation preference, learned the
+condition-before-method pattern from two independent passages, and gained no style
+lesson from the corrected number. The result, interval, and citation remained intact.
+
+Codex needed approved host execution to initialize its state database, while its
+child retained the workspace sandbox. Its configured model identifier was
+unsupported by this CLI, so subsequent tests used CLI defaults without loading
+user configuration. No user settings were changed. An initial Claude shell
+allowlist blocked exploratory reads; later runs permitted shell tools in the
+disposable test under the parent sandbox. An initial exact-phrase detector also
+rejected a grammatical equivalent; that record is retained with the original check.
+
+Profiles lived in an isolated `XDG_CONFIG_HOME` outside each project with access
+granted explicitly. No personal profile or installed Quill was modified. The final
+Codex prompt named the existing profile file explicitly after earlier conditional
+reads yielded no profile output; the final read was verified in the tool trace.
+The skill was also selected by explicit path. These are one-sample integration
+smoke tests, not evidence of automatic discovery, denied-permission behavior, or
+general writing improvement. The final reference hashes match the tested checkout.

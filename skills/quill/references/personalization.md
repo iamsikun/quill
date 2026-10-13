@@ -53,14 +53,18 @@ None of these steps delays the requested writing.
    and the requested editing depth come first; then current instructions; then
    project lessons; then the profile.
 2. With `mode: learn`, unless the project sets `edits: others`, run
-   `quill style changes FILE` before editing a file you wrote earlier. It shows
+   `quill style changes FILE` before editing a manuscript file. It shows
    the author's edits since your last version: changed paragraphs, flagged when
    they change numbers, citations, references, or mathematics, or move a
-   paragraph. Skip this step if the CLI is unavailable.
+   paragraph. A missing baseline means there are no prior edits to learn from.
+   Skip this step if the CLI is unavailable.
 3. Do the requested writing.
 4. With `mode: learn`, learn from those edits and from this conversation's
-   feedback (below). If you checked changes in step 2, then run
-   `quill style baseline FILE` for each file you wrote.
+   feedback (below). Save new lessons in `profile.md` and log their supporting
+   feedback or edits in `examples.md`. Unless the project sets `edits: others`, when the CLI is
+   available, run `quill style baseline FILE` for each manuscript file you wrote,
+   including its first write. This establishes the baseline for the author's
+   next edits even when there was no earlier version to compare.
 5. If the profile changed, end the reply with one short line, such as “Added to your
    writing profile: report the estimate before interpreting it.” Ask nothing. If
    the host blocks writing to the profile, keep applying the lesson in this

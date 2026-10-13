@@ -86,8 +86,12 @@ Your profile belongs to you, not to one project. It lives in `~/.config/quill/`
 
 Every agent with Quill installed (Claude Code, Codex, Cursor, Gemini CLI, Copilot,
 OpenCode) reads and updates this same profile, in any project. To use it on several
-machines, sync that folder as you would other dotfiles. In an assistant that cannot
-read your files, such as the ChatGPT app, attach or paste `profile.md`.
+machines, sync that folder as you would other dotfiles. Local ChatGPT Work tasks
+can also use this profile when file access is permitted. Cloud tasks need an
+online, connected computer with local access enabled to use your local profile;
+otherwise, attach or paste `profile.md`. An attachment supplies a snapshot and
+does not save new lessons back to your local file. See OpenAI's
+[local file access documentation](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-local-security).
 
 A preference you state is learned at once. A pattern in your edits is learned once
 it appears in two separate passages. Corrections of results, numbers, citations, or
