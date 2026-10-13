@@ -155,6 +155,58 @@ Literature synthesis from supplied sources is supported. Autonomous literature
 search, research execution, venue selection, and submission formatting are outside
 the skill's scope. It does not verify research by merely restating its sources.
 
+## Personal writing memory
+
+Personalization is optional and works through ordinary agent tools. Ask “Learn my
+writing preferences for this project,” then continue drafting and revising normally.
+Quill remembers appropriately scoped editorial feedback, applies relevant lessons
+in later sessions, and can explain, correct, retire, or forget them on request.
+There are no hooks, background watchers, or agent-specific memory dependencies.
+
+Memory is **off** until enabled. **Apply** uses existing preferences without collecting
+new examples; **learn** applies preferences and records useful feedback and baselines.
+A current-task instruction can suspend learning without changing the saved mode.
+Unexplained file changes remain observations; they are not automatically attributed
+to you. Missing storage or an uncertain edit never requires stopping the writing.
+
+Project memory lives in `.quill/style/`, excluded from Git by a store-local ignore
+file. Explicitly selected author memory lives in
+`~/.config/quill/authors/<author-id>/` (or under `XDG_CONFIG_HOME`), or a custom
+location. Projects link author stores instead of copying them. The store contains
+versioned JSON records, exact original text, history, and a readable `profile.md`.
+Install, sync, and uninstall do not manage this data. Existing explicit project
+preferences and the optional bundled static author profile remain supported.
+
+The skill can use ordinary file tools without the CLI. Optional deterministic helpers
+make comparison, deduplication, revision checks, and recovery easier for agents:
+
+```bash
+quill style init --mode learn
+quill style context --section introduction --audience economics
+quill style harvest intro.tex
+quill style show
+```
+
+The agent uses `record` to save an interpreted JSON update and `snapshot` after
+writing a passage. Mutations require the current `--expected-revision` from `show`
+or `context`. `configure` changes mode or author links; `history`, `restore`,
+`forget`, and `export` provide inspection, recovery, removal, and portable Markdown.
+Commands return JSON by default except `export`, which writes Markdown to stdout.
+Use `quill style COMMAND --help` for arguments. The CLI never calls a model or
+decides what a human revision means.
+
+Manually edited profiles are preserved until the agent reconciles the changes.
+Forgetting purges associated text from managed history and snapshots and reconsiders
+dependent rules; it cannot delete exported copies, backups, or source manuscripts.
+Without persistent writable storage, Quill can use supplied preferences and return
+a portable Markdown memory document when requested. It does not claim that another
+session or agent has access to unsaved memory.
+
+See the self-contained [personalization workflow](skills/quill/references/personalization.md)
+and [record format](skills/quill/references/personalization-format.md). The separate
+[behavioral evaluation protocol](evals/README.md#personalization) distinguishes
+storage integrity, learning behavior, and author-assessed writing quality.
+
 ## Optional managed manuscript utilities
 
 Writing does not require a `paper/` directory. For a project that benefits from

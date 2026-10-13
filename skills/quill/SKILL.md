@@ -1,6 +1,6 @@
 ---
 name: quill
-description: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, or addressing reviewer feedback. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.
+description: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, addressing reviewer feedback, or remembering and applying personal academic writing preferences. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.
 license: MIT
 metadata:
   author: Sikun Xu
@@ -20,6 +20,14 @@ researcher familiar with the field's basic tools but new to this project. Follow
 the manuscript's established terminology and structure. Ask only for missing
 information that materially affects the work; use the supplied passage and
 conversation when they are sufficient.
+
+When working in a persistent project, check for an existing `.quill/style/state.json`
+at the selected project root (or nearest ancestor containing that marker). Read
+[Personalization](references/personalization.md) when memory exists, the user supplies
+a profile, or asks to learn, inspect, correct, or forget writing preferences. Memory
+is off until enabled; a writing request alone does not enable collection. Follow
+the saved mode in later sessions without asking again. Do not search other projects
+or personal stores unless selected. Missing memory must not delay the writing.
 
 Work directly with pasted prose or the user's existing files. Resolve bundled
 references below relative to this skill's directory, and manuscript paths relative

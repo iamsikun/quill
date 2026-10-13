@@ -14,6 +14,7 @@ from .migration import migrate_project
 from .sync import find_repo_root, init_project, package_version
 from .validate import validate_repo
 from .doctor import diagnose, format_diagnosis
+from .style_cli import add_parser as add_style_parser
 
 
 def _repo_root() -> Path:
@@ -208,6 +209,7 @@ def _add_common_metadata_arguments(parser: argparse.ArgumentParser) -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="quill")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    add_style_parser(subparsers)
 
     skill_parser = subparsers.add_parser(
         "skill", help="Copy the writing skill into a project (or user folder) without auto-updates")

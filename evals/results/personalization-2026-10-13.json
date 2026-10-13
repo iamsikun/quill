@@ -1,0 +1,367 @@
+{
+  "date": "2026-10-13",
+  "kind": "development smoke evaluations, assistant-inspected; not author preference measurements",
+  "notes": [
+    "All 13 sample records, exact prompts and returned text, source hashes, host versions, and execution metadata are retained in the compressed archive. Provider reasoning/signature blocks are excluded; hashes identify the original local stdout logs.",
+    "The first Codex positive case stored economists but queried economics: the profile was not retrieved. Treat it as a retrieval miss, despite faithful prose.",
+    "The fix exposes available scope tags to agents and uses a shared fixture vocabulary. The subsequent positive case retrieved one preference and one example.",
+    "The comparison includes all eight scenarios and four arms for the explicit-preference case. Learned and examples arms reuse the same learning record.",
+    "All four introduction outputs begin with the decision problem and preserve planned evaluation status; this sample demonstrates no writing-quality advantage.",
+    "Other reviewed cases retain corrected scope, avoid learning from scientific or unattributed edits, preserve effective prose, and continue without storage.",
+    "These are fresh read-only host sessions with harness-managed persistence, not proof of automatic invocation or autonomous file-tool use.",
+    "Cases were run during development; each raw record includes the exact skill hashes and prompts for that run. No samples were discarded."
+  ],
+  "samples": [
+    {
+      "sample": "initial/claude-examples-scientific-correction.json",
+      "host": "claude",
+      "host_version": "2.1.296 (Claude Code)",
+      "case": "scientific-correction",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {},
+      "applied_preferences": [],
+      "retrieved_examples": [],
+      "application_text": "In the held-out sample, the estimated effect was 7 percent (95 percent confidence interval, 1 to 13 percent).",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "initial/codex-examples-explicit-preference.json",
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "case": "explicit-preference",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {
+        "substantive-problem-before-method": {
+          "counter": [],
+          "id": "substantive-problem-before-method",
+          "scope": {
+            "audience": [
+              "economists"
+            ],
+            "section": [
+              "introduction"
+            ]
+          },
+          "status": "explicit",
+          "support": [
+            "ada-introduction-framing-feedback"
+          ],
+          "text": "In introductions for economists, start with the substantive decision problem before introducing the method. Retain technical details when needed."
+        }
+      },
+      "applied_preferences": [],
+      "retrieved_examples": [],
+      "application_text": "I’ll use the supplied Quill guidance to draft the opening paragraph.\n\nA hospital must choose how much capacity to reserve before demand is known. Underestimating demand delays care; overestimating it leaves capacity idle. This tradeoff makes the distribution of demand central to capacity planning. We propose an estimator of that distribution using repeated daily measurements, with the aim of informing capacity decisions under uncertainty. Evaluation of the estimator’s performance is planned.",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "comparison/claude-examples-changed-audience.json",
+      "host": "claude",
+      "host_version": "2.1.296 (Claude Code)",
+      "case": "changed-audience",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {
+        "exec-summary-consequence-first": {
+          "counter": [],
+          "id": "exec-summary-consequence-first",
+          "scope": {
+            "audience": [
+              "managers"
+            ],
+            "section": [
+              "executive-summary"
+            ]
+          },
+          "status": "explicit",
+          "support": [
+            "ada-exec-summary-feedback-1"
+          ],
+          "text": "In executive summaries for managers, explain the decision consequence before mathematical details. Does not apply to proofs or technical methods sections."
+        }
+      },
+      "applied_preferences": [],
+      "retrieved_examples": [],
+      "application_text": "For every $n \\ge 2$, assume that the variables are independent and have finite variance. Under these assumptions, the estimator is unbiased.",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "comparison/claude-examples-corrected-preference.json",
+      "host": "claude",
+      "host_version": "2.1.296 (Claude Code)",
+      "case": "corrected-preference",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {
+        "intro-intuition-before-notation": {
+          "counter": [],
+          "id": "intro-intuition-before-notation",
+          "scope": {
+            "section": [
+              "introduction"
+            ]
+          },
+          "status": "explicit",
+          "support": [
+            "ada-intuition-notation-scope-correction",
+            "ada-intuition-notation-initial"
+          ],
+          "text": "In introductions, give the intuition before introducing notation. This applies only to introductions, not as a general rule; methods sections follow a different order."
+        },
+        "methods-define-then-interpret": {
+          "counter": [],
+          "id": "methods-define-then-interpret",
+          "scope": {
+            "section": [
+              "methods"
+            ]
+          },
+          "status": "explicit",
+          "support": [
+            "ada-intuition-notation-scope-correction"
+          ],
+          "text": "In methods sections, define the object first, then explain its interpretation. Do not lead with intuition before the definition in methods sections."
+        }
+      },
+      "applied_preferences": [
+        "methods-define-then-interpret"
+      ],
+      "retrieved_examples": [
+        "ada-intuition-notation-scope-correction"
+      ],
+      "application_text": "Let $w_i$ denote the probability that unit $i$ receives treatment. Because these probabilities are determined by the randomization design, they are known before any outcomes are measured.",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "comparison/claude-examples-scientific-correction.json",
+      "host": "claude",
+      "host_version": "2.1.296 (Claude Code)",
+      "case": "scientific-correction",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {},
+      "applied_preferences": [],
+      "retrieved_examples": [],
+      "application_text": "In the held-out sample, the estimated effect was 7 percent (95 percent confidence interval, 1 to 13 percent).",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "comparison/claude-examples-unavailable-storage.json",
+      "host": "claude",
+      "host_version": "2.1.296 (Claude Code)",
+      "case": "unavailable-storage",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {},
+      "applied_preferences": [],
+      "retrieved_examples": [],
+      "application_text": "In the observed pilot, implementing the policy reduced the time needed to process applications.",
+      "stage_exit_codes": [
+        0
+      ]
+    },
+    {
+      "sample": "comparison/claude-examples-unknown-attribution.json",
+      "host": "claude",
+      "host_version": "2.1.296 (Claude Code)",
+      "case": "unknown-attribution",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {},
+      "applied_preferences": [],
+      "retrieved_examples": [],
+      "application_text": "The estimator uses observations collected before the intervention; outcomes measured after the intervention are reserved for evaluation.",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "comparison/codex-examples-effective-prose.json",
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "case": "effective-prose",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {
+        "preserve-effective-sentences-in-copyediting": {
+          "counter": [],
+          "id": "preserve-effective-sentences-in-copyediting",
+          "scope": {
+            "decision": [
+              "copyediting"
+            ]
+          },
+          "status": "explicit",
+          "support": [
+            "ada-copyediting-restraint-feedback"
+          ],
+          "text": "When copyediting, preserve effective sentences. Do not rewrite clear prose merely to make it sound different."
+        }
+      },
+      "applied_preferences": [
+        "preserve-effective-sentences-in-copyediting"
+      ],
+      "retrieved_examples": [
+        "ada-copyediting-restraint-feedback"
+      ],
+      "application_text": "We randomly assigned 240 participants to two groups. Both groups completed the same task. Only the treatment group received feedback.",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "comparison/codex-examples-explicit-preference.json",
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "case": "explicit-preference",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {
+        "ada-problem-before-method": {
+          "counter": [],
+          "id": "ada-problem-before-method",
+          "scope": {
+            "audience": [
+              "economics"
+            ],
+            "section": [
+              "introduction"
+            ]
+          },
+          "status": "explicit",
+          "support": [
+            "ada-introduction-framing-feedback"
+          ],
+          "text": "In introductions for economists, start with the substantive decision problem before introducing the method. Retain technical details when needed."
+        }
+      },
+      "applied_preferences": [
+        "ada-problem-before-method"
+      ],
+      "retrieved_examples": [
+        "ada-introduction-framing-feedback"
+      ],
+      "application_text": "A hospital must choose how much capacity to reserve before demand is known. Reserving too little delays care, while reserving too much leaves capacity idle. Balancing these consequences requires information about the distribution of demand. We propose an estimator of that distribution based on repeated daily measurements, with evaluation of its performance planned for future work.",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "comparison/codex-examples-local-instruction.json",
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "case": "local-instruction",
+      "arm": "examples",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {},
+      "applied_preferences": [],
+      "retrieved_examples": [],
+      "application_text": "Let q denote the probability of treatment. The design fixes q before outcomes are observed.",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "comparison/codex-learned-explicit-preference.json",
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "case": "explicit-preference",
+      "arm": "learned",
+      "error": null,
+      "training_reused": true,
+      "learned_preferences": {
+        "ada-problem-before-method": {
+          "counter": [],
+          "id": "ada-problem-before-method",
+          "scope": {
+            "audience": [
+              "economics"
+            ],
+            "section": [
+              "introduction"
+            ]
+          },
+          "status": "explicit",
+          "support": [
+            "ada-introduction-framing-feedback"
+          ],
+          "text": "In introductions for economists, start with the substantive decision problem before introducing the method. Retain technical details when needed."
+        }
+      },
+      "applied_preferences": [
+        "ada-problem-before-method"
+      ],
+      "retrieved_examples": [],
+      "application_text": "A hospital must choose how much capacity to reserve before demand is known. Underestimating demand delays care, while overestimating it leaves capacity idle. To inform this decision, we propose an estimator of the demand distribution using repeated daily measurements. We plan to evaluate the estimator’s performance in future work.",
+      "stage_exit_codes": [
+        0,
+        0
+      ]
+    },
+    {
+      "sample": "comparison/codex-none-explicit-preference.json",
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "case": "explicit-preference",
+      "arm": "none",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {},
+      "applied_preferences": [],
+      "retrieved_examples": [],
+      "application_text": "Hospitals must choose how much capacity to reserve before demand is known. Underestimating demand delays care, while overestimating it leaves capacity idle. This trade-off makes the distribution of demand a central input into capacity planning: hospitals need to assess the likelihood of demand exceeding or falling short of reserved capacity. We propose an estimator of the demand distribution using repeated daily measurements. Evaluation of the estimator is planned.",
+      "stage_exit_codes": [
+        0
+      ]
+    },
+    {
+      "sample": "comparison/codex-static-explicit-preference.json",
+      "host": "codex",
+      "host_version": "codex-cli 0.153.4",
+      "case": "explicit-preference",
+      "arm": "static",
+      "error": null,
+      "training_reused": false,
+      "learned_preferences": {},
+      "applied_preferences": [],
+      "retrieved_examples": [],
+      "application_text": "A hospital must choose how much capacity to reserve before demand is known. Reserving too little delays care, while reserving too much leaves capacity idle. This tradeoff makes the demand distribution relevant to capacity planning: it describes the likelihood that demand will exceed or fall short of a chosen capacity level. We propose an estimator of this distribution using repeated daily measurements and plan to evaluate its performance.",
+      "stage_exit_codes": [
+        0
+      ]
+    }
+  ],
+  "trace_archive": "personalization-2026-10-13.traces.json.gz",
+  "trace_archive_sha256": "409c01dee4dbfa0e722e9e131197d19f179d5e13dae7586fcf915361a8023b6a"
+}

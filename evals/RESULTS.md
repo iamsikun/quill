@@ -267,3 +267,35 @@ recoverable from short passages. They do not measure human comprehension or
 establish superiority over a strong plain prompt. Longer held-out manuscripts,
 independent expert judgments, repeated sampling, and additional host/model
 configurations remain untested.
+
+## Personal writing memory — 2026-10-13
+
+The [personalization smoke record](results/personalization-2026-10-13.json) retains
+13 development samples from fresh Codex and Claude sessions. It links a compressed
+archive of prompts, responses, source hashes, and execution metadata. No sample was
+discarded. These are assistant-inspected synthetic cases, not author judgments.
+
+The first positive Codex run exposed a retrieval miss: the model stored the audience
+tag `economists`, while the task queried `economics`. Its fluent output did not
+establish that personalization had been applied. Context retrieval now exposes
+available scope tags for the agent to interpret, and fixtures use a shared vocabulary.
+The subsequent positive run retrieved one preference and one supporting example.
+
+The comparison set covers all eight scenarios. Inspection found appropriately scoped
+explicit preferences, no generalized rule from the one-off instruction, no stylistic
+lesson from the result correction, no author preference from an unattributed edit,
+and no managerial-summary preference applied to technical methods. A corrected
+preference controlled the later methods passage. Effective prose was returned
+unchanged, and unavailable storage did not delay writing or elicit a persistence claim.
+
+All four introduction arms—ordinary Quill, static profile, learned preferences,
+and learned preferences with examples—began with the decision problem and preserved
+the planned evaluation status. The latter two reused the same learned evidence.
+This small comparison shows no writing-quality advantage; blind author preference
+and revision effort remain unmeasured.
+
+The harness persists validated updates between read-only sessions. It does not
+establish automatic skill invocation, autonomous file-tool behavior, or support
+in every host. Samples were captured during development; the archive preserves
+each sample's instruction hashes and exact prompts rather than treating them as
+a single frozen-version benchmark.

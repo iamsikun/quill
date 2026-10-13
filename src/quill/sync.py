@@ -31,7 +31,7 @@ def find_repo_root(start: Path | None = None) -> Path:
     current = (start or Path.cwd()).resolve()
     for candidate in (current, *current.parents):
         if any((candidate / marker).exists() for marker in
-               (".quill/config.yaml", ".pepper/config.yaml", "paper/state.yaml", ".git", "pyproject.toml")):
+               (".quill/style/state.json", ".quill/config.yaml", ".pepper/config.yaml", "paper/state.yaml", ".git", "pyproject.toml")):
             return candidate
     return current
 

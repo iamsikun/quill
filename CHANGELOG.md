@@ -5,6 +5,17 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
+## Unreleased
+
+- Add optional portable writing memory with project and explicitly linked author
+  scopes, three operating modes, and a workflow driven by normal editorial feedback.
+- Add deterministic `quill style` helpers for exact capture, comparison, evidence
+  recording, bounded context, inspection, restoration, forgetting, and export.
+- Protect explicit author corrections, edited profiles, concurrent updates, and
+  personal data across skill updates; preserve unknown attribution and scientific scope.
+- Add isolated personalization evaluations and regression coverage. No hooks,
+  background services, new runtime dependencies, or release changes are required.
+
 ## 0.5.0 — 2026-10-10
 
 - Add earned-confidence guidance: preserve supported conceptual ambition, state
