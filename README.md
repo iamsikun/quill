@@ -8,20 +8,29 @@ Quill helps AI agents such as Claude Code and Codex draft and revise research pa
 It improves how a paper reads without changing what the research says: claims,
 assumptions, evidence, uncertainty, numbers, notation, and citations stay intact.
 
+Quill also learns how you write. It notices what you correct in its drafts and what
+you say you prefer, keeps those lessons in a profile you can read and edit, and
+applies them in later sessions, in every project, and in every agent you use, so
+you correct the same things less often.
+
 Ask in plain language: “Polish this methods paragraph,” “Draft an introduction from
 these notes,” or “Revise this section in response to the reviewer.” You can also
 invoke Quill explicitly as `$quill` in Codex or `/quill` in Claude Code.
 
 ## What Quill does
 
-- **Edits at the depth you ask for.** A copyedit fixes mechanics and leaves effective
-  sentences alone; a line edit improves the flow of sentences and paragraphs; a
-  structural revision reshapes an argument; a draft is written from the notes and
-  results you supply; a review returns feedback without changing your files.
 - **Keeps the science intact.** Quill maintains distinctions such as association
   versus causation, estimate versus estimand, and simulation versus empirical
   evidence. It does not invent results, citations, or limitations. Fluent prose
   that changes a claim counts as a failed revision.
+- **Learns how you write.** Say “Learn my writing style,” then write as usual. Quill
+  learns from your feedback and from your edits to its text, and it learns the
+  writing decision behind an edit, not your wording. Without a profile, it imposes
+  no personal voice. See [Your writing profile](#your-writing-profile).
+- **Edits at the depth you ask for.** A copyedit fixes mechanics and leaves effective
+  sentences alone. A line edit improves the flow of sentences and paragraphs. A
+  structural revision reshapes an argument, a draft is written from the notes and
+  results you supply, and a review returns feedback without changing your files.
 - **States supported findings directly.** Quill makes the strongest case the
   evidence supports: it removes stacked hedges and repeated caveats while keeping
   the conditions that change a finding's meaning.
@@ -31,21 +40,102 @@ invoke Quill explicitly as `$quill` in Codex or `/quill` in Claude Code.
   contrasts, workflow narration, repair notes in captions, code identifiers, and
   generic wrap-ups. Ask it to “remove the AI-like writing” for an audit or a rewrite.
 - **Reviews its work before delivering it.** Beyond a short polish, Quill checks the
-  finished text against a [checklist](skills/quill/references/checklist.md) in two
-  passes: one for meaning and the reader's path through the argument, one for
-  expression. For a section or more, a fresh reviewer runs the passes when the
-  host supports subagents.
+  finished text against a [checklist](skills/quill/references/checklist.md) and your
+  profile in two passes: one for meaning and the reader's path through the argument,
+  one for expression. For a section or more, a fresh reviewer runs the passes when
+  the host supports subagents.
 - **Works with your files as they are.** It edits pasted text, Markdown, and LaTeX
   in your existing structure, and needs no setup for a paragraph edit.
-- **Learns your writing style, if you ask.** Quill can learn from your feedback and
-  from your edits to its text; otherwise it imposes no personal voice. See
-  [Personal writing memory](#personal-writing-memory).
 - **Manages LaTeX manuscripts, if you want.** An optional CLI sets up, imports,
   validates, and packages manuscripts. See [Manuscript utilities](#manuscript-utilities).
 
 Quill synthesizes literature you supply, but it does not search for literature, run
 research, choose venues, or format submissions. It writes from the research you
-supply; it does not verify that research.
+supply. It does not verify that research.
+
+## Your writing profile
+
+Say “Learn my writing style,” then keep writing as usual. Quill learns from two
+things you already do: the feedback you give it, and the edits you make to text it
+wrote. It never stops the writing to ask about memory, and it tells you in one line
+when it adds or changes a lesson.
+
+### From an edit to a lesson
+
+Suppose Quill drafts a methods passage and you revise it:
+
+> **Quill:** We introduce the estimator next. It uses repeated measurements to
+> separate signal from noise.
+>
+> **You:** Repeated measurements let us separate signal from noise. We use this
+> structure to construct the estimator.
+
+Quill does not save your sentence. It saves the decision behind it: *explain the
+enabling idea before naming the method.* The next time it introduces a method, in
+this paper or another, it starts from the idea.
+
+- A preference you state, such as “in methods sections I prefer intuition before
+  notation,” is learned at once.
+- A pattern in your edits is learned once it appears in two separate passages.
+  A single local edit is only logged.
+- Corrections of results, numbers, citations, or notation never become style
+  lessons. Correcting a claim's strength is not a preference for stronger or weaker
+  claims.
+- A decision that holds only for one paper, such as its audience or the name of its
+  method, stays with that project.
+- If you correct something a lesson already covers, Quill checks that lesson line by
+  line in its review from then on. For a pattern that is easy to detect, it can add
+  a lint pattern so `quill check` flags it.
+
+### Author control
+
+Your profile belongs to you, not to one project. It lives in `~/.config/quill/`
+(or `$XDG_CONFIG_HOME/quill/`) as plain Markdown:
+
+- `profile.md`: the lessons, grouped by where they apply. Edit it freely. Your edits win.
+- `examples.md`: the feedback and edits each lesson came from.
+- `history/`: earlier versions of the profile, saved before Quill reorganizes it.
+
+Ask Quill why a lesson exists, change its scope, forget it, restore an earlier
+profile, or pause learning. Removing the evidence for a lesson also removes the
+lesson if nothing else supports it. Memory adapts the instructions Quill follows.
+It does not retrain a model.
+
+### Every agent, every project
+
+Every agent with Quill installed (Claude Code, Codex, Cursor, Gemini CLI, Copilot,
+OpenCode) reads and updates the same profile, in any project. To use it on several
+machines, sync that folder as you would other dotfiles. Local ChatGPT Work tasks
+can also use this profile when file access is permitted. Cloud tasks need an
+online, connected computer with local access enabled to use your local profile.
+Otherwise, attach or paste `profile.md`. An attachment supplies a snapshot and
+does not save new lessons back to your local file. See OpenAI's
+[local file access documentation](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-local-security).
+
+A project's `.quill/style/` folder, which Git ignores, holds only what belongs to that
+project: Quill's last version of each file it wrote, so it can see your edits, and
+an optional `profile.md` for lessons that apply only to that paper. If coauthors also
+edit a project's files, say so. Quill records `edits: others` there and learns in
+that project only from your feedback in conversation. A coauthor's preferences never
+enter your personal profile.
+
+Two optional commands help Quill see your edits:
+
+```bash
+quill style changes                     # paragraphs you changed since Quill last wrote each file
+quill style baseline sections/intro.tex # record Quill's new version after it writes
+```
+
+`changes` flags edits that touch numbers, citations, references, or mathematics,
+since those are usually corrections rather than style. Without the CLI, Quill still
+learns from feedback in conversation.
+
+Because the profile is outside your project, an agent may ask permission the first
+time it reads or writes it. To allow it once and for all, add the folder to Claude
+Code's `permissions.additionalDirectories` setting, or to Codex's
+`[sandbox_workspace_write] writable_roots` in `~/.codex/config.toml` (as an absolute
+path). See the [personalization workflow](skills/quill/references/personalization.md)
+and the [evaluation protocol](evals/README.md#personalization).
 
 ## Install
 
@@ -80,58 +170,6 @@ each new release on its own.
 
 Other installation methods, project copies for collaborators, update controls, and
 diagnostics are described in [Installation details](#installation-details).
-
-## Personal writing memory
-
-Say “Learn my writing style,” then keep writing as usual. Quill learns from two
-things you already do: the feedback you give it, and the edits you make to text it
-wrote. It applies what it learned in later sessions, never stops to ask about
-memory, and tells you in one line when it adds a lesson.
-
-Your profile belongs to you, not to one project. It lives in `~/.config/quill/`
-(or `$XDG_CONFIG_HOME/quill/`) as two plain Markdown files:
-
-- `profile.md`: the lessons, grouped by where they apply. Edit it freely; your edits win.
-- `examples.md`: the edits and feedback each lesson came from.
-
-Every agent with Quill installed (Claude Code, Codex, Cursor, Gemini CLI, Copilot,
-OpenCode) reads and updates this same profile, in any project. To use it on several
-machines, sync that folder as you would other dotfiles. Local ChatGPT Work tasks
-can also use this profile when file access is permitted. Cloud tasks need an
-online, connected computer with local access enabled to use your local profile;
-otherwise, attach or paste `profile.md`. An attachment supplies a snapshot and
-does not save new lessons back to your local file. See OpenAI's
-[local file access documentation](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-local-security).
-
-A preference you state is learned at once. A pattern in your edits is learned once
-it appears in two separate passages. Corrections of results, numbers, citations, or
-notation never become style lessons. Ask Quill to explain, change, or forget a
-lesson, or to pause learning.
-
-A project's `.quill/style/` folder, which Git ignores, holds only what belongs to that
-project: Quill's last version of each file it wrote, so it can see your edits, and
-an optional `profile.md` for lessons that apply only to that paper. If coauthors also
-edit a project's files, say so; Quill records `edits: others` there and learns in
-that project only from your feedback in conversation.
-
-Two optional commands help Quill see your edits:
-
-```bash
-quill style changes                     # paragraphs you changed since Quill last wrote each file
-quill style baseline sections/intro.tex # record Quill's new version after it writes
-```
-
-`changes` flags edits that touch numbers, citations, references, or mathematics,
-since those are usually corrections rather than style. Without the CLI, Quill still
-learns from feedback in conversation.
-
-Because the profile is outside your project, an agent may ask permission the first
-time it reads or writes it. To allow it once and for all, add the folder to Claude
-Code's `permissions.additionalDirectories` setting, or to Codex's
-`[sandbox_workspace_write] writable_roots` in `~/.codex/config.toml` (as an absolute
-path). Memory adapts the instructions Quill follows; it does not retrain a model.
-See the [personalization workflow](skills/quill/references/personalization.md) and
-the [evaluation protocol](evals/README.md#personalization).
 
 ## Review utilities
 
