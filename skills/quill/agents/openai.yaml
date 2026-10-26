@@ -1,6 +1,6 @@
 interface:
   display_name: "Quill"
-  short_description: "Academic writing with scientific meaning preserved"
+  short_description: "Academic writing that keeps your science and learns your style"
   default_prompt: "Use $quill to revise this academic passage for clarity while preserving its scientific meaning."
 policy:
   allow_implicit_invocation: true

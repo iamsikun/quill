@@ -1,7 +1,7 @@
 {
   "name": "quill",
   "version": "0.7.1",
-  "description": "Draft and revise research papers, polish academic prose, and respond to reviewers while preserving claims, assumptions, evidence, uncertainty, numbers, notation, and citations.",
+  "description": "Draft and revise academic papers that read like an expert's writing, not an AI's, while preserving claims, evidence, numbers, notation, and citations. Quill reviews its work before delivery and learns your writing style.",
   "author": {
     "name": "Sikun Xu"
   },
@@ -19,6 +19,8 @@
     "reviewer-response",
     "latex",
     "research",
-    "academia"
+    "academia",
+    "personalization",
+    "writing-style"
   ]
 }

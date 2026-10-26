@@ -3,12 +3,12 @@
   "owner": {
     "name": "Sikun Xu"
   },
-  "description": "Quill: an academic-writing skill for AI coding agents that drafts and revises research papers without changing their claims, numbers, notation, or citations.",
+  "description": "Quill: an academic-writing skill for AI agents. It drafts and revises academic papers that read like an expert's writing, not an AI's, and learns your writing style.",
   "plugins": [
     {
       "name": "quill",
       "source": "./",
-      "description": "Academic-writing skill: draft and revise research papers, polish academic prose, and respond to reviewers while preserving claims, assumptions, evidence, uncertainty, numbers, notation, and citations."
+      "description": "Academic-writing skill: draft and revise academic papers that read like an expert's writing, not an AI's, while preserving claims, evidence, numbers, notation, and citations. Quill reviews its work before delivery and learns your writing style."
     }
   ]
 }
