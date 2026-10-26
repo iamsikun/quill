@@ -4,7 +4,7 @@ description: Draft and revise academic manuscripts, improve arguments and techni
 license: MIT
 metadata:
   author: Sikun Xu
-  version: "0.7.0"
+  version: "0.7.1"
 ---
 
 # Quill

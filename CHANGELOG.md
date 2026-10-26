@@ -5,7 +5,7 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
-## Unreleased
+## 0.7.1 — 2026-10-26
 
 - Restore two guardrails dropped when local edits were reconciled: neither brevity
   nor completeness is an editing objective on its own, and a corrected claim is not
