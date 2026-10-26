@@ -139,7 +139,8 @@ pattern narrow enough that most hits are real.
 When asked to organize a discussion or reflect on failed edits, distinguish direct
 feedback from your diagnosis. Record the before/after example, the decision it
 changes, and the limits of that lesson. Do not convert an edited connective into
-a word ban or a removed redundancy into “always shorten.” Corrections that add
+a word ban, a removed redundancy into “always shorten,” or a corrected claim into
+“always sound more confident.” Corrections that add
 useful detail and others that remove redundant detail may express the same
 priority. Put transferable reasoning in skill instructions only when updating the
 skill is authorized.
