@@ -7,6 +7,18 @@ Quill uses semantic versioning:
 
 ## Unreleased
 
+- Bring in editing guidance developed in a local installation from manuscript
+  feedback. Substantial writing starts from the main messages and the evidence
+  that earns them, introduces methods through the problems they address, chooses
+  connectives by their logical relationship, and judges detail by what it helps
+  readers understand. Wording duplicated between the core and the editing
+  reference is consolidated.
+- Add guidance on conclusions, supporting detail, appendix organization,
+  assumptions, notation, and robustness, with four new editing examples.
+- Distinguish reference passages from edit targets, verify the rendered artifact
+  the user actually sees, and record writing retrospectives without turning local
+  corrections into rules.
+
 ## 0.6.0 — 2026-10-13
 
 - Clarify local ChatGPT Work profile access and attachment snapshots. Exercise

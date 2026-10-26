@@ -91,6 +91,14 @@ in the profile unless they hold only for the current project.
 - A newer stated preference replaces an older one; an occasional contrary edit
   becomes an exception or is left in the log.
 
+When asked to organize a discussion or reflect on failed edits, distinguish direct
+feedback from your diagnosis. Record the before/after example, the decision it
+changes, and the limits of that lesson. Do not convert an edited connective into
+a word ban or a removed redundancy into “always shorten.” Corrections that add
+useful detail and others that remove redundant detail may express the same
+priority. Put transferable reasoning in skill instructions only when updating the
+skill is authorized.
+
 Keep the profile short: when it grows past about 40 lessons, merge overlapping
 lessons and remove ones the author no longer follows. Log each change briefly:
 

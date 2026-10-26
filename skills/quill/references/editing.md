@@ -6,7 +6,9 @@ Read the passage before deciding that it needs a rewrite. For a file edit, ident
 the actual file and requested span; do not infer a filename from the first word of
 the user's request. Read enough surrounding context to resolve references and
 scientific scope. If several files are plausible, resolve the ambiguity before
-editing. A user's selection is the edit boundary, not the read boundary.
+editing. A user's selection is the edit boundary, not the read boundary. A passage
+supplied as a model for revising other material is a reference, not automatically
+an edit target. Learn from its logic without silently rewriting it.
 
 Copyediting corrects mechanics and unambiguous local problems. Line editing can
 recast sentences and improve paragraph continuity. Structural revision can move
@@ -21,20 +23,34 @@ performing the larger revision.
 
 ## Diagnose before polishing
 
-For a substantial revision, ask:
+For substantial revision, diagnose the argument at the scale where it fails:
 
-1. What is the actual claim, and what supports it?
-2. Does each next step have the context the reader needs?
-3. Can the same reasoning be expressed more directly?
-4. Did the revision lose a condition, change a comparison, or imply unsupported
-   certainty?
-5. Did it weaken a supported conclusion or conceptual contribution, or add caveats
-   that make the argument less direct without improving its accuracy?
+- **Paper or section:** What should the audience understand or conclude, and which
+  evidence earns that takeaway? Give results prominence according to their role in
+  the contribution, not their technical complexity or usefulness in answering a
+  possible objection. Distinguish explaining a phenomenon, validating a method,
+  and establishing its empirical relevance.
+- **Paragraph:** What question does this answer, and what does the reader need to
+  know first? Does it present the problem before the procedure, and report what
+  the evidence established? Develop the evidence and interpretation that the
+  takeaway actually requires.
+- **Sentence:** Can the same reasoning be expressed more directly? Does each
+  connective state the actual relationship between the propositions? What does
+  each detail add, and does it belong here, or is it already implied or explained
+  nearby?
 
-These are priorities, not mandatory passes. Return to the argument if sentence
-editing exposes a missing premise. Supply a connection only when the sources
-support it; otherwise flag the gap when it is material to the requested argument.
-Distinguish an exposition problem from an unresolved scientific question.
+Use these questions where they change the edit, not as a fixed sequence of passes
+or a template for every paragraph. Return to the argument if sentence editing
+exposes a missing premise. Supply a connection only when the sources support it.
+Otherwise flag the gap when it is material to the requested argument. Distinguish
+an exposition problem from an unresolved scientific question.
+
+Compare the revision's takeaway with the source, not only its wording. Check for
+lost conditions, changed comparisons, unsupported certainty, weakened findings, and
+added caveats that make the argument less direct without improving its accuracy.
+An edit can retain every number yet change the argument by moving the evidence,
+replacing the motivation, or introducing a concession. Recheck author-corrected
+passages for those errors before polishing them again.
 
 Within the requested scope, preserve the author's scientifically justified
 conviction and positioning. Replace vague statements of potential usefulness with
@@ -62,7 +78,12 @@ an experiment or revision was performed when it was only proposed.
 
 For review-only requests, provide actionable observations and short examples
 without changing source files. For edits, deliver the revised prose or files and
-any requested response. Apply the core delivery rule: add a separate note only
+any requested response. Describe substantive changes as such rather than calling
+them grammatical cleanup. When an updated rendered artifact is part of delivery,
+verify the actual delivered or viewed file against the revised source. A successful
+temporary build does not establish that the user's copy is current.
+
+Apply the core delivery rule: add a separate note only
 when a material issue remains unresolved. Do not add an author note repeating a
 limitation or requirement already explained in the requested prose or reviewer
 response. Once the requested text is scientifically accurate and complete, stop.

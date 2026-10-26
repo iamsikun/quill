@@ -74,10 +74,27 @@ Do not invent a limitation any more than a finding.
 
 ## Write for the reader
 
-Identify what the passage needs to help the reader understand and arrange the
-information accordingly. Connect new concepts to established context. Make the
-relationship between claims explicit when the sources support it. Explain what
-an equation or technical term contributes when the reader needs that explanation.
+For substantial writing, establish the main messages and the evidence that earns
+them before arranging technical detail. Give each passage a role in that argument.
+A sequence of correct statements is not sufficient if readers cannot see why they
+matter or how one prepares them for the next. For a local edit, recover that role
+from context without reopening the whole manuscript.
+
+Introduce a method through the problem it addresses when that need is not yet clear.
+When reporting evidence, explain what it establishes rather than merely narrating
+which analyses were performed. Connect new concepts to what the reader already
+knows. Explain an equation or term when doing so advances understanding.
+
+Make the relationship between claims explicit when the sources support it. Choose
+connectives from the actual relationship between propositions: purpose, cause,
+evidence, implication, contrast, or concession. A cautious-sounding
+“although” can invent a conflict just as an unsupported “therefore” can invent an
+inference. Fluency does not repair either error.
+
+Judge detail by what it enables the reader to understand. Add missing explanation
+and remove restatements of what is already implied or explained nearby. Precision
+is useful when it resolves a real ambiguity, not when it merely redescribes the
+same event. Economy means less avoidable effort, not the fewest words.
 
 Prefer familiar words and verbs that express the relevant action. Retain necessary
 technical terms and use the same term for the same concept. Make referents,
@@ -93,7 +110,8 @@ rewrite an effective sentence merely to show that editing occurred.
 Read only the additional guidance needed for this task:
 
 - [Technical writing](references/technical-writing.md): section purpose,
-  mathematical exposition, results, literature synthesis, and captions.
+  mathematical exposition, results, literature synthesis, conclusions, supporting
+  detail, and captions.
 - [Examples](references/examples.md): difficult editing judgments, especially
   changes that sound fluent but alter meaning and cases requiring restraint.
 - [Quill workspaces](references/quill-workspaces.md): only for an existing
