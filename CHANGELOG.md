@@ -5,6 +5,13 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
+## 0.7.2 — 2026-10-26
+
+- Describe Quill consistently with the README across the plugin manifest,
+  marketplace listing, package metadata, and Codex skill card: papers that read
+  like an expert's writing, a review before delivery, and a learned writing style.
+  Writing instructions and CLI behavior are unchanged.
+
 ## 0.7.1 — 2026-10-26
 
 - Restore two guardrails dropped when local edits were reconciled: neither brevity

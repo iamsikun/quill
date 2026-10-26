@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "quill"
-version = "0.7.1"
+version = "0.7.2"
 description = "Academic-writing skill for AI agents (Claude Code, Codex, Cursor, Gemini CLI) that learns your writing style, with an optional CLI for review checks and LaTeX manuscripts"
 keywords = ["academic-writing", "scientific-writing", "paper-writing", "research-paper", "manuscript", "latex", "agent-skills", "claude-code", "codex", "personalization", "writing-style"]
 readme = "README.md"
