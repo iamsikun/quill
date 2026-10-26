@@ -1,10 +1,10 @@
 ---
 name: quill
-description: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, addressing reviewer feedback, or remembering and applying personal academic writing preferences. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.
+description: Draft and revise academic manuscripts, improve arguments and technical exposition, and edit research prose while preserving scientific meaning. Use for writing papers or sections from supplied research, polishing passages, removing AI-like or machine-sounding prose, addressing reviewer feedback, or remembering and applying personal academic writing preferences. Not for standalone literature searches, running research, submission formatting, or ordinary software documentation.
 license: MIT
 metadata:
   author: Sikun Xu
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
 # Quill
@@ -44,8 +44,10 @@ Choose the appropriate depth:
 
 For substantial edits or feedback-driven revision, read
 [Editing](references/editing.md). For drafting, read
-[Drafting](references/drafting.md). A short polish can be completed using this core
-alone. These are working modes, not separate agents or mandatory sequential passes.
+[Drafting](references/drafting.md). Beyond a short polish, also read
+[Review](references/review.md) and the [Checklist](references/checklist.md): every
+task except a copyedit ends with the review they describe. A short polish needs
+only this core and a brief self-check.
 
 ## Preserve meaning
 
@@ -78,7 +80,14 @@ For substantial writing, establish the main messages and the evidence that earns
 them before arranging technical detail. Give each passage a role in that argument.
 A sequence of correct statements is not sufficient if readers cannot see why they
 matter or how one prepares them for the next. For a local edit, recover that role
-from context without reopening the whole manuscript.
+from context without reopening the whole manuscript. Polishing must not make the
+central result, contribution, or implication harder to see. Each section has its
+own job: the abstract gives the main contribution and the evidence that most earns
+it, the introduction develops the argument, and methods, results, theorems, and
+appendices supply the detail. A number kept in a summary keeps the qualifications
+that give it its meaning; otherwise say what the evidence establishes and leave the
+number to the results. When an author expands an explanation or moves a
+technical passage, treat that as intended emphasis; do not mechanically restore it.
 
 Introduce a method through the problem it addresses when that need is not yet clear.
 When reporting evidence, explain what it establishes rather than merely narrating
@@ -102,16 +111,24 @@ comparisons, and numerical quantities unambiguous. Choose active or passive voic
 according to the passage's focus; let sentence length follow the reasoning.
 
 Remove empty importance claims, unnecessary ceremony, and repetitive conclusions.
-Preserve supported research stakes and significance, useful signposting, deliberate
-technical repetition, and qualifications that affect meaning.
+Preserve supported research stakes, useful signposting, and deliberate technical
+repetition.
 Do not force every paragraph into one template, manufacture a personal voice, or
 rewrite an effective sentence merely to show that editing occurred.
+
+Write for readers of the finished paper. The manuscript explains the research:
+its method, evidence, assumptions, and implications. Revision history, repair
+announcements, verification narration, and the agent's workspace do not belong in
+it. Check thoroughly; do not reproduce the checking in the text.
 
 Read only the additional guidance needed for this task:
 
 - [Technical writing](references/technical-writing.md): section purpose,
   mathematical exposition, results, literature synthesis, conclusions, supporting
-  detail, and captions.
+  detail, tables, and captions.
+- [Natural prose](references/natural-prose.md): requests to remove AI-like or
+  machine-sounding writing, and patterns that make careful prose read like an
+  assistant's work report.
 - [Examples](references/examples.md): difficult editing judgments, especially
   changes that sound fluent but alter meaning and cases requiring restraint.
 - [Quill workspaces](references/quill-workspaces.md): only for an existing
@@ -154,30 +171,33 @@ contributions. Keep critique and rebuttal commentary outside manuscript prose.
 Apply these principles within the authorized editing depth: ordinary polishing
 does not authorize reframing the research.
 
-## Complete and check the work
+## Complete and review the work
 
 Perform the requested writing in the current host's conversation using available
 tools. Do not stop after an outline, instruction brief, or description of what a
 writer should do. Use a plan as an intermediate aid only when the task merits it.
 
-For substantial work, address argument and continuity before expression. Compare
-the revision with its sources for changed meaning, missing conditions, altered
-numbers, notation, and citation scope. Check for weakened supported conclusions
-or positioning and newly added caveats as well as overclaims. Check affected
-cross-references and nearby dependencies proportionally to the edit; a paragraph
+Review the finished text before delivering it. For a copyedit or local polish,
+check it against the meaning, scope, and delivery rules above and the active
+profile. For anything larger, run the two-pass review in [Review](references/review.md):
+Pass 1 checks meaning and the reader's path through the argument, and Pass 2 checks
+expression against every routed [Checklist](references/checklist.md) item. Repair
+only the flagged spans and recheck them against the sources. For a section or
+more, use an independent reviewer when the host supports subagents. Check affected
+cross-references and nearby dependencies in proportion to the edit; a paragraph
 polish does not require a full-manuscript audit. Keep unaffected file content
 unchanged for surgical edits.
 
 Return the requested deliverables in the requested format, or identify the files
-edited. Keep routine scientific and editing checks in working reasoning. Add a
-separate note only when a material issue remains unresolved after delivering the
-requested text and needs the author's attention. Do not repeat an issue already
-handled in that text or in a requested reviewer response. Evidence unnecessary
-to the claim being made is not, by itself, an unresolved issue.
+edited. Keep the review's outlines, statuses, and findings out of the manuscript
+and the reply. Add a separate note only when a material issue remains unresolved
+after delivering the requested text and needs the author's attention. Do not repeat
+an issue already handled in that text or in a requested reviewer response. Evidence
+unnecessary to the claim being made is not, by itself, an unresolved issue.
 
-Once the requested deliverables are complete and scientifically accurate, stop.
-Give additional explanation or critique when requested. Do not append hypothetical
-analyses, a verification checklist, or explanations of routine editing choices.
-Keep editorial commentary outside the manuscript. Report verification limits
-honestly when they affect the requested result. Do not add revision markers,
-logs, scaffolding, or new files to a small writing task unless requested.
+The task is done when the deliverables are complete, scientifically accurate, and
+pass the review. Then stop. Give additional explanation or critique when requested.
+Do not append hypothetical analyses, a verification checklist, or explanations of
+routine editing choices. Report verification limits honestly when they affect the
+requested result. Do not add revision markers, logs, scaffolding, or new files to
+a small writing task unless requested.

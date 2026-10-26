@@ -39,11 +39,22 @@ For substantial revision, diagnose the argument at the scale where it fails:
   each detail add, and does it belong here, or is it already implied or explained
   nearby?
 
-Use these questions where they change the edit, not as a fixed sequence of passes
-or a template for every paragraph. Return to the argument if sentence editing
-exposes a missing premise. Supply a connection only when the sources support it.
-Otherwise flag the gap when it is material to the requested argument. Distinguish
-an exposition problem from an unresolved scientific question.
+These questions guide the diagnosis. They are not a template every paragraph must
+fit. The [review](review.md) then checks the result: its Pass 1 reverse outline
+shows whether the revised passage still gives readers a connected path (A1–A6).
+For a substantial revision, that check has four steps: recover the intended
+takeaway and its evidence, read the surrounding context, revise within scope, and
+check that the resulting passage connects to what precedes and follows it. Return
+to the argument if sentence editing exposes a missing premise. Supply a connection
+only when the sources support it. Otherwise flag the gap when it is material to the
+requested argument. Distinguish an exposition problem from an unresolved scientific
+question.
+
+Check the evidence thoroughly, but do not write the check into the manuscript.
+Audit logs, implementation correspondence, repair history, and responses to
+imagined objections help the revision; they do not belong in the exposition (U5).
+When a request is to remove AI-like or machine-sounding prose, read
+[Natural prose](natural-prose.md).
 
 Compare the revision's takeaway with the source, not only its wording. Check for
 lost conditions, changed comparisons, unsupported certainty, weakened findings, and
@@ -76,16 +87,17 @@ an experiment or revision was performed when it was only proposed.
 
 ## Delivery
 
-For review-only requests, provide actionable observations and short examples
-without changing source files. For edits, deliver the revised prose or files and
-any requested response. Describe substantive changes as such rather than calling
-them grammatical cleanup. When an updated rendered artifact is part of delivery,
-verify the actual delivered or viewed file against the revised source. A successful
-temporary build does not establish that the user's copy is current.
+For review-only requests, give findings with their exact location, the reader's
+problem, and a concrete edit, without changing source files (R1, R2). For edits,
+deliver the revised prose or files and any requested response. Describe substantive
+changes as such rather than calling them grammatical cleanup, and a changed table
+structure as a substantive edit. When an updated rendered artifact is part of
+delivery, verify the actual delivered or viewed file against the revised source,
+including its displays (D5). A successful temporary build does not establish that
+the user's copy is current. Which copies a project keeps, and where, is project
+configuration.
 
-Apply the core delivery rule: add a separate note only
-when a material issue remains unresolved. Do not add an author note repeating a
-limitation or requirement already explained in the requested prose or reviewer
-response. Once the requested text is scientifically accurate and complete, stop.
-Do not append generic praise, a repeated summary, or `% REVISED`/`% POLISHED`
-comments unless requested.
+Apply the core delivery rule (U6). Do not add an author note repeating a limitation
+or requirement already explained in the requested prose or reviewer response. Do
+not append generic praise, a repeated summary, or `% REVISED`/`% POLISHED` comments
+unless requested.

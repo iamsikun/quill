@@ -25,6 +25,16 @@ invoke Quill explicitly as `$quill` in Codex or `/quill` in Claude Code.
 - **States supported findings directly.** Quill makes the strongest case the
   evidence supports: it removes stacked hedges and repeated caveats while keeping
   the conditions that change a finding's meaning.
+- **Writes for the reader of the finished paper.** It keeps the main contribution
+  prominent, connects each section to the argument before it, and removes the
+  habits that make careful prose read like an assistant's work report: defensive
+  contrasts, workflow narration, repair notes in captions, code identifiers, and
+  generic wrap-ups. Ask it to “remove the AI-like writing” for an audit or a rewrite.
+- **Reviews its work before delivering it.** Beyond a short polish, Quill checks the
+  finished text against a [checklist](skills/quill/references/checklist.md) in two
+  passes: one for meaning and the reader's path through the argument, one for
+  expression. For a section or more, a fresh reviewer runs the passes when the
+  host supports subagents.
 - **Works with your files as they are.** It edits pasted text, Markdown, and LaTeX
   in your existing structure, and needs no setup for a paragraph edit.
 - **Learns your writing style, if you ask.** Quill can learn from your feedback and
@@ -122,6 +132,45 @@ Code's `permissions.additionalDirectories` setting, or to Codex's
 path). Memory adapts the instructions Quill follows; it does not retrain a model.
 See the [personalization workflow](skills/quill/references/personalization.md) and
 the [evaluation protocol](evals/README.md#personalization).
+
+## Review utilities
+
+Two optional commands support the review. Neither is needed to write or edit prose.
+
+```bash
+quill check sections/intro.tex                     # candidates for the review to judge
+quill check sections/intro.tex --baseline --lines 12-30  # also changed numbers, citations, math, out-of-span edits
+quill review record sections/intro.tex             # this version passed the review
+quill review status                                # which files changed since their last review
+```
+
+`quill check` reports style candidates, such as defensive contrasts, stock
+scaffolding, commit hashes and workspace narration, code identifiers, and leftover
+markers, with the checklist rule each relates to. With `--against FILE` or
+`--baseline`, it also reports fidelity guards: changed numbers, citations,
+references, and mathematics, and edits outside the `--lines` you authorized. Lint
+patterns in your profile's `checks` header are reported too. Every hit is a
+candidate for judgment; the counts are not a quality score. Review records live in
+the project's `.quill/reviews/`, which Git ignores; any later edit makes a record
+stale, and `quill review status` exits nonzero until the file is reviewed again.
+
+In Claude Code you can make the review hard to skip with two opt-in hooks. Add them
+to a project's `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [{"matcher": "Edit|Write",
+                     "hooks": [{"type": "command", "command": "quill hook post-edit"}]}],
+    "Stop": [{"hooks": [{"type": "command", "command": "quill hook stop"}]}]
+  }
+}
+```
+
+After each edit of a manuscript file, `post-edit` gives the agent the `quill check`
+candidates and a reminder to review. `stop` asks the agent once to finish the
+review before it ends its turn while an edited file has no current review record.
+Neither hook edits your files or fails the session.
 
 ## Manuscript utilities
 
@@ -327,7 +376,7 @@ copies of the writing instructions.
 uv sync
 uv run pytest -q
 uv build
-QUILL_WHEEL="$PWD/dist/quill-0.5.0-py3-none-any.whl" uv run pytest -q
+QUILL_WHEEL="$PWD/dist/quill-0.7.0-py3-none-any.whl" uv run pytest -q
 ```
 
 `uv run python scripts/validate.py` checks the skill against the Agent Skills spec and
@@ -336,9 +385,9 @@ confirms that the version agrees across `SKILL.md`, `.claude-plugin/plugin.json`
 [AGENTS.md](AGENTS.md#releasing).
 
 Tests cover installed content and references, ownership protection, migration, and
-managed utilities. `evals/README.md` describes the 21 synthetic behavioral cases,
-the three-arm comparison, fresh-session discovery checks, and the separate
-personalization cases. Behavioral results are recorded separately from mechanical
+managed utilities. `evals/README.md` describes the 44 synthetic behavioral cases,
+the three-arm comparison, the multi-turn session evaluation with file tools,
+fresh-session discovery checks, and the separate personalization cases. Behavioral results are recorded separately from mechanical
 tests; neither a valid manifest nor a fluent answer establishes improved human
 comprehension. See [the evaluation results](evals/RESULTS.md) for the actual host
 checks and their limitations.

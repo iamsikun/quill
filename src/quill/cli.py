@@ -15,6 +15,7 @@ from .sync import find_repo_root, init_project, package_version
 from .validate import validate_repo
 from .doctor import diagnose, format_diagnosis
 from .style_cli import add_parser as add_style_parser
+from .review_cli import add_parsers as add_review_parsers
 
 
 def _repo_root() -> Path:
@@ -210,6 +211,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="quill")
     subparsers = parser.add_subparsers(dest="command", required=True)
     add_style_parser(subparsers)
+    add_review_parsers(subparsers)
 
     skill_parser = subparsers.add_parser(
         "skill", help="Copy the writing skill into a project (or user folder) without auto-updates")

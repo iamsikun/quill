@@ -1,0 +1,325 @@
+{
+  "id": "creative-selection",
+  "description": "A synthetic multi-section manuscript revised over six turns in one session with file tools. Failures from issues #3-#5 are embedded; preservation controls check over-correction. Grading fields never enter prompts.",
+  "files": [
+    "paper.md",
+    "render.py",
+    "CODE.md"
+  ],
+  "delivered": {
+    "source": "paper.md",
+    "build": "build/paper.html",
+    "copy": "share/paper.html"
+  },
+  "turns": [
+    {
+      "id": "T1",
+      "scope": [
+        "## 1. Introduction"
+      ],
+      "prompt": "I'm revising paper.md for a statistics and machine-learning audience. Revise the Introduction (Section 1) only. Edit the file directly."
+    },
+    {
+      "id": "T2",
+      "scope": [
+        "## 3. Validation"
+      ],
+      "prompt": "Now revise Section 3 (Validation), including Table 1, its note, and the Figure 2 caption. CODE.md documents the method identifiers."
+    },
+    {
+      "id": "T3",
+      "scope": [
+        "## 2. Setup and theory",
+        "## 4. Application",
+        "## Paper checklist"
+      ],
+      "prompt": "Sections 2 and 4 and my checklist answers read like an AI wrote them. Remove the AI-like writing there."
+    },
+    {
+      "id": "T4",
+      "scope": [
+        "## Abstract"
+      ],
+      "prompt": "Tighten the abstract so the main theoretical result is prominent."
+    },
+    {
+      "id": "T5",
+      "scope": [],
+      "review_only": true,
+      "prompt": "Review the Conclusion and Appendix A. Don't edit anything; list the problems with exact locations and proposed fixes."
+    },
+    {
+      "id": "T6",
+      "scope": [
+        "## 5. Conclusion"
+      ],
+      "prompt": "Apply your fixes to the Conclusion only; leave Appendix A as it is. Then run `python3 render.py` and make sure the copy I read, share/paper.html, is current."
+    }
+  ],
+  "controls": [
+    {
+      "id": "P1-theorem",
+      "verbatim": "**Theorem 1.** Suppose Assumptions 1-3 hold and the population lifts are separated by gaps bounded below by $\\delta > 0$. Then for each fixed $K$, $\\mathbb{E}[\\tilde\\mu - \\mu_{(1)}] = o(m^{-1/2})$ as $m \\to \\infty$. If in addition the leading coefficient $c_1$ is nonzero, $\\mathbb{E}[\\hat\\mu_{(1)} - \\mu_{(1)}] = \\Theta(m^{-1/2})$."
+    },
+    {
+      "id": "P2-proposition",
+      "verbatim": "**Proposition 2.** If the gaps shrink at rate $m^{-1/2}$, no estimator that is measurable with respect to the split sample removes the first-order bias uniformly over such configurations."
+    },
+    {
+      "id": "P3-necessary-negation",
+      "sentence_with": [
+        "finite-sample coverage",
+        "not"
+      ]
+    },
+    {
+      "id": "P4-replicate-limitation",
+      "all": [
+        "two independent replicates",
+        "undefined",
+        "87 campaigns"
+      ]
+    },
+    {
+      "id": "P5-snapshot-provenance",
+      "all": [
+        "v2.3",
+        "2025-11-02",
+        "2026-01-15"
+      ]
+    },
+    {
+      "id": "P6-checklist-template",
+      "verbatim_lines": [
+        "Question: Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?",
+        "Guidelines: The answer NA means that the abstract and introduction do not include the claims made in the paper.",
+        "Question: Does the paper discuss the limitations of the work performed by the authors?",
+        "Guidelines: The answer NA means that the paper has no limitation while the answer No means that the paper has limitations, but those are not discussed in the paper."
+      ]
+    },
+    {
+      "id": "P7-concept-explanation",
+      "section": "## 2. Setup and theory",
+      "any": [
+        "nois"
+      ]
+    },
+    {
+      "id": "P8-clipping-disclosure",
+      "all": [
+        "clipped at 0.01"
+      ]
+    },
+    {
+      "id": "P9-effective-paragraph",
+      "similar_to": "Marketing teams act on the winning creative's estimated lift: they forecast revenue from it and allocate budget to similar designs. When dozens of creatives are compared on the same traffic, the creative that ranks first is disproportionately one whose noise happened to be favorable, so its reported lift overstates what it will deliver. This winner's curse is well documented in genetics and in A/B testing, but platforms still report the raw estimate.",
+      "min_ratio": 0.85
+    },
+    {
+      "id": "P12-conclusion-limitation",
+      "all": [
+        "replicate"
+      ],
+      "section": "## 5. Conclusion"
+    },
+    {
+      "id": "P10-appendix-unchanged",
+      "section_unchanged": "## Appendix A. Proofs and additional results"
+    },
+    {
+      "id": "P11-numbers",
+      "numbers_kept": true
+    }
+  ],
+  "failures": [
+    {
+      "id": "F1",
+      "turn": "T1",
+      "rule": "A4",
+      "where": "Introduction, paragraph 1",
+      "problem": "Procedure (split, select, shrink) precedes the problem it solves, which only appears in paragraph 2."
+    },
+    {
+      "id": "F2",
+      "turn": "T1",
+      "rule": "E3",
+      "where": "Introduction, paragraph 1",
+      "problem": "\"Importantly, this is a two-step procedure.\" is empty scaffolding."
+    },
+    {
+      "id": "F3",
+      "turn": "T1",
+      "rule": "A5",
+      "where": "Introduction, paragraph 3",
+      "problem": "False concession: \"Although we assume ... this assumption gives a clean characterization\" expresses purpose, not contrast."
+    },
+    {
+      "id": "F4",
+      "turn": "T1",
+      "rule": "E1",
+      "where": "Introduction, paragraph 3",
+      "problem": "\"not the ranking itself\" denies an alternative readers were not considering."
+    },
+    {
+      "id": "F5",
+      "turn": "T1",
+      "rule": "E4",
+      "where": "Introduction, paragraph 3",
+      "problem": "Definition of an unbiased estimator is tutorial filler for this audience."
+    },
+    {
+      "id": "F6",
+      "turn": "T2",
+      "rule": "A3",
+      "where": "Section 3 opening",
+      "problem": "Opens with a vague finding and \"Furthermore\" instead of the finite-sample question the asymptotic theorem leaves open and the distinct roles of the two analyses."
+    },
+    {
+      "id": "F7",
+      "turn": "T2",
+      "rule": "A8",
+      "where": "Section 3, paragraph 2",
+      "problem": "Repeated independence caveat."
+    },
+    {
+      "id": "F8",
+      "turn": "T2",
+      "rule": "A6",
+      "where": "Section 3, paragraph 3",
+      "problem": "Rising MAE right after a bias guarantee is not explained (signed-bias guarantee does not bound MAE); must not invent a variance mechanism."
+    },
+    {
+      "id": "F9",
+      "turn": "T2",
+      "rule": "A2",
+      "where": "Section 3, paragraph 3",
+      "problem": "\"We conducted sensitivity analyses\" announces the analysis; the result (corrected bias 0.05-0.07 across prior widths) supports stability and should be stated."
+    },
+    {
+      "id": "F10",
+      "turn": "T2",
+      "rule": "D2",
+      "where": "Table 1",
+      "problem": "Metric and method are fused in flat headers; the shared quantity should group the methods; sig/total counts are packed in one cell; quantities undefined in the note."
+    },
+    {
+      "id": "F11",
+      "turn": "T2",
+      "rule": "E6",
+      "where": "Table 1 headers and Figure 2 legend",
+      "problem": "Code identifiers naive_max and split_shrink_v2 in reader-facing labels; CODE.md supplies the mapping."
+    },
+    {
+      "id": "F12",
+      "turn": "T2",
+      "rule": "D4",
+      "where": "Table 1 note and Figure 2 caption",
+      "problem": "Consistency assurance and repair narration (\"as verified after the earlier mismatch was fixed\", \"now logarithmic so that no curve is truncated anymore\"); clipping disclosure must stay."
+    },
+    {
+      "id": "F13",
+      "turn": "T3",
+      "rule": "E7",
+      "where": "Section 2, paragraph 2",
+      "problem": "Editor instruction: \"the correction must use lambda-hat and not the population weight\"."
+    },
+    {
+      "id": "F14",
+      "turn": "T3",
+      "rule": "E1",
+      "where": "Section 2, after Theorem 1",
+      "problem": "Shouted defensive contrast \"NOT a guarantee about its mean squared error\" (a plain statement of the bias target may remain)."
+    },
+    {
+      "id": "F15",
+      "turn": "T3",
+      "rule": "A8",
+      "where": "Section 2 after Theorem 1, and Section 4 paragraph 1",
+      "problem": "Repeated independence caveats."
+    },
+    {
+      "id": "F16",
+      "turn": "T3",
+      "rule": "U5",
+      "where": "Section 4, paragraph 1",
+      "problem": "Workflow narration (dirty worktree, commit hash) and an agent-workspace limit presented as fact (\"The local snapshot lacks the 2023 campaign logs\"). No reproducibility destination is given."
+    },
+    {
+      "id": "F17",
+      "turn": "T3",
+      "rule": "E2",
+      "where": "Section 4, paragraph 2",
+      "problem": "\"This highlights the importance of correction for practitioners.\" is an empty importance claim."
+    },
+    {
+      "id": "F18",
+      "turn": "T3",
+      "rule": "U5",
+      "where": "Checklist item 1 justification",
+      "problem": "Revision narration (\"We rewrote the abstract in this revision so that it now matches\")."
+    },
+    {
+      "id": "F19",
+      "turn": "T4",
+      "rule": "A1",
+      "where": "Abstract",
+      "problem": "Proposition 2 (secondary) receives as much space as the main bias-reduction result; the main theorem should lead."
+    },
+    {
+      "id": "F20",
+      "turn": "T4",
+      "rule": "U1",
+      "where": "Abstract",
+      "problem": "A Theta starting rate needs the nonzero c_1 condition if stated."
+    },
+    {
+      "id": "F21",
+      "turn": "T4",
+      "rule": "S1",
+      "where": "Abstract",
+      "problem": "Dense aggregation-specific numbers; the abstract's job is to say what the validation establishes."
+    },
+    {
+      "id": "F22",
+      "turn": "T4",
+      "rule": "E5",
+      "where": "Abstract, last sentence",
+      "problem": "Overloaded noun phrase, \"It is worth noting\", and shouted NOT contrast."
+    },
+    {
+      "id": "F23",
+      "turn": "T5",
+      "rule": "S4",
+      "where": "Conclusion",
+      "problem": "Reopens objections and a minor extension (dependence, Appendix B, heavy tails)."
+    },
+    {
+      "id": "F24",
+      "turn": "T5",
+      "rule": "E1",
+      "where": "Conclusion",
+      "problem": "\"Importantly, the correction is not a ranking method.\""
+    },
+    {
+      "id": "F25",
+      "turn": "T5",
+      "rule": "E2",
+      "where": "Conclusion, last sentence",
+      "problem": "Generic wrap-up."
+    },
+    {
+      "id": "F26",
+      "turn": "T5",
+      "rule": "S4",
+      "where": "Appendix A, first paragraph",
+      "problem": "Promises additional K = 50 results \"below\" that do not appear."
+    },
+    {
+      "id": "F27",
+      "turn": "T5",
+      "rule": "A9",
+      "where": "Appendix A, third paragraph",
+      "problem": "Duplicates the Section 2 explanation of split-sample shrinkage."
+    }
+  ]
+}

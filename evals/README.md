@@ -1,11 +1,32 @@
 # Quill behavioral evaluation
 
-The 21 cases in `cases.json` are synthetic and are not excerpts from the user's
+The 44 cases in `cases.json` are synthetic and are not excerpts from the user's
 paper. Expected properties are withheld from the model. They test fidelity and
 scope before style preference; none requires research access or real manuscript data.
 Five cases additionally test earned confidence: over-hedging, defensive conceptual
 framing, redundant caveats, positioning with incomplete evidence, and observations
 whose proposed mechanisms remain uncertain.
+
+Twenty-three cases, marked with an `issue` field, test the guidance from issues
+#3-#5 on held-out material in other domains:
+
+- **Contribution hierarchy (#3):** connecting an abstract's contributions, keeping
+  the main theorem prominent while preserving a rate condition, selecting evidence
+  for an abstract, and respecting an author's deliberate relocation.
+- **Reader path and displays (#4):** a theory-to-validation opening, false versus
+  genuine concession and irrelevant versus necessary contrast, robustness versus
+  fragility, a bias guarantee alongside a higher mean absolute error, expanding an
+  explanation while trimming bookkeeping, a conclusion with competing messages, a
+  table with grouped quantities and packed counts, and a protected model passage.
+- **Natural prose (#5):** workflow narration with a real relocation destination,
+  repair captions with a real clipping disclosure, unverified code labels, expert
+  filler beside a modified construction, an overloaded name, an empty summary,
+  repeated caveats across sections and a caption, an audit with passing passages,
+  a multi-paragraph rewrite with formal and provenance controls, effective prose
+  that should stay unchanged, and venue checklist text.
+
+Each has `rhetorical_checks` that grade contribution clarity, continuity, or
+directness separately from fidelity. Review-only and no-change controls are included.
 
 ## Three-arm comparison
 
@@ -26,6 +47,10 @@ uv run python evals/run.py --host claude --arm plain --case theorem --output /tm
 uv run python evals/run.py --host claude --arm core --case theorem --output /tmp/quill-eval
 uv run python evals/run.py --host claude --arm references --case theorem --output /tmp/quill-eval
 ```
+
+To compare a frozen earlier version, pass its skill folder and a label, for example
+`--skill /tmp/quill-0.6.0/skills/quill --label before`. A frozen version that lacks a
+newer reference receives only the references it has; the record lists the missing ones.
 
 Comparison arms supply all inputs inline and request returned text rather than
 file writes. Claude's safe mode and disabled tools prevent incidental skill
@@ -133,6 +158,67 @@ explicit corrections, unnecessary questions, false persistence claims, and autho
 revision effort. Model
 judgments and synthetic author cases do not establish improved writing quality.
 Use held-out manuscripts and blind author comparisons before claiming that benefit.
+
+## Grading
+
+`grade.py` grades blind. For single-turn cases it shuffles every answer to a case,
+relabels them, and grades them together against the frozen
+[case rubric](rubrics/cases.md); record names are attached only afterwards.
+For sessions it grades one record at a time against the
+[session rubric](rubrics/session.md), without the arm, skill, traces, or tool
+evidence. Freeze the rubric before generating answers.
+
+```bash
+uv run python evals/grade.py cases /tmp/quill-eval/*.json --output /tmp/quill-grades.json
+uv run python evals/grade.py session /tmp/quill-session/*.json --output /tmp/quill-session-grades.json
+```
+
+Model grades are preliminary evidence. Use blind human review before claiming
+improved readability or comprehension.
+
+## Long-session revision
+
+Single prompts with tools disabled cannot show whether an agent skips the review,
+forgets the guidance over many requests, or damages text while repairing it.
+`session.py` runs one manuscript revision of six requests in a single host session
+with file tools. The [fixture](sessions/creative-selection/) is a synthetic paper
+with 27 embedded failures from issues #3-#5 and preservation controls: a theorem and
+proposition that must stay verbatim, a necessary negation, a material limitation,
+snapshot provenance, venue checklist text, a concept explanation, a clipping
+disclosure, an effective paragraph, an appendix the user says to leave alone, and
+every number. The requests revise sections in turn, remove AI-like writing, tighten
+the abstract, review without editing, apply the review to one section, and render the
+paper to the copy the user reads.
+
+Arms are frozen skill versions and review configurations:
+
+| Arm | Skill | Subagents | `quill` CLI |
+|---|---|---|---|
+| A | baseline (the reconciled skill before the review protocol) | no | no |
+| B | A plus “review and revise twice against the guidance” | no | no |
+| C | the structured review protocol | no | no |
+| D | C | yes | no |
+| E | C | yes | yes |
+| F | C, with the opt-in `quill hook` post-edit and stop hooks (Claude only) | yes | yes |
+
+B against C tests the protocol's structure, C against D the independent reviewer,
+and D against E the deterministic checks. F was added after the first runs showed
+that the review references were often not read (see the results). C also contains the new #3-#5 guidance,
+so B against C does not separate structure from content.
+
+```bash
+uv run python evals/session.py --host claude --arm C --skill skills/quill --output /tmp/quill-session/claude-C-1.json
+```
+
+The runner isolates `XDG_CONFIG_HOME` so no personal profile is visible, shadows any
+installed `quill` with a stub except in arm E, and records every turn's prompt, reply,
+tool trace, and manuscript. Deterministic checks report edits outside each request's
+sections, an unchanged file after the review-only request, each preservation control,
+whether the user's copy matches a fresh rendering, skill files read, subagent calls,
+CLI calls, and review records. Claude runs use restricted mode with file and shell
+tools and no hooks or MCP servers. Codex runs use a workspace-write sandbox and resume
+the same thread; Codex has no subagent tool here, so its D and E arms test only
+the instructions and the CLI.
 
 ## Profile filesystem smoke test
 

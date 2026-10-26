@@ -386,6 +386,659 @@
     ]
   },
   {
+    "id": "abstract-connect",
+    "issue": [
+      3
+    ],
+    "references": [
+      "technical-writing.md",
+      "editing.md",
+      "checklist.md"
+    ],
+    "prompt": "Revise this abstract sentence so readers understand the contribution. Return only the revised sentence or sentences.",
+    "source": "Notes: The paper proposes a calibration report for clinical risk scores. A single resampling procedure (the patient bootstrap) produces three outputs: a per-decile recalibration offset, an interval of plausible calibration slopes for each hospital, and groups of hospitals whose slope intervals overlap. Only the recalibration offsets have a theoretical guarantee: they are consistent as the number of patients grows. The groups are a descriptive summary.\nDraft: Our report keeps the original score and adds decile offsets, bootstrap slope intervals, and overlap groups.",
+    "must_preserve": [
+      "one bootstrap procedure produces all three outputs",
+      "per-decile recalibration offsets",
+      "per-hospital slope intervals",
+      "groups based on overlapping intervals",
+      "consistency guarantee applies to the offsets only, as patients grow"
+    ],
+    "must_not": [
+      "attach a guarantee to the intervals or the groups",
+      "invent a coverage level, sample size, or empirical result",
+      "describe the groups as statistically validated"
+    ],
+    "rhetorical_checks": [
+      "explains how the outputs relate to the single procedure rather than listing them",
+      "makes clear which output carries the theoretical guarantee",
+      "may be longer than the draft when the added words explain relationships"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "abstract-main-theorem",
+    "issue": [
+      3
+    ],
+    "references": [
+      "technical-writing.md",
+      "editing.md",
+      "checklist.md"
+    ],
+    "prompt": "Revise this abstract passage so the main theoretical result is prominent. Return only the revised passage.",
+    "source": "Notes: The paper's main result is that the jackknife correction reduces selection bias in the winning arm's estimate. The bias is Theta(K^{-1/2}) without correction only when the leading coefficient c_1 is nonzero; after correction it is o(K^{-1/2}) under Assumptions 1-2 with positive gaps between arm means. A secondary result, in Section 6, shows that when gaps shrink at the K^{-1/2} rate no estimator removes the first-order bias uniformly.\nDraft: Under Assumptions 1-2 with arm means separated by positive gaps, we show that the jackknife removes the leading K^{-1/2} term at every fixed configuration. Where c_1 is nonzero, the expected bias magnitude falls from Theta(K^{-1/2}) to o(K^{-1/2}). For gaps shrinking at the K^{-1/2} rate, we characterize first-order residuals and prove that no estimator removes first-order bias uniformly.",
+    "must_preserve": [
+      "Assumptions 1-2 and positive gaps",
+      "removal of the leading K^{-1/2} bias term or the reduction to o(K^{-1/2})",
+      "Theta starting rate only when c_1 is nonzero, if Theta is stated"
+    ],
+    "must_not": [
+      "state Theta(K^{-1/2}) as the uncorrected rate without the nonzero-coefficient condition",
+      "claim the correction removes all bias or works uniformly under shrinking gaps",
+      "invent a finite-sample guarantee"
+    ],
+    "rhetorical_checks": [
+      "puts the bias-reduction result first and in its own sentence",
+      "moves or compresses the shrinking-gap impossibility result rather than giving it equal weight",
+      "uses a concise accurate formulation instead of restoring every technical clause"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "abstract-evidence",
+    "issue": [
+      3
+    ],
+    "references": [
+      "technical-writing.md",
+      "checklist.md"
+    ],
+    "prompt": "Revise the last sentence of this abstract so it fits the abstract's purpose. Return only the revised sentence.",
+    "source": "Abstract context: The abstract presents a correction for winner's-curse bias in A/B test platforms, its asymptotic guarantee, and two validations: re-estimation on held-out traffic and simulations calibrated to 14 historical experiments where true effects are known.\nLast sentence: Across 300 traffic splits, correction lowers the cross-experiment mean of absolute mean split error by 41-63% for the top three variants, although per-split absolute error is nearly unchanged.\nResults section: reports the 41-63% figure and the per-split absolute error comparison in detail.",
+    "must_preserve": [
+      "two complementary validations: held-out traffic and calibrated simulations",
+      "validation concerns the correction's finite-sample performance"
+    ],
+    "must_not": [
+      "claim the correction reduces per-split absolute error",
+      "state a single improvement number that misrepresents the aggregation",
+      "invent new numbers or significance"
+    ],
+    "rhetorical_checks": [
+      "tells the reader what the validation establishes for the abstract's message",
+      "leaves the aggregation-specific magnitudes to the results section, or keeps a number only if it is stated accurately"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "author-relocation",
+    "issue": [
+      3
+    ],
+    "references": [
+      "editing.md",
+      "technical-writing.md",
+      "checklist.md"
+    ],
+    "prompt": "Polish this abstract. The author recently revised it. Return only the polished abstract.",
+    "source": "Author note: I moved the boundary-case analysis and the per-dataset error table out of the abstract into Sections 5 and 6 on purpose.\nEarlier version (for context only): ... For heavy-tailed noise we derive a boundary-case expansion and show the correction can overshoot; per-dataset mean absolute errors range from 0.031 to 0.112.\nCurrent abstract: Ranking estimated effects inflates the apparent effect of the top-ranked unit. We propose a split-sample correction that removes this inflation asymptotically under light-tailed noise. In held-out evaluations on eight datasets the corrected estimates track re-measured effects more closely than uncorrected estimates.",
+    "must_preserve": [
+      "split-sample correction",
+      "asymptotic removal under light-tailed noise",
+      "held-out evaluation on eight datasets with closer tracking than uncorrected estimates"
+    ],
+    "must_not": [
+      "restore the boundary-case expansion or the per-dataset error range to the abstract",
+      "drop the light-tailed condition",
+      "claim finite-sample removal of inflation"
+    ],
+    "rhetorical_checks": [
+      "respects the author's relocation as intended emphasis",
+      "makes only restrained improvements to an already effective abstract"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "continuity-theory-validation",
+    "issue": [
+      4
+    ],
+    "references": [
+      "editing.md",
+      "technical-writing.md",
+      "checklist.md"
+    ],
+    "prompt": "Revise the opening paragraph of Section 4 so it connects to the preceding section. Return only the revised paragraph.",
+    "source": "End of Section 3 (theory): Theorem 2 shows that the debiased dose estimate is consistent as the number of trial sites grows, with bias of order o(m^{-1/2}). The theorem says nothing about trials with fewer than 30 sites, which are common in practice.\nSection 4 opening: Re-analysis of three completed trials and simulations with known dose-response curves show large reductions in selection error. Furthermore, the debiased estimate performs well.\nSection 4 content: The re-analysis compares estimates from half the sites with outcomes in the other half (real data, true dose unknown). The simulations use 10 to 40 sites and known curves, so error against the truth can be computed.",
+    "must_preserve": [
+      "theory is asymptotic in the number of sites",
+      "practical trials often have fewer than 30 sites",
+      "re-analysis of three trials using split sites",
+      "simulations with 10 to 40 sites and known curves"
+    ],
+    "must_not": [
+      "claim a finite-sample guarantee",
+      "invent the size of the error reduction",
+      "claim the re-analysis knows the true dose"
+    ],
+    "rhetorical_checks": [
+      "opens from the finite-sample question the theorem leaves open",
+      "gives each analysis its distinct role (real data versus known truth)",
+      "does not rely on a generic transition word for the connection"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "concession-contrast",
+    "issue": [
+      4
+    ],
+    "references": [
+      "editing.md",
+      "checklist.md",
+      "examples.md"
+    ],
+    "prompt": "Line-edit this methods paragraph. Return only the revised paragraph.",
+    "source": "Although we assume that sensor failures occur independently, this assumption gives a closed-form expression for the detection delay. Although the estimator is unbiased under this assumption, its variance grows linearly with the number of sensors, which limits its use in arrays larger than about 200 sensors. We estimate the failure rate using failures and not using maintenance logs.",
+    "must_preserve": [
+      "independence assumption yields the closed-form detection delay",
+      "estimator unbiased under the assumption",
+      "variance grows linearly with the number of sensors",
+      "limits use beyond about 200 sensors",
+      "failure rate estimated from failures"
+    ],
+    "must_not": [
+      "remove the variance limitation or the 200-sensor boundary",
+      "present the independence assumption as empirically verified",
+      "change which data source is used"
+    ],
+    "rhetorical_checks": [
+      "replaces the false concession with a purpose relationship",
+      "keeps the genuine contrast between unbiasedness and growing variance",
+      "removes or justifies the denial about maintenance logs, which readers had no reason to expect"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "robust-versus-fragile",
+    "issue": [
+      4
+    ],
+    "references": [
+      "technical-writing.md",
+      "checklist.md"
+    ],
+    "prompt": "Revise this robustness paragraph so it reports what the checks establish. Return only the revised paragraph.",
+    "source": "Notes: Main estimate of the minimum-wage employment elasticity: -0.12 (95% CI -0.20 to -0.04). Re-estimating with alternative county pairings gave -0.11 and -0.13. Dropping the two largest states gave -0.03 (95% CI -0.14 to 0.08).\nDraft: We conducted sensitivity analyses using alternative county pairings and a sample excluding the two largest states. The results are robust across all specifications.",
+    "must_preserve": [
+      "main estimate -0.12 with interval -0.20 to -0.04",
+      "alternative pairings -0.11 and -0.13",
+      "excluding the two largest states gives -0.03 with interval -0.14 to 0.08"
+    ],
+    "must_not": [
+      "call the result robust to excluding the two largest states",
+      "invent a reason for the sensitivity to the largest states",
+      "claim significance in the restricted sample"
+    ],
+    "rhetorical_checks": [
+      "states that the estimate is stable across pairings",
+      "reports the sensitivity to the largest states as a real finding rather than hiding it",
+      "replaces the announcement of analyses with what they show"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "bias-versus-mae",
+    "issue": [
+      4
+    ],
+    "references": [
+      "technical-writing.md",
+      "checklist.md",
+      "examples.md"
+    ],
+    "prompt": "Revise this results paragraph so it reads coherently after the theory section. Return only the revised paragraph.",
+    "source": "Theory section: Proposition 3 shows that the correction removes the leading term of the expected signed bias of the top-ranked school's value-added estimate.\nResults draft: The correction reduces mean signed bias for the top-ranked school from 0.18 to 0.03 test-score SD across 500 resamples. Mean absolute error across resamples rose from 0.21 to 0.23.\nNo variance estimates or decompositions are supplied.",
+    "must_preserve": [
+      "mean signed bias falls from 0.18 to 0.03 SD",
+      "mean absolute error rises from 0.21 to 0.23",
+      "500 resamples",
+      "Proposition 3 concerns expected signed bias"
+    ],
+    "must_not": [
+      "claim the correction reduces mean absolute error or overall accuracy",
+      "assert a measured variance increase or another unsupplied decomposition as fact",
+      "omit the mean absolute error increase"
+    ],
+    "rhetorical_checks": [
+      "explains at that point that a signed-bias guarantee does not determine mean absolute error",
+      "keeps the adverse result visible and connected to the guarantee"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "expand-and-trim",
+    "issue": [
+      4
+    ],
+    "references": [
+      "editing.md",
+      "checklist.md",
+      "examples.md"
+    ],
+    "prompt": "Line-edit this passage for readers new to the method. Return only the revised passage.",
+    "source": "Notes: When several products have equal estimated demand, they share the positions they jointly occupy, and each receives the average of those positions. Readers in operations research are often unfamiliar with this convention.\nDraft: Ranks use midranks (ties). If r products tie across r positions in the ordering of all products, each tied product among those r products receives the average position. We then report the top-ranked product's estimated demand.",
+    "must_preserve": [
+      "tied products receive the average of the positions they jointly occupy",
+      "top-ranked product's estimated demand is reported"
+    ],
+    "must_not": [
+      "change the tie-handling rule",
+      "remove the explanation of the convention entirely",
+      "add an unsupported justification for midranks"
+    ],
+    "rhetorical_checks": [
+      "adds a short explanation of the tie convention for unfamiliar readers",
+      "removes redundant bookkeeping such as \"across r positions\" and \"among those r products\""
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "conclusion-competing",
+    "issue": [
+      4
+    ],
+    "references": [
+      "technical-writing.md",
+      "checklist.md"
+    ],
+    "prompt": "Revise this conclusion. Return only the revised conclusion.",
+    "source": "Paper findings: The proposed stopping rule cuts the expected number of trial participants by 22% relative to fixed-sample designs while keeping type I error at 0.05, in simulations calibrated to 40 past trials. It requires outcomes observable within 30 days; for slower outcomes it is not applicable.\nDraft conclusion: This paper proposed a stopping rule. Importantly, a reviewer might worry about non-Gaussian outcomes; although we did not study them, Appendix C sketches a heavy-tail extension that could be explored. One might also ask about multi-arm trials, which we leave to future work, and cluster randomization, which is beyond scope. The rule reduced expected participants by 22% at type I error 0.05 in simulations calibrated to 40 past trials. The rule requires outcomes observable within 30 days. Together, these results open many exciting avenues for adaptive trial design.",
+    "must_preserve": [
+      "22% reduction in expected participants relative to fixed-sample designs",
+      "type I error kept at 0.05",
+      "simulations calibrated to 40 past trials",
+      "requirement of outcomes observable within 30 days"
+    ],
+    "must_not": [
+      "drop the 30-day applicability limit",
+      "claim results for real trials or non-Gaussian outcomes",
+      "add new future-work items"
+    ],
+    "rhetorical_checks": [
+      "leads with the main finding and its implication",
+      "removes responses to anticipated objections and the generic closing",
+      "keeps the material applicability limit"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "table-structure",
+    "issue": [
+      4
+    ],
+    "references": [
+      "technical-writing.md",
+      "checklist.md"
+    ],
+    "prompt": "Revise this Markdown table and its note so readers can tell what each column measures. Keep every value. Return only the revised table and note.",
+    "source": "| Method | Bias | Adjusted | MAE | Adjusted | Tiers (sig/total) |\n|---|---|---|---|---|---|\n| naive_top | 0.18 | 0.03 | 0.21 | 0.23 | 3/12 |\n| shrink_eb | 0.09 | 0.02 | 0.15 | 0.16 | 5/12 |\nNote: Adjusted = after correction. Tiers = tiers.\nCode notes (not reader-facing): naive_top is the uncorrected top-ranked estimate; shrink_eb is empirical-Bayes shrinkage. \"Bias\" is the mean signed error across resamples; \"MAE\" is the mean absolute error across resamples. Tiers (sig/total) counts tiers with significantly separated means out of all tiers formed.",
+    "must_preserve": [
+      "every value with its row and column meaning",
+      "mean signed bias distinct from mean absolute error",
+      "before versus after correction for each metric",
+      "significant tiers and total tiers as separate counts"
+    ],
+    "must_not": [
+      "move a value to the wrong method or metric",
+      "label mean signed bias as mean absolute error",
+      "drop any row or value"
+    ],
+    "rhetorical_checks": [
+      "groups each metric above before/after columns",
+      "splits the packed tier counts into named columns",
+      "replaces code identifiers with readable method names",
+      "defines the quantities in the note"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "protected-reference",
+    "issue": [
+      4
+    ],
+    "references": [
+      "editing.md",
+      "checklist.md"
+    ],
+    "prompt": "Use the first paragraph as a model of the tone I want, and revise the second paragraph to match it. Return both paragraphs as they should appear.",
+    "source": "Model paragraph (keep as written): Mortality fell in the treated counties. The decline began two years after the program and persisted through 2019, matching the timing of the clinic openings.\nParagraph to revise: It is worth noting that, importantly, the findings regarding hospitalization appear to potentially indicate a reduction, although the estimate (-4.1 per 1,000; 95% CI -9.0 to 0.8) is imprecise and the interval includes zero, which is a key limitation.",
+    "must_preserve": [
+      "model paragraph unchanged",
+      "hospitalization estimate -4.1 per 1,000 with interval -9.0 to 0.8",
+      "interval includes zero / imprecision"
+    ],
+    "must_not": [
+      "edit the model paragraph",
+      "claim hospitalization fell significantly",
+      "drop the imprecision"
+    ],
+    "rhetorical_checks": [
+      "removes scaffolding and stacked hedges in the second paragraph",
+      "states the imprecise estimate plainly with its interval"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "workflow-leakage",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "checklist.md",
+      "editing.md"
+    ],
+    "prompt": "Revise this methods paragraph for the paper. The repository has a REPRODUCIBILITY.md file for software details. Return the revised paragraph, then any text to add to REPRODUCIBILITY.md.",
+    "source": "Draft: Simulations were run from the dirty worktree at commit 7d1e9b2 with two uncommitted patches to the sampler. Complete GPU-hour records are unavailable in this local snapshot, so we do not use row counts as a substitute. Each configuration draws 1,000 datasets of n=400 from the factor model in Section 2 and fits the estimator with 5-fold cross-fitting.\nAuthor note: GPU-hour records exist on the cluster but were not given to the assistant.",
+    "must_preserve": [
+      "1,000 datasets of n=400 per configuration",
+      "factor model from Section 2",
+      "5-fold cross-fitting",
+      "commit and uncommitted-patch information preserved in the REPRODUCIBILITY.md text"
+    ],
+    "must_not": [
+      "state in the paper that GPU-hour records do not exist or are unavailable to the authors",
+      "delete the commit information entirely",
+      "invent the content of the patches or the GPU hours"
+    ],
+    "rhetorical_checks": [
+      "describes the procedure rather than the workspace",
+      "relocates version details to the named destination",
+      "removes the agent-workspace access limit from the paper"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "repair-captions",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "technical-writing.md",
+      "checklist.md"
+    ],
+    "prompt": "Edit these figure and table captions for the paper. Return only the revised captions.",
+    "source": "Figure 2: Coverage of the corrected interval across sample sizes. The logarithmic horizontal axis now shows every sample size without overlapping labels. Curves above 0.99 are clipped at 0.99.\nTable 3: Coverage by design. The values in Table 3 and Figure 2 come from the same 2,000 replications, as verified after the earlier mismatch was fixed.",
+    "must_preserve": [
+      "horizontal axis is logarithmic",
+      "curves above 0.99 are clipped at 0.99",
+      "2,000 replications for the table, if replication count is kept"
+    ],
+    "must_not": [
+      "remove the clipping disclosure",
+      "keep the repair narration about labels or the fixed mismatch",
+      "invent a coverage level or a design detail"
+    ],
+    "rhetorical_checks": [
+      "describes what each display shows",
+      "deletes the consistency assurance or replaces it with the table's role"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "raw-labels",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "checklist.md"
+    ],
+    "prompt": "Make these reader-facing labels and the sentence below suitable for the paper. Return the revised legend labels and sentence, plus anything you cannot resolve.",
+    "source": "Legend: dr_crossfit | ipw_trim05 | tmle_v3_new\nSentence: The row order corresponds to code identifiers in run_all.py.\nMapping from the code documentation: dr_crossfit = cross-fitted doubly robust estimator; ipw_trim05 = inverse-probability weighting with weights trimmed at the 5th and 95th percentiles. No documentation is given for tmle_v3_new.",
+    "must_preserve": [
+      "doubly robust estimator is cross-fitted",
+      "IPW weights trimmed at the 5th and 95th percentiles"
+    ],
+    "must_not": [
+      "invent a display label or description for tmle_v3_new",
+      "keep code identifiers or run_all.py in reader-facing text"
+    ],
+    "rhetorical_checks": [
+      "uses readable verified labels",
+      "flags the undocumented identifier instead of guessing",
+      "removes or replaces the row-order sentence with a reader-relevant statement"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "expert-filler",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "checklist.md"
+    ],
+    "prompt": "Edit this paragraph for a statistics journal audience. Return only the revised paragraph.",
+    "source": "Recall that a 95% confidence interval should contain the true parameter in 95% of repeated samples. A Wald interval adds and subtracts 1.96 standard errors from the estimate. Our interval differs: it centers on the debiased estimate and inflates the standard error by the factor (1 + 1/K) to account for selecting one of K arms. In simulations it covered the selected arm's mean in 94.1% of 5,000 replications.",
+    "must_preserve": [
+      "interval centered on the debiased estimate",
+      "standard error inflated by (1 + 1/K)",
+      "reason: selecting one of K arms",
+      "94.1% coverage in 5,000 replications"
+    ],
+    "must_not": [
+      "remove the description of the modified construction",
+      "change the coverage figure or replication count",
+      "claim exact or guaranteed 95% coverage"
+    ],
+    "rhetorical_checks": [
+      "deletes the elementary definitions of coverage and the Wald interval",
+      "keeps and clarifies the paper-specific modification"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "overloaded-noun",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "checklist.md"
+    ],
+    "prompt": "Line-edit this paragraph. Return only the revised paragraph.",
+    "source": "Our deterministic ex-ante population-calibrated allocation oracle serves as the benchmark. The deterministic ex-ante population-calibrated allocation oracle knows the true outcome distributions, fixes the share of samples sent to each arm before any data arrive, and minimizes the expected squared error of the final estimate averaged over sampling randomness.",
+    "must_preserve": [
+      "knows the true outcome distributions",
+      "fixes the allocation before data arrive",
+      "minimizes expected squared error averaged over sampling randomness",
+      "serves as a benchmark"
+    ],
+    "must_not": [
+      "change what the oracle knows or optimizes",
+      "claim the oracle is implementable in practice"
+    ],
+    "rhetorical_checks": [
+      "defines the object in sentences before naming it",
+      "uses a short stable name afterward instead of the stacked noun phrase"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "empty-summary",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "checklist.md"
+    ],
+    "prompt": "Edit the end of this discussion section. Return only the revised text.",
+    "source": "Preceding paragraph: Shrinkage reduced the top school's overestimate by about two-thirds in all four districts, and the reduction was largest where schools had fewer than 50 tested students.\nFinal paragraph to edit: Taken together, these results shed light on the promise of shrinkage for school accountability. Importantly, they highlight how statistical tools can help policymakers make better decisions, paving the way for more equitable evaluation systems.",
+    "must_preserve": [
+      "the preceding findings remain the substance (no new findings)"
+    ],
+    "must_not": [
+      "invent a new finding or policy effect",
+      "claim more equitable evaluation was demonstrated"
+    ],
+    "rhetorical_checks": [
+      "deletes the generic wrap-up, or replaces it only with a specific supported inference such as the small-school implication",
+      "does not substitute an equally generic closing sentence"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "repeated-caveats-sections",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "checklist.md",
+      "technical-writing.md"
+    ],
+    "prompt": "Revise these consecutive excerpts from Sections 3 and 4, including the caption. Return the revised excerpts with their labels.",
+    "source": "Section 3.1: Under Assumption 2 (sites are independent), the corrected estimate is consistent. We stress that this relies on independence and may fail otherwise.\nSection 3.2: Again assuming independence, which may not hold in practice, the interval attains nominal coverage asymptotically.\nSection 4: In the cluster-randomized application, sites within a region share supply shocks, so Assumption 2 is doubtful there; we report the estimate as descriptive.\nFigure 3 caption (read on its own by many readers): Corrected estimates by region. Note that, as always, results assume independence and may not hold otherwise.",
+    "must_preserve": [
+      "consistency and asymptotic coverage are under Assumption 2 (independence)",
+      "application: independence doubtful because regions share supply shocks, estimate reported as descriptive",
+      "figure readers learn the application estimate is descriptive or that independence is doubtful there"
+    ],
+    "must_not": [
+      "remove the application-specific doubt about independence",
+      "claim the guarantees hold without Assumption 2",
+      "add new caveats"
+    ],
+    "rhetorical_checks": [
+      "states the assumption once where the results are given and drops repeated warnings",
+      "keeps the material application-specific limitation",
+      "gives the caption a specific, useful qualification instead of a generic disclaimer"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "ai-audit",
+    "issue": [
+      5
+    ],
+    "expect_activation": true,
+    "references": [
+      "natural-prose.md",
+      "checklist.md",
+      "review.md"
+    ],
+    "prompt": "Audit this passage for AI-like writing. Do not rewrite it. For each problem give the location, the reader's problem, and a concrete fix.",
+    "source": "[P1] We study ranking uncertainty in public model leaderboards. The leaderboard snapshot is LiveEval v4.1 (released 2026-02-03; retrieved 2026-03-10).\n[P2] It is worth noting that our method, importantly, is a calibration method, not a ranking method. This highlights the key role of calibration in the evaluation landscape.\n[P3] Theorem 1 does not establish coverage for fewer than 20 prompts per model; we therefore report intervals only for models with at least 20 prompts.\n[P4] All intervals were recomputed after we fixed the off-by-one bug in the earlier draft, and they now match Table 2.\n[P5] Together, these contributions pave the way for more trustworthy AI evaluation.",
+    "must_preserve": [
+      "no rewritten passage or edited file"
+    ],
+    "must_not": [
+      "flag the snapshot provenance in P1 as a problem",
+      "flag the necessary negation in P3 as a problem",
+      "rewrite the whole passage instead of auditing"
+    ],
+    "rhetorical_checks": [
+      "locates the scaffolding and defensive contrast in P2",
+      "flags the repair narration in P4",
+      "flags the generic wrap-up in P5",
+      "treats P1 and P3 as passing"
+    ]
+  },
+  {
+    "id": "ai-rewrite-multipara",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "checklist.md",
+      "technical-writing.md"
+    ],
+    "prompt": "This passage reads like an AI wrote it. Remove the AI-like writing. Return only the revised passage.",
+    "source": "Importantly, we consider a two-stage design. In stage one, a pilot of n_1 units estimates each arm's variance; in stage two, the remaining n_2 units are allocated in proportion to the estimated standard deviations. Note that this is a variance-based allocation, NOT a reward-maximizing one.\nTheorem 1 (stated as in the paper). Suppose Assumptions A1-A3 hold and n_1/n -> rho in (0, 1). Then the two-stage estimator is asymptotically normal, and its asymptotic variance is at most (1 + epsilon_rho) times that of the oracle allocation.\nIt is worth noting that the theorem does not establish finite-sample efficiency. This highlights that the guarantee is asymptotic. The theorem is asymptotic, as mentioned. In the experiments on the CropYield benchmark (version 2.0, released 2025-06-01), the design reduced the variance of the treatment-effect estimate by 18% relative to equal allocation.\nOverall, these results showcase the transformative potential of adaptive designs for agricultural science.",
+    "must_preserve": [
+      "Theorem 1 unchanged: Assumptions A1-A3, n_1/n -> rho in (0, 1), asymptotic normality, variance at most (1 + epsilon_rho) times oracle",
+      "the theorem does not establish finite-sample efficiency",
+      "CropYield benchmark version 2.0 released 2025-06-01",
+      "18% variance reduction relative to equal allocation",
+      "stage one pilot estimates variances; stage two allocates in proportion to estimated standard deviations"
+    ],
+    "must_not": [
+      "alter the theorem statement",
+      "delete the necessary negation about finite-sample efficiency",
+      "remove the benchmark version",
+      "add a new claim of significance or practical impact"
+    ],
+    "rhetorical_checks": [
+      "removes scaffolding and repeated statements that the result is asymptotic",
+      "states the design positively instead of the shouted contrast, unless a needed contrast is kept in plain form",
+      "deletes the generic closing sentence"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "ai-no-change",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "checklist.md"
+    ],
+    "prompt": "Does this paragraph sound like AI wrote it? Fix it if needed. Return only the final paragraph.",
+    "source": "We randomized 1,204 households to receive either a text reminder or no reminder before each bill was due. Reminders raised on-time payment from 61% to 67%. The effect was concentrated among households that had missed a payment in the previous year, and it faded after reminders stopped. We do not observe whether households paid late bills from other accounts, so the reminders may have shifted rather than reduced arrears.",
+    "must_preserve": [
+      "1,204 households randomized to reminder or no reminder",
+      "on-time payment 61% to 67%",
+      "concentration among prior missers and fading after reminders stopped",
+      "limitation that shifting rather than reducing arrears cannot be ruled out"
+    ],
+    "must_not": [
+      "remove the arrears-shifting limitation",
+      "add hedges, scaffolding, or new claims",
+      "change any number"
+    ],
+    "rhetorical_checks": [
+      "returns the paragraph unchanged or with minimal changes",
+      "does not manufacture problems in effective prose"
+    ],
+    "expect_activation": true
+  },
+  {
+    "id": "checklist-template",
+    "issue": [
+      5
+    ],
+    "references": [
+      "natural-prose.md",
+      "checklist.md"
+    ],
+    "prompt": "Polish my answer to this venue checklist item. The question and guidelines are supplied by the venue. Return the full item as it should appear.",
+    "source": "3. Limitations\nQuestion: Does the paper discuss the limitations of the work performed by the authors?\nAnswer: [Yes]\nJustification: Yes. We fixed the limitations section in this revision and it now covers everything a reviewer could ask about, including dependence across sites (Section 5.2) and the requirement of two replicates per site (Section 3.1).\nGuidelines: The answer NA means that the paper has no limitation while the answer No means that the paper has limitations, but those are not discussed in the paper.",
+    "must_preserve": [
+      "question text verbatim",
+      "guidelines text verbatim",
+      "answer [Yes]",
+      "pointers to Section 5.2 dependence and Section 3.1 two replicates"
+    ],
+    "must_not": [
+      "edit the venue-supplied question or guidelines",
+      "claim limitations the paper does not discuss",
+      "keep the revision narration"
+    ],
+    "rhetorical_checks": [
+      "removes the revision history and the overclaim about covering everything",
+      "states what the limitations discussion covers and where"
+    ],
+    "expect_activation": true
+  },
+  {
     "expect_activation": false,
     "id": "negative-code",
     "prompt": "Explain what this Python function does in one sentence.",

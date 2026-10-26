@@ -15,6 +15,7 @@ uses the same one. It lives in `$XDG_CONFIG_HOME/quill/`, which is
   edit it directly, and those edits are authoritative.
 - `examples.md`: a log of the edits and feedback lessons came from, each entry
   naming its project.
+- `history/`: earlier versions of `profile.md`, saved before Quill reorganizes it.
 
 ```markdown
 ---
@@ -27,8 +28,11 @@ mode: learn       # learn: apply and learn; apply: apply only; off: ignore
   already familiar to the reader. (stated)
 
 ## Results
-- Report the estimate before interpreting it. (seen 2×)
+- Report the estimate before interpreting it. (seen 2×, review)
 ```
+
+A lesson's marker records its evidence and, optionally, its enforcement level
+(below). Lessons without a level are applied while writing.
 
 A project needs its own `.quill/style/` folder, which Git ignores, only for:
 
@@ -51,7 +55,8 @@ None of these steps delays the requested writing.
 1. Read the profile, and the project's `profile.md` if one exists. Apply lessons
    that fit the passage's section, audience, and genre. Fidelity to the research
    and the requested editing depth come first; then current instructions; then
-   project lessons; then the profile.
+   project lessons; then the profile. The review checks the applicable lessons
+   against the finished text (U7).
 2. With `mode: learn`, unless the project sets `edits: others`, run
    `quill style changes FILE` before editing a manuscript file. It shows
    the author's edits since your last version: changed paragraphs, flagged when
@@ -91,6 +96,46 @@ in the profile unless they hold only for the current project.
 - A newer stated preference replaces an older one; an occasional contrary edit
   becomes an exception or is left in the log.
 
+Classify each correction before learning from it, and log the class:
+
+| Class | Example | Where it goes |
+|---|---|---|
+| Author preference | “Avoid semicolons in prose.” | `profile.md` |
+| Project decision | This paper's main message, audience, method names, or which subsection is compressed | The project's `profile.md` |
+| Scientific correction | A rate is Θ rather than a bound; an assumption does not support a claim | Nowhere as style. Fix the text. |
+| Shared writing-quality repair | Text that failed a rule the skill already states, or a general lesson any author would want, such as explaining an apparent contradiction where it appears | `examples.md`, marked `shared candidate` |
+
+A shared candidate is evidence for improving Quill itself, not an author preference.
+Keep it out of the profile unless the author states it as their own preference,
+and never edit the skill's instructions from it unless the author asks you to work
+on Quill. Changes to the shared skill go through separate review and behavioral
+evaluation. One correction can contain both a general lesson and a local
+application; record both, with their exceptions.
+
+## Compliance failures
+
+When the author corrects text that an existing lesson, or a checklist rule, already
+covered, the problem was applying the guidance, not missing it. Log the entry in
+`examples.md` as a `compliance failure`, naming the lesson or rule ID. Do not add a
+second, reworded copy of the lesson. Raise the lesson's enforcement level instead:
+
+1. **write** (default): applied while drafting.
+2. **review**: also checked line by line in the review's Pass 2. Mark it `review`.
+3. **lint**: once the pattern is detectable in text, also add a pattern to the
+   profile's `checks` header so `quill check` reports candidates:
+
+```markdown
+---
+mode: learn
+checks:
+  - pattern: '[a-z]; [a-z]'
+    lesson: Avoid semicolons in prose.
+---
+```
+
+A lint pattern finds candidates for the review to judge, not violations. Choose a
+pattern narrow enough that most hits are real.
+
 When asked to organize a discussion or reflect on failed edits, distinguish direct
 feedback from your diagnosis. Record the before/after example, the decision it
 changes, and the limits of that lesson. Do not convert an edited connective into
@@ -100,7 +145,11 @@ priority. Put transferable reasoning in skill instructions only when updating th
 skill is authorized.
 
 Keep the profile short: when it grows past about 40 lessons, merge overlapping
-lessons and remove ones the author no longer follows. Log each change briefly:
+lessons and remove ones the author no longer follows. Before any change that
+merges, rewrites, or removes lessons, copy the current file to
+`history/profile-YYYY-MM-DD.md` (add a suffix if that name exists). Never delete a
+lesson silently: name each removed or merged lesson in the reply's profile line.
+Log each change briefly:
 
 ```markdown
 ## 2026-10-13 · demand-paper/intro.tex · exposition
@@ -111,9 +160,11 @@ Lesson: explain the enabling idea before naming the method (seen 2×)
 
 ## Author control
 
-When asked, explain where a lesson came from using the log; change, move, or remove
-lessons; or delete log entries the author wants forgotten, together with any lesson
-that rests only on them. The profile is the machine user's; never add a
+When asked, explain where a lesson came from using the log; change a lesson's
+scope, move, or remove it; restore an earlier profile from `history/`; or delete
+log entries the author wants forgotten, together with any lesson that rests only on
+them. Removing evidence means reconsidering every lesson it supported. A repeated
+snapshot of the same revision is not new evidence. The profile is the machine user's; never add a
 coauthor's preferences to it. A coauthor's agreed style belongs in that project's
 `profile.md`.
 

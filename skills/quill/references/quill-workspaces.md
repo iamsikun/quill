@@ -23,6 +23,8 @@ Useful deterministic helpers, when the task warrants them:
 - `quill log-decision TEXT` records a requested persistent editorial decision.
 - `quill validate` checks managed project structure and references; it does not
   certify scientific correctness or readability.
+- `quill check FILE` and `quill review record|status FILE` support the
+  [review](review.md) in any project where the CLI is available.
 - `quill assemble` regenerates a managed `main.tex`; use only when regeneration
   is intended, since it can replace an existing document shell.
 

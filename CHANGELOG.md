@@ -5,8 +5,37 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
-## Unreleased
+## 0.7.0 — 2026-10-26
 
+- Review drafts against the writing guidance before delivery (#6). A new
+  checklist gives every checkable rule an ID, a scope, a yes/no question, a
+  default action, an exception, and an example, with routing by task and section.
+  Beyond a short polish, the work ends with a two-pass review: meaning and the
+  reader's path (with a reverse outline), then expression against every routed
+  rule. Repairs are limited to flagged spans and rechecked. For a section or more,
+  an independent reviewer runs the passes when the host supports subagents. The
+  stopping rule now requires passing the review.
+- Add guidance for natural scholarly prose and requests to remove AI-like writing
+  (#5): workflow narration, repair notes in captions, code identifiers, tutorial
+  filler, overloaded names, generic wrap-ups, and editor instructions, with what
+  must be preserved and when to delete, relocate, or leave text unchanged.
+- Keep the contribution hierarchy visible and choose detail by section (#3);
+  explain apparent contradictions where they appear, give headings, displays, and
+  notes distinct jobs, structure tables, record snapshot provenance, and check the
+  delivered rendering (#4).
+- Personal writing memory classifies corrections as author preferences, project
+  decisions, scientific corrections, or shared writing-quality repairs; logs
+  compliance failures and raises a lesson's enforcement level; lets profile
+  `checks` patterns feed `quill check`; and keeps earlier profile versions in
+  `history/` (#2, #4, #6).
+- Add `quill check`, which reports style candidates and fidelity guards, and
+  `quill review record|status`, which records reviewed file versions and reports
+  stale reviews. Add opt-in Claude Code hooks (`quill hook post-edit` and `stop`),
+  because the evaluation showed the review references were often not read without them.
+- Add 23 behavioral cases for #3-#5, a multi-turn session evaluation with file
+  tools, traces, preservation controls, and six arms, and a blind grader with
+  frozen rubrics. Results are in `evals/RESULTS.md`. These are preliminary model
+  judgments on synthetic material.
 - Bring in editing guidance developed in a local installation from manuscript
   feedback. Substantial writing starts from the main messages and the evidence
   that earns them, introduces methods through the problems they address, chooses

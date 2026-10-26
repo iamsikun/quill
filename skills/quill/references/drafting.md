@@ -39,13 +39,15 @@ not become a list of caveats when the drafted claim is already precisely scoped.
 If the user wants an incomplete draft, mark any
 placeholders explicitly so they cannot be mistaken for findings.
 
-Keep the outline and checks in working context; deliver the requested prose. For
-a full manuscript, write the supported sections and explain material omissions.
-Apply the core delivery rule: add a separate note only when a material issue remains
-unresolved after drafting. Information unnecessary to the current claim is not an
-unresolved issue. Once the requested prose is scientifically accurate and complete,
-stop rather than appending unrequested advice about further work.
+Before writing a substantial section, sketch the reader path: one line per
+paragraph giving its role and how it follows from the one before. The
+[review](review.md) compares the draft's reverse outline with this sketch. Keep the
+outline, sketch, and checks in working context and deliver the requested prose.
+Apply the natural-prose checks while drafting, not only in revision: write the
+method and findings, not the process of checking them (U5, E1–E9). For a full
+manuscript, write the supported sections and explain material omissions. Apply the
+core delivery rule (U6), and stop rather than appending advice about further work.
 
-Check terminology and claims across the sections you changed. Preserve the user's
-file organization and output format; use a managed Quill workspace only when it is
-already in use or requested.
+Check terminology and claims across the sections you changed (A10). Preserve the
+user's file organization and output format; use a managed Quill workspace only when
+it is already in use or requested.

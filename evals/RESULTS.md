@@ -1,5 +1,120 @@
 # Development evaluations
 
+## Review protocol, natural prose, and contribution hierarchy — 2026-10-26
+
+These runs test the changes for issues #3–#6. **Before** (arm A) is the skill at
+commit 26dbc26, the reconciliation requested in #4 and the baseline named in #6.
+**After** is the revised skill that this release ships, frozen before generation. Two
+later edits were not re-evaluated: one sentence in the core about keeping a summary
+number's qualifications, and one clause in the natural-prose table about workspace
+limits. Claude Code 2.1.305 reported `claude-opus-5-5`. No personal writing profile
+was visible in any run. The rubrics in `rubrics/` were written before any answer was
+generated. A model grader in safe mode with tools disabled scored anonymous, shuffled
+answers. Arm and version labels were attached only after scoring. These grades are
+preliminary model judgments, not human readability results.
+
+### Single-turn cases
+
+There was one sample per case, arm, and version for the 23 new cases, plus seven
+earlier cases run as regressions with references. The table gives counts. Effort is
+1–5, where 5 means the author needs no further revision.
+
+| Version and arm | Answers | Fidelity pass | Scope pass | Reply fits request | Rhetorical checks met | Mean effort |
+|---|---|---|---|---|---|---|
+| plain (no skill) | 23 | 18/23 | 23/23 | 19/23 | 43/60 | 3.39 |
+| before, core | 23 | 23/23 | 23/23 | 22/23 | 45/60 | 4.00 |
+| after, core | 23 | 22/23 | 23/23 | 23/23 | 46/60 | 3.91 |
+| before, references | 30 | 29/30 | 30/30 | 30/30 | 54/65 | 4.03 |
+| after, references | 30 | 30/30 | 30/30 | 28/30 | 62/65 | 4.40 |
+
+With the routed references, the revised skill met more case-level checks, had no
+fidelity failures, and needed less author revision. The largest gains were in
+keeping the main theorem prominent, table structure, captions, labels, expert
+filler, and overloaded names. With the core alone, the two versions tie. The
+section-specific guidance from #3 lives in references, and the core does not carry
+it:
+
+- In `abstract-evidence`, the revised core kept a 41–63% figure but dropped the
+  qualifier and the two validations. Three more core samples with the added core
+  sentence still failed on the validations, although two of the three kept the
+  qualifier. The case passes with references.
+- In `ai-no-change`, the revised core made one minimal edit to effective prose.
+
+The plain prompt failed fidelity five times. It invented a Monte Carlo standard
+error, a policy effect, a guessed label, and stronger certainty, and it rewrote
+venue text. All runs completed. [Records and grades](results/2026-10-26-cases.json).
+
+### Long-session revision
+
+[`session.py`](session.py) ran six requests in one session with file tools on the
+[fixture manuscript](sessions/creative-selection/), which embeds 27 problems and 12
+preservation controls. Claude ran three sessions per arm. Codex CLI 0.153.4 ran one
+session each of A, C, and E. Codex has no subagent tool in this harness, so its D
+arm would equal C.
+
+| Host and arm | Sessions | Problems fixed or found | Fidelity errors | New defects | Over-corrections | Replies fitting the request | Contribution clarity | Author effort |
+|---|---|---|---|---|---|---|---|---|
+| Claude A, baseline | 3 | 62/81 | 7 | 10 | 0 | 11/18 | 4.00 | 3.33 |
+| Claude B, A + “review twice” | 3 | 59/81 | 8 | 9 | 1 | 13/18 | 4.00 | 3.00 |
+| Claude C, protocol | 3 | 75/81 | 8 | 8 | 0 | 10/18 | 5.00 | 4.00 |
+| Claude D, C + subagents | 3 | 73/81 | 8 | 9 | 1 | 10/18 | 4.67 | 4.00 |
+| Claude E, D + CLI | 3 | 72/81 | 2 | 10 | 0 | 11/18 | 4.67 | 4.00 |
+| Claude F, E + hooks | 3 | 74/81 | 3 | 8 | 1 | 6/18 | 4.67 | 4.00 |
+| Codex A | 1 | 17/27 | 0 | 4 | 1 | 6/6 | 4.00 | 3.00 |
+| Codex C | 1 | 26/27 | 2 | 6 | 3 | 6/6 | 5.00 | 4.00 |
+| Codex E | 1 | 26/27 | 1 | 4 | 0 | 6/6 | 4.00 | 4.00 |
+
+Results by failure type:
+
+- **Missed problems.** The revised guidance and protocol (C) left 6 of 81 problems,
+  against 19 for the baseline. A simple instruction to review twice (B) did not
+  help. The independent reviewer (D) did not improve on C in these samples.
+- **Skipped checks.** The traces show this most clearly. In C, all three Claude
+  sessions read only `SKILL.md` before the first edit, never `review.md` or
+  `checklist.md`, and later turns read them only sometimes. With the subagent tool
+  available (D–F), every session read both in its first turn. The hooks in F made
+  every turn reread them and run `quill check`, and all three F sessions recorded
+  reviews. Codex C and E reread the checklist in every turn; Codex A read references
+  only in its first turn.
+- **Bad repairs.** The CLI's fidelity guards reduced fidelity errors in changed spans
+  from 7–8 per three sessions (A–D) to 2–3 (E, F). Typical errors were a dropped
+  “for each fixed K” or “at least two replicates” condition, and a secondary result
+  generalized beyond its rate. The clipping disclosure was deleted in 3/3 A sessions
+  and 2/3 B sessions, but in only 1 of the 12 Claude C–F sessions. All 12 controls
+  survived in all three F sessions. There were no edits outside the requested
+  sections except one dependent checklist edit (D-3). The review-only turn left the
+  file unchanged in every session. Codex C and E edited the user's `render.py`
+  unasked, so their delivered copy does not match the original renderer.
+- **Costs.** The hooks lengthened replies: 6/18 F turns fit the request, against
+  10–13/18 for the other Claude arms, so the hook reminder now asks to keep the
+  review out of the reply (untested). Sessions with subagents or hooks took about
+  twice as long per turn.
+
+Remaining failures across arms:
+
+- In 20 of 21 sessions, an agent-workspace limit was restated as a fact about the
+  analysis (F16). The natural-prose guidance now says to ask the author instead
+  (untested).
+- A contrast against re-ranking survived in most sessions (F4). Graders and
+  agents disagreed on whether readers need it.
+- Table restructuring was incomplete in some sessions (F10).
+
+The harness had to be fixed twice. The first batch invoked the skill as a slash
+command, which these print-mode sessions do not expose, so some runs never loaded
+it. Those records are retained separately and not scored. Six sessions that hit a
+usage limit were rerun and are retained as host failures. Model judgments and one
+synthetic manuscript do not establish improved human readability. A blind human
+review of held-out manuscripts remains necessary before claiming that.
+[Sessions, traces, grades, and failures](results/2026-10-26-sessions.json.gz).
+
+## Quill 0.7.0 release smoke check
+
+The released skill passed `theorem` and `ai-rewrite-multipara` in the `references`
+arm. The first answer kept B1–B3, the fixed t in (0, 1), and the pointwise scope. The
+second kept Theorem 1 verbatim, the necessary negation about finite-sample
+efficiency, and the benchmark version and date. It removed the shouted contrast,
+the scaffolding, and the generic closing. [Records](results/0.7.0-smoke.json).
+
 ## Quill 0.6.0 release smoke check
 
 The final skill with version metadata 0.6.0 passed one fresh `theorem` case using

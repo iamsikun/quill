@@ -15,16 +15,18 @@ SKILL = ROOT / 'skills/quill'
 ARMS = ('plain', 'core', 'references', 'implicit', 'explicit')
 
 
-def build_prompt(case: dict, arm: str, host: str) -> str:
+def build_prompt(case: dict, arm: str, host: str, skill: Path = SKILL) -> str:
     parts = ['Complete this synthetic writing task. Return the answer in at most 350 words. '
              'Do not write files or access external services.']
     if arm in ('plain', 'core', 'references'):
         parts.append('All permitted context is included below. Do not use tools or load additional instructions.')
     if arm in ('core', 'references'):
-        parts.append(SKILL.joinpath('SKILL.md').read_text())
+        parts.append(skill.joinpath('SKILL.md').read_text())
     if arm == 'references':
+        # A frozen earlier version may lack a newer reference; it then gets the ones it has.
         for relative in case['references']:
-            parts.append(SKILL.joinpath('references', relative).read_text())
+            if skill.joinpath('references', relative).is_file():
+                parts.append(skill.joinpath('references', relative).read_text())
     parts.append(case['prompt'])
     for relative in case.get('supplied', []):
         parts.append('Supplied by the user:\n' + (ROOT / 'evals' / relative).read_text())
@@ -57,15 +59,22 @@ def main() -> None:
     parser.add_argument('--case', choices=[c['id'] for c in cases], required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--timeout', type=int, default=120)
+    parser.add_argument('--skill', type=Path, default=SKILL,
+                        help='Skill folder to evaluate, such as a frozen earlier version')
+    parser.add_argument('--label', default='', help='Version label recorded and added to the filename')
     args = parser.parse_args()
+    skill = args.skill.resolve()
     case = next(c for c in cases if c['id'] == args.case)
     args.output.mkdir(parents=True, exist_ok=True)
-    record = {'host': args.host, 'arm': args.arm, 'case': args.case,
-              'prompt': build_prompt(case, args.arm, args.host), 'command': host_command(args.host, args.arm),
-              'skill_hashes': {p.relative_to(SKILL).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
-                               for p in sorted(SKILL.rglob('*')) if p.is_file()},
+    record = {'host': args.host, 'arm': args.arm, 'case': args.case, 'label': args.label,
+              'prompt': build_prompt(case, args.arm, args.host, skill), 'command': host_command(args.host, args.arm),
+              'skill_hashes': {p.relative_to(skill).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                               for p in sorted(skill.rglob('*')) if p.is_file()},
+              'missing_references': [r for r in case['references']
+                                     if args.arm == 'references' and not (skill / 'references' / r).is_file()],
               'case_hash': hashlib.sha256(json.dumps(case, sort_keys=True).encode()).hexdigest()}
-    output = args.output / f'{args.host}-{args.arm}-{args.case}.json'
+    stem = '-'.join(filter(None, (args.label, args.host, args.arm, args.case)))
+    output = args.output / f'{stem}.json'
     if output.exists():
         parser.error(f'refusing to overwrite evaluation record: {output}')
     start = time.monotonic()
@@ -76,7 +85,7 @@ def main() -> None:
             project = Path(tmp)
             if args.arm in ('implicit', 'explicit'):
                 directory = '.agents' if args.host == 'codex' else '.claude'
-                shutil.copytree(SKILL, project / directory / 'skills/quill')
+                shutil.copytree(skill, project / directory / 'skills/quill')
             for relative, content in case.get('files', {}).items():
                 project.joinpath(relative).parent.mkdir(parents=True, exist_ok=True)
                 project.joinpath(relative).write_text(content)
