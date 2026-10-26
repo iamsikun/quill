@@ -39,7 +39,7 @@ For substantial revision, diagnose the argument at the scale where it fails:
   each detail add, and does it belong here, or is it already implied or explained
   nearby? A redundant condition can be removed while an underexplained method
   needs more explanation. Neither brevity nor completeness is the objective on its
-  own.
+  own (A9).
 
 These questions guide the diagnosis. They are not a template every paragraph must
 fit. The [review](review.md) then checks the result: its Pass 1 reverse outline
