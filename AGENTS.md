@@ -39,6 +39,12 @@ checks the plugin version. Only move `stable` deliberately:
    git push origin main vX.Y.Z
    git push origin main:stable      # this is the release; it fast-forwards stable
    ```
+5. Create the GitHub release so the repository page shows it. Pushing a tag does not:
+   ```bash
+   gh release create vX.Y.Z --title "Quill X.Y.Z" --notes-file NOTES.md --latest
+   ```
+   Base the notes on the changelog entry, and report the validation that was run
+   along with its limits.
 
 Never force-push `stable`. Installs update with `--ff-only`, so rewriting the branch's
 history would leave them stuck on the old version.
