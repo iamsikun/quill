@@ -10,6 +10,10 @@ Quill uses semantic versioning:
 - Restore two guardrails dropped when local edits were reconciled: neither brevity
   nor completeness is an editing objective on its own, and a corrected claim is not
   a lesson to always sound more confident.
+- Reorganize the README around what Quill does, installation, and a quick start,
+  with a worked example and a summary of the evaluation. Installation details, the
+  CLI reference, the writing-profile details, and the Pepper migration guide move
+  to `docs/`.
 
 ## 0.7.0 — 2026-10-26
 

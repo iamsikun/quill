@@ -44,6 +44,7 @@ include = [
   "/skills",
   "/evals",
   "/README.md",
+  "/docs",
   "/AGENTS.md",
   "/CLAUDE.md",
   "/CHANGELOG.md",
