@@ -57,11 +57,16 @@ different? Default: restore the original. Except: changes needed by another chec
 *Fails:* “We randomly assigned 600 participants to one of three groups” becomes
 “A randomized allocation procedure was implemented across a tripartite grouping.”
 
-**U5 · Research, not workflow.** Is the text free of revision history, repair
-announcements, verification narration, editor reminders, agent workspace limits,
-and revision markers? Default: delete it, or describe the actual method or finding
-instead. Relocate exact versions, commands, and hashes only to a real or authorized
-reproducibility destination. Except: provenance the reader needs (see D6).
+**U5 · Research, not workflow.** Is the text free of the project's own code and
+workflow: file names, paths, scripts, notebooks, library calls, commit hashes,
+internal records, revision history, repair announcements, verification narration,
+editor reminders, agent workspace limits, and revision markers? Default: delete it,
+or describe the method, convention, or finding itself. Except: pinned revisions of
+external data sources, which the reader needs for provenance and which stay (D6),
+and a code-availability statement the venue requires.
+*Fails:* “The saved `summary.json` records actual half sizes.”
+*Fails:* “using the NumPy sort convention (`np.argsort`)” where “breaks exact ties
+with a fixed deterministic order” describes the convention.
 *Fails:* “The profiles use the recorded dirty worktree at commit 3f2a9c1.”
 *Fails:* “Complete runtime records are unavailable in this local snapshot.” If
 the paper omits them, “Complete execution-time records are not provided” states

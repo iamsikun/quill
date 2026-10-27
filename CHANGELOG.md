@@ -5,6 +5,19 @@ Quill uses semantic versioning:
 - **Minor** releases add guidance, references, or utilities.
 - **Patch** releases make wording fixes.
 
+## 0.7.3 — 2026-10-27
+
+- Rule U5 now keeps the project's own code out of the manuscript: file names,
+  paths, scripts, notebooks, library calls, commit hashes, and internal records.
+  Describe the method or convention itself instead. Pinned revisions of external
+  data sources stay for provenance (D6), as does a code-availability statement the
+  venue requires. The natural-prose reference adds a matching row, and its
+  workflow-narration row now keeps the code's versions, commands, and hashes out of
+  the manuscript.
+- `quill check` reports a new U5 candidate, `code file or call`, for file names
+  with code or data extensions, library calls such as `np.argsort`, `\path{…}`,
+  and mentions of a reproducibility or artifact record.
+
 ## 0.7.2 — 2026-10-26
 
 - Describe Quill consistently with the README across the plugin manifest,

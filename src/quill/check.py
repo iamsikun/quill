@@ -50,6 +50,10 @@ PATTERNS = [
     _p('U5', 'workflow narration',
        r'\b(?:worktree|working tree|uncommitted|dirty (?:tree|checkout)|local (?:snapshot|copy|checkout)'
        r'|this (?:session|workspace|repository)|the agent)\b'),
+    _p('U5', 'code file or call',
+       r'(?<![\w/])[\w./\\-]*\w\.(?:jsonl?|csv|tsv|py|ipynb|npz|npy|pkl|parquet|ya?ml|toml|sh)\b'
+       r'|\b(?:np|numpy|pd|pandas|torch|scipy|sklearn|plt)\.[a-z_]\w*'
+       r'|\\path\{|\b(?:reproducibility|artifact) record\b'),
     _p('U5', 'repair announcement',
        r'\b(?:now (?:shows?|displays?|uses?|correctly)|no longer (?:truncat|clip|overlap)\w*'
        r'|(?:was|were|has been|have been) (?:fixed|corrected|regenerated|repaired)'

@@ -51,6 +51,17 @@ def test_math_keys_and_comments_are_not_prose():
     assert len(mask(text)) == len(text) and mask(text).count('\n') == text.count('\n')
 
 
+def test_code_files_and_calls_are_candidates():
+    text = ('The saved \\texttt{summary.json} records the half sizes.\n'
+            'An experiment in \\texttt{two\\_model\\_toy\\_results.json} uses 41 tasks.\n'
+            'Ties follow \\texttt{np.argsort} on negative scores.\n'
+            'The reproducibility record lists exact commands.\n'
+            'Hashes are in \\path{data/source_manifest.json}.\n'
+            'Ties are broken by a fixed deterministic order, e.g. in Fig. 2 of Smith et al.\n')
+    lines = {hit['line'] for hit in style_candidates(text) if hit['name'] == 'code file or call'}
+    assert lines == {1, 2, 3, 4, 5}
+
+
 def test_markdown_percent_is_not_a_comment():
     hits = style_candidates('Error fell by 48% at commit 3f2a9c1.\n', latex=False)
     assert ('U5', 'commit or hash') in names(hits)
